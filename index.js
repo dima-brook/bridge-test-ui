@@ -17,17 +17,21 @@ async function SendParachainElrond() {
         // HEX encoded Parachain keys:
         const paraKeys = await getParachainKeys('./parachain_keys.json');
 
+        // Link DOM elements
         const polkadotwallet = document.getElementById("from-elrond-address");
         const elrondWallet = document.getElementById('to-elrond-address');
         const token_ = document.getElementById("p2e-token");
         const amount = Number(document.getElementById("p2e-amount").value);
 
+        // Extract values
         const acctName = polkadotwallet.options[polkadotwallet.selectedIndex].innerHTML;
         const acctAddress = polkadotwallet.value;
         const key = paraKeys[acctName];
         const targetWallet = elrondWallet.value;
         const token = token_.value;
 
+        // Check the extracted values
+        // TODO: remove before production
         console.log("Account", acctName)
         console.log("From", acctAddress)
         console.log("KEY", key)
@@ -36,13 +40,17 @@ async function SendParachainElrond() {
         console.log(amount, typeof amount);
 
 
+        // Function variable
         let func;
 
+        // Choice of the target function
         if (token === "XPNET") {
             func = transfer_xpnet_p2e;
         } else {
             func = withdraw_egold_p2e;
         }
+
+        // Chosen function call
         func(key, targetWallet, amount);
 
     } catch (error) {
@@ -54,12 +62,13 @@ async function SendParachainElrond() {
 // returns its content in a string
 async function SendElrondParachain() {
     try {
-
+        // Link DOM elements
         const elrondWallet = document.getElementById("from-elrond-address");
         const polkadotWallet = document.getElementById("to-polkadot-address");
         const token_ = document.getElementById("e2p-token");
         const amount = Number(document.getElementById("e2p-amount").value);
 
+        // Extract values
         const acctName = elrondWallet.options[elrondWallet.selectedIndex].innerHTML;
         const acctAddress = elrondWallet.value;
         const key = await fetch(`./elrond_keys/${acctName.toLowerCase()}.pem`)
@@ -68,6 +77,9 @@ async function SendElrondParachain() {
         const targetWallet = polkadotWallet.value;
         const token = token_.value;
 
+
+        // Check the extracted values
+        // TODO: remove before production
         console.log(acctName)
         console.log(acctAddress)
         console.log(key)
@@ -76,14 +88,17 @@ async function SendElrondParachain() {
         console.log(amount, typeof amount);
 
 
+        // Function variable
         let func;
 
+        // Choice of the target function
         if (token === "EGLD") {
             func = transfer_egold_e2p;
         } else {
             func = withdraw_xpnet_e2p;
         }
 
+        // Chosen function call
         func(key, targetWallet, amount);
 
     } catch (error) {
@@ -92,12 +107,14 @@ async function SendElrondParachain() {
 
 }
 
+// Generic HTTP request
 async function sendRequest(route, pem, sender_key, destination, value) {
     try {
 
+        // JSON encoded body
         const body = JSON.stringify({ pem, sender_key, destination, value });
-        console.log(body);
 
+        // HTTP POST Request
         const rawResp = await fetch(route,
             {
                 method: "POST",
@@ -107,6 +124,7 @@ async function sendRequest(route, pem, sender_key, destination, value) {
                 },
                 body
             });
+        // JSON formed response
         const content = await rawResp.json();
         return content;
     } catch (error) {
@@ -115,25 +133,28 @@ async function sendRequest(route, pem, sender_key, destination, value) {
 
 }
 
-
+// Return wrapped XPNET from Elrond -> Parachain
 async function withdraw_xpnet_e2p(pem, destination, value) {
     const sender_key = pem;
     const result = await sendRequest(`${url}/xpnet/withdraw`, pem, sender_key, destination, value);
     console.log(result);
 }
 
+// Return wrapped eGold from Parachain -> Elrond
 async function withdraw_egold_p2e(pem, destination, value) {
     const sender_key = pem;
     const result = await sendRequest(`${url}/egld/withdraw`, pem, sender_key, destination, value);
     console.log(result);
 }
 
+// Freeze XPNET in a Parachain and release wrapped XPNET in Elrond
 async function transfer_xpnet_p2e(pem, destination, value) {
     const sender_key = pem;
     const result = await sendRequest(`${url}/xpnet/transfer`, pem, sender_key, destination, value);
     console.log(result);
 }
 
+// Freeze eGold in a Parachain and release wrapped eGold in Elrond
 async function transfer_egold_e2p(pem, destination, value) {
     const sender_key = pem;
     const result = await sendRequest(`${url}/egld/transfer`, pem, sender_key, destination, value);
