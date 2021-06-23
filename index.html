@@ -59,16 +59,8 @@
     <main>
         <div class="form">
             <h2>Transfer Parachain to Elrond</h2>
-            <label for="poladot-address" style="margin-right: 5px;">From:</label>
-            <select id="poladot-address" name="poladot-address">
-                <option value="5GrwvaEF5zXb26Fz9rcQpDWS57CtERHpNehXCPcNoHGKutQY">ALICE</option>
-                <option value="5GNJqTPyNqANBkUVMN1LPPrxXnFouWXoe2wNSmmEoLctxiZY">ALISE_STASH</option>
-                <option value="5FHneW46xGXgs5mUiveU4sbTyGBzmstUspZC92UhjJM694ty">BOB</option>
-                <option value="5HpG9w8EBLe5XCrbczpwq5TSXvedjrBGCwqxK1iQ7qUsSWFc">BOB_STASH</option>
-                <option value="5FLSigC9HGRKVhB9FiEo4Y3koPsNmBmLJbpXg2mp1hXcS59Y">CHARLIE</option>
-                <option value="5DAAnrj7VHTznn2AWBemMuyBwZWs6FNFjdyVXUeYum3PTXFy">DAVE</option>
-                <option value="5HGjWAeFDfFCWPsjFQdVV2Msvz2XtMktvgocEZcCj68kUMaw">EVE</option>
-                <option value="5CiPPseXPECbkjWCa6MnjNokrgYjMqmKndv2rSnekmSK2DjL">FERDIE</option>
+            <label for="from-polkadot-address" style="margin-right: 5px;">From:</label>
+            <select id="from-polkadot-address" name="from-polkadot-address">
             </select>
             <label for="p2e-amount">Amount:</label>
             <input type="number" name="p2e-amount" id="p2e-amount" prompt="p2e-amount" value="1000000000000000">
@@ -104,16 +96,8 @@
 
             <br><br>
 
-            <label for="to-poladot-address" style="margin-right: 29px;">To:</label>
-            <select id="to-poladot-address" name="to-poladot-address">
-                <option value="5GrwvaEF5zXb26Fz9rcQpDWS57CtERHpNehXCPcNoHGKutQY">ALICE</option>
-                <option value="5GNJqTPyNqANBkUVMN1LPPrxXnFouWXoe2wNSmmEoLctxiZY">ALISE_STASH</option>
-                <option value="5FHneW46xGXgs5mUiveU4sbTyGBzmstUspZC92UhjJM694ty">BOB</option>
-                <option value="5HpG9w8EBLe5XCrbczpwq5TSXvedjrBGCwqxK1iQ7qUsSWFc">BOB_STASH</option>
-                <option value="5FLSigC9HGRKVhB9FiEo4Y3koPsNmBmLJbpXg2mp1hXcS59Y">CHARLIE</option>
-                <option value="5DAAnrj7VHTznn2AWBemMuyBwZWs6FNFjdyVXUeYum3PTXFy">DAVE</option>
-                <option value="5HGjWAeFDfFCWPsjFQdVV2Msvz2XtMktvgocEZcCj68kUMaw">EVE</option>
-                <option value="5CiPPseXPECbkjWCa6MnjNokrgYjMqmKndv2rSnekmSK2DjL">FERDIE</option>
+            <label for="to-polkadot-address" style="margin-right: 29px;">To:</label>
+            <select id="to-polkadot-address" name="to-polkadot-address">
             </select>
             <label for="polkadot-balance">Balance:</label>
             <input type="number" name="polkadot-balance" id="polkadot-balance" prompt="polkadot-balance" value="0">
@@ -133,7 +117,8 @@
     <script>
 
         (async () => {
-            const res = await readJson('elrond_accounts.json')
+            await populateElrond('elrond_accounts.json');
+            await populatePolkadot('parachain_accounts.json');
         })();
 
         const url = "http://localhost:8080";
@@ -154,7 +139,7 @@
 
                 }
 
-                const polkadotwallet = document.getElementById("poladot-address");
+                const polkadotwallet = document.getElementById("from-elrond-address");
                 const elrondWallet = document.getElementById('to-elrond-address');
                 const token_ = document.getElementById("p2e-token");
                 const amount = Number(document.getElementById("p2e-amount").value);
@@ -193,7 +178,7 @@
             try {
 
                 const elrondWallet = document.getElementById("from-elrond-address");
-                const polkadotWallet = document.getElementById("to-poladot-address");
+                const polkadotWallet = document.getElementById("to-polkadot-address");
                 const token_ = document.getElementById("e2p-token");
                 const amount = Number(document.getElementById("e2p-amount").value);
 
@@ -278,7 +263,7 @@
         }
 
 
-        async function readJson(fileName) {
+        async function populateElrond(fileName) {
             const keys = await fetch(fileName)
                 .then(response => response.json())
                 .then(text => text)
@@ -299,6 +284,28 @@
                 to_elrond_address.appendChild(opt2);
             }
 
+        }
+
+        async function populatePolkadot(fileName) {
+            const keys = await fetch(fileName)
+                .then(response => response.json())
+                .then(text => text)
+
+            const to_polkadot_address = document.getElementById('to-polkadot-address');
+            const from_polkadot_address = document.getElementById('from-polkadot-address');
+
+            for (const key of Object.keys(keys)) {
+
+                const opt1 = document.createElement('OPTION');
+                opt1.value = keys[key];
+                opt1.innerHTML = key;
+                to_polkadot_address.appendChild(opt1);
+
+                const opt2 = document.createElement('OPTION');
+                opt2.value = keys[key];
+                opt2.innerHTML = key;
+                from_polkadot_address.appendChild(opt2);
+            }
         }
 
 
