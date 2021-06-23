@@ -76,17 +76,6 @@
             <br><br>
             <label for="to-elrond-address" style="margin-right: 29px;">To:</label>
             <select id="to-elrond-address" name="to-elrond-address">
-                <option value="erd1qyu5wthldzr8wx5c9ucg8kjagg0jfs53s8nr3zpz3hypefsdd8ssycr6th">ALICE</option>
-                <option value="erd1spyavw0956vq68xj8y4tenjpq2wd5a9p2c6j8gsz7ztyrnpxrruqzu66jx">BOB</option>
-                <option value="erd1k2s324ww2g0yj38qn2ch2jwctdy8mnfxep94q9arncc6xecg3xaq6mjse8">CAROL</option>
-                <option value="erd1kyaqzaprcdnv4luvanah0gfxzzsnpaygsy6pytrexll2urtd05ts9vegu7">DAN</option>
-                <option value="erd18tudnj2z8vjh0339yu3vrkgzz2jpz8mjq0uhgnmklnap6z33qqeszq2yn4">EVE</option>
-                <option value="erd1kdl46yctawygtwg2k462307dmz2v55c605737dp3zkxh04sct7asqylhyv">FRANK</option>
-                <option value="erd1r69gk66fmedhhcg24g2c5kn2f2a5k4kvpr6jfw67dn2lyydd8cfswy6ede">GRACE</option>
-                <option value="erd1dc3yzxxeq69wvf583gw0h67td226gu2ahpk3k50qdgzzym8npltq7ndgha">HEIDIE</option>
-                <option value="erd13x29rvmp4qlgn4emgztd8jgvyzdj0p6vn37tqxas3v9mfhq4dy7shalqrx">IVAN</option>
-                <option value="erd1fggp5ru0jhcjrp5rjqyqrnvhr3sz3v2e0fm3ktknvlg7mcyan54qzccnan">JUDY</option>
-                <option value="erd1z32fx8l6wk9tx4j555sxk28fm0clhr0cl88dpyam9zr7kw0hu7hsx2j524">MALLORY</option>
             </select>
 
             <label for="elrond-balance">Balance:</label>
@@ -108,17 +97,6 @@
             <h2>Transfer Elrond to Parachain</h2>
             <label for="from-elrond-address" style="margin-right: 5px;">From:</label>
             <select id="from-elrond-address" name="from-elrond-address">
-                <option value="erd1qyu5wthldzr8wx5c9ucg8kjagg0jfs53s8nr3zpz3hypefsdd8ssycr6th">ALICE</option>
-                <option value="erd1spyavw0956vq68xj8y4tenjpq2wd5a9p2c6j8gsz7ztyrnpxrruqzu66jx">BOB</option>
-                <option value="erd1k2s324ww2g0yj38qn2ch2jwctdy8mnfxep94q9arncc6xecg3xaq6mjse8">CAROL</option>
-                <option value="erd1kyaqzaprcdnv4luvanah0gfxzzsnpaygsy6pytrexll2urtd05ts9vegu7">DAN</option>
-                <option value="erd18tudnj2z8vjh0339yu3vrkgzz2jpz8mjq0uhgnmklnap6z33qqeszq2yn4">EVE</option>
-                <option value="erd1kdl46yctawygtwg2k462307dmz2v55c605737dp3zkxh04sct7asqylhyv">FRANK</option>
-                <option value="erd1r69gk66fmedhhcg24g2c5kn2f2a5k4kvpr6jfw67dn2lyydd8cfswy6ede">GRACE</option>
-                <option value="erd1dc3yzxxeq69wvf583gw0h67td226gu2ahpk3k50qdgzzym8npltq7ndgha">HEIDIE</option>
-                <option value="erd13x29rvmp4qlgn4emgztd8jgvyzdj0p6vn37tqxas3v9mfhq4dy7shalqrx">IVAN</option>
-                <option value="erd1fggp5ru0jhcjrp5rjqyqrnvhr3sz3v2e0fm3ktknvlg7mcyan54qzccnan">JUDY</option>
-                <option value="erd1z32fx8l6wk9tx4j555sxk28fm0clhr0cl88dpyam9zr7kw0hu7hsx2j524">MALLORY</option>
             </select>
 
             <label for="e2p-amount">Amount:</label>
@@ -153,6 +131,10 @@
         </div>
     </main>
     <script>
+
+        (async () => {
+            const res = await readJson('elrond_accounts.json')
+        })();
 
         const url = "http://localhost:8080";
 
@@ -294,6 +276,31 @@
             const result = await sendRequest(`${url}/egld/transfer`, pem, sender_key, destination, value);
             console.log(result);
         }
+
+
+        async function readJson(fileName) {
+            const keys = await fetch(fileName)
+                .then(response => response.json())
+                .then(text => text)
+
+            const to_elrond_address = document.getElementById('to-elrond-address');
+            const from_elrond_address = document.getElementById('from-elrond-address');
+
+            for (const key of Object.keys(keys)) {
+
+                const opt1 = document.createElement('OPTION');
+                opt1.value = keys[key];
+                opt1.innerHTML = key;
+                from_elrond_address.appendChild(opt1);
+
+                const opt2 = document.createElement('OPTION');
+                opt2.value = keys[key];
+                opt2.innerHTML = key;
+                to_elrond_address.appendChild(opt2);
+            }
+
+        }
+
 
     </script>
 </body>
