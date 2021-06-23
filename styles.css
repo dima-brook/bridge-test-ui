@@ -1,0 +1,40 @@
+body {
+    background-color: #030c21;
+    margin: 0;
+    color: white;
+    align-content: center;
+
+}
+
+header,
+footer {
+    background: radial-gradient(341.25% 140988% at -3% 0%, #2853EB 0%, rgba(40, 83, 235, 0.75) 100%);
+    padding: 10px 0 10px 0;
+}
+
+main {
+
+    align-self: center;
+    align-content: center;
+}
+
+.form {
+
+    border: solid white 1px;
+    margin: 20px 0% 20px 25%;
+    padding: 20px;
+    width: 510px;
+
+}
+
+input {
+    width: 150px;
+}
+
+option {
+    width: 100px;
+}
+
+label {
+    width: 60px;
+}
