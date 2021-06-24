@@ -8,11 +8,12 @@ def get_priv(uri: str):
 if __name__ == "__main__":
 
     names = [
-        "BOB_STASH",
-        "CHARLIE",
-        "DAVE",
-        "EVE",
-        "FERDIE"
+    	"Alice",
+        "Bob",
+        "Charlie",
+        "Dave",
+        "Eve",
+        "Ferdie"
     ]
 
     for name in names:

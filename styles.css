@@ -1,10 +1,38 @@
+
+html, body {
+    height: 100%;
+}
+
 body {
     background-color: #030c21;
     margin: 0;
     color: white;
-    align-content: center;
-
 }
+.flex-container {
+    height: 100%;
+    padding: 0;
+    margin: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+.row {
+    width: auto;
+}
+.flex-item {
+    background-color: tomato;
+    padding: 5px;
+    width: 20px;
+    height: 20px;
+    margin: 10px;
+    line-height: 20px;
+    color: white;
+    font-weight: bold;
+    font-size: 2em;
+    text-align: center;
+}
+
+
 
 header,
 footer {
@@ -21,9 +49,9 @@ main {
 .form {
 
     border: solid white 1px;
-    margin: 20px 0% 20px 25%;
     padding: 20px;
-    width: 510px;
+    width: 490px;
+    border-radius: 20px;
 
 }
 
