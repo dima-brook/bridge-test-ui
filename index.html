@@ -28,10 +28,6 @@
             <label for="to-elrond-address" style="margin-right: 29px;">To:</label>
             <select id="to-elrond-address" name="to-elrond-address">
             </select>
-
-            <label for="elrond-balance">Balance:</label>
-            <input type="number" name="elrond-balance" id="elrond-balance" prompt="elrond-balance" value="0">
-
             <br><br>
 
             <label for="p2e-token">Token:</label>
@@ -51,15 +47,13 @@
             </select>
 
             <label for="e2p-amount">Amount:</label>
-            <input type="number" name="e2p-amount" id="e2p-amount" prompt="e2p-amount" value="1000000000000000">
+            <input type="number" name="e2p-amount" id="e2p-amount" prompt="e2p-amount" value="100000000000000">
 
             <br><br>
 
             <label for="to-polkadot-address" style="margin-right: 29px;">To:</label>
             <select id="to-polkadot-address" name="to-polkadot-address">
             </select>
-            <label for="polkadot-balance">Balance:</label>
-            <input type="number" name="polkadot-balance" id="polkadot-balance" prompt="polkadot-balance" value="0">
 
             <br><br>
 
@@ -71,6 +65,11 @@
 
             <button onclick="SendElrondParachain()">Send</button>
 
+        </div>
+
+        <div class="tx-box">
+            <h3>Latest Transaction:</h3>
+            <p id="tx-hash"></p>
         </div>
     </main>
     <script src="./index.js"></script>

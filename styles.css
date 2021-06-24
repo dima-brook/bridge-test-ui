@@ -27,6 +27,11 @@ main {
 
 }
 
+.tx-box {
+    margin: 20px 0% 20px 25%;
+    padding-top: 50px
+}
+
 input {
     width: 150px;
 }

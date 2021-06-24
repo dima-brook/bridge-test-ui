@@ -7,7 +7,7 @@
 
 
 // Endpont url global constant:
-const url = "http://localhost:8080";
+const url = "http://localhost:8000";
 
 
 // Send tokens from a Parachain to Elrond:
@@ -18,7 +18,7 @@ async function SendParachainElrond() {
         const paraKeys = await getParachainKeys('./parachain_keys.json');
 
         // Link DOM elements
-        const polkadotwallet = document.getElementById("from-elrond-address");
+        const polkadotwallet = document.getElementById("from-polkadot-address");
         const elrondWallet = document.getElementById('to-elrond-address');
         const token_ = document.getElementById("p2e-token");
         const amount = Number(document.getElementById("p2e-amount").value);
@@ -51,7 +51,7 @@ async function SendParachainElrond() {
         }
 
         // Chosen function call
-        func(key, targetWallet, amount);
+        func(acctAddress, key, targetWallet, amount);
 
     } catch (error) {
         console.error(error);
@@ -107,58 +107,74 @@ async function SendElrondParachain() {
 
 }
 
-// Generic HTTP request
-async function sendRequest(route, pem, sender_key, destination, value) {
-    try {
+async function post(route, data) {
+    const body = JSON.stringify(data);
 
-        // JSON encoded body
-        const body = JSON.stringify({ pem, sender_key, destination, value });
+    let err;
+    const resp = await fetch(route,
+        {
+            method: "POST",
+            headers: {
+                'Accept': 'application/json',
+                'Content-Type': 'application/json'
+            },
+            body
+        })
+        .catch((e) => err = e);
 
-        // HTTP POST Request
-        const rawResp = await fetch(route,
-            {
-                method: "POST",
-                headers: {
-                    'Accept': 'application/json',
-                    'Content-Type': 'application/json'
-                },
-                body
-            });
-        // JSON formed response
-        const content = await rawResp.json();
-        return content;
-    } catch (error) {
-        console.error(error);
+    err && console.log(err);
+
+    return [await resp.json(), err];
+}
+
+function polkadot_req_data(addr, key, dest, val) {
+    return {
+        "sender_addr": addr,
+        "sender_key": key,
+        "destination": dest,
+        "value": val
     }
+}
 
+function elrd_req_data(pem, dest, val) {
+    return {
+        "pem": pem,
+        "destination": dest,
+        "value": val
+    }
+}
+
+function update_tx(nw) {
+    const holder = document.getElementById("tx-hash");
+    holder.innerText = nw;
 }
 
 // Return wrapped XPNET from Elrond -> Parachain
 async function withdraw_xpnet_e2p(pem, destination, value) {
-    const sender_key = pem;
-    const result = await sendRequest(`${url}/xpnet/withdraw`, pem, sender_key, destination, value);
-    console.log(result);
+    update_tx("please wait...")
+    const result = await post(`${url}/xpnet/withdraw`, elrd_req_data(pem, destination, value));
+    update_tx(`${JSON.stringify(result[0])}`)
 }
 
 // Return wrapped eGold from Parachain -> Elrond
-async function withdraw_egold_p2e(pem, destination, value) {
-    const sender_key = pem;
-    const result = await sendRequest(`${url}/egld/withdraw`, pem, sender_key, destination, value);
-    console.log(result);
+async function withdraw_egold_p2e(sender_addr, sender_key, destination, value) {
+    update_tx("please wait...")
+    const result = await post(`${url}/egld/withdraw`, polkadot_req_data(sender_addr, sender_key, destination, value));
+    update_tx(`${JSON.stringify(result[0])}`)
 }
 
 // Freeze XPNET in a Parachain and release wrapped XPNET in Elrond
-async function transfer_xpnet_p2e(pem, destination, value) {
-    const sender_key = pem;
-    const result = await sendRequest(`${url}/xpnet/transfer`, pem, sender_key, destination, value);
-    console.log(result);
+async function transfer_xpnet_p2e(sender_addr, sender_key, destination, value) {
+    update_tx("please wait...")
+    const result = await post(`${url}/xpnet/transfer`, polkadot_req_data(sender_addr, sender_key, destination, value));
+    update_tx(`${JSON.stringify(result[0])}`);
 }
 
 // Freeze eGold in a Parachain and release wrapped eGold in Elrond
 async function transfer_egold_e2p(pem, destination, value) {
-    const sender_key = pem;
-    const result = await sendRequest(`${url}/egld/transfer`, pem, sender_key, destination, value);
-    console.log(result);
+    update_tx("please wait...")
+    const result = await post(`${url}/egld/transfer`, elrd_req_data(pem, destination, value));
+    update_tx(`${JSON.stringify(result[0])}`);
 }
 
 
