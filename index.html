@@ -17,7 +17,7 @@
     </header>
     <main>
         <div class="form">
-            <h2>Transfer from a Parachain to Elrond</h2>
+            <h2>Transfer from a Parachain to Heco</h2>
             <label for="from-polkadot-address" style="margin-right: 5px;">From:</label>
             <select id="from-polkadot-address" name="from-polkadot-address">
             </select>
@@ -25,25 +25,25 @@
             <input type="number" name="p2e-amount" id="p2e-amount" prompt="p2e-amount" value="1000000000000000">
 
             <br><br>
-            <label for="to-elrond-address" style="margin-right: 29px;">To:</label>
-            <select id="to-elrond-address" name="to-elrond-address">
+            <label for="to-heco-address" style="margin-right: 29px;">To:</label>
+            <select id="to-heco-address" name="to-heco-address">
             </select>
             <br><br>
 
             <label for="p2e-token">Token:</label>
             <select id="p2e-token" name="p2e-token" style="margin-right: 75px;">
                 <option value="XPNET">XPNET</option>
-                <option value="EGLD">EGLD</option>
+                <option value="HT">HT</option>
             </select>
 
-            <button onclick="SendParachainElrond()">Send</button>
+            <button onclick="SendParachainHeco()">Send</button>
 
         </div>
 
         <div class="form">
-            <h2>Transfer Elrond to a Parachain</h2>
-            <label for="from-elrond-address" style="margin-right: 5px;">From:</label>
-            <select id="from-elrond-address" name="from-elrond-address">
+            <h2>Transfer Heco to a Parachain</h2>
+            <label for="from-heco-address" style="margin-right: 5px;">From:</label>
+            <select id="from-heco-address" name="from-heco-address">
             </select>
 
             <label for="e2p-amount">Amount:</label>
@@ -60,10 +60,10 @@
             <label for="e2p-token">Token:</label>
             <select id="e2p-token" name="e2p-token" style="margin-right: 75px;">
                 <option value="XPNET">XPNET</option>
-                <option value="EGLD">EGLD</option>
+                <option value="HT">HT</option>
             </select>
 
-            <button onclick="SendElrondParachain()">Send</button>
+            <button onclick="SendHecoParachain()">Send</button>
 
         </div>
 
