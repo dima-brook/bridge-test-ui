@@ -144,37 +144,37 @@ function elrd_req_data(pem, dest, val) {
     }
 }
 
-function update_tx(nw) {
+function update_tx(receiver, nw) {
     const holder = document.getElementById("tx-hash");
-    holder.innerText = nw;
+    holder.innerText = `sent to: ${receiver}\n${nw}`;
 }
 
 // Return wrapped XPNET from Elrond -> Parachain
 async function withdraw_xpnet_e2p(pem, destination, value) {
-    update_tx("please wait...")
+    update_tx("", "please wait...")
     const result = await post(`${url}/xpnet/withdraw`, elrd_req_data(pem, destination, value));
-    update_tx(`${JSON.stringify(result[0])}`)
+    update_tx(destination, `${JSON.stringify(result[0])}`)
 }
 
 // Return wrapped eGold from Parachain -> Elrond
 async function withdraw_egold_p2e(sender_addr, sender_key, destination, value) {
     update_tx("please wait...")
     const result = await post(`${url}/egld/withdraw`, polkadot_req_data(sender_addr, sender_key, destination, value));
-    update_tx(`${JSON.stringify(result[0])}`)
+    update_tx(destination, `${JSON.stringify(result[0])}`)
 }
 
 // Freeze XPNET in a Parachain and release wrapped XPNET in Elrond
 async function transfer_xpnet_p2e(sender_addr, sender_key, destination, value) {
-    update_tx("please wait...")
+    update_tx('', "please wait...")
     const result = await post(`${url}/xpnet/transfer`, polkadot_req_data(sender_addr, sender_key, destination, value));
-    update_tx(`${JSON.stringify(result[0])}`);
+    update_tx(destination, `${JSON.stringify(result[0])}`);
 }
 
 // Freeze eGold in a Parachain and release wrapped eGold in Elrond
 async function transfer_egold_e2p(pem, destination, value) {
-    update_tx("please wait...")
+    update_tx('', "please wait...")
     const result = await post(`${url}/egld/transfer`, elrd_req_data(pem, destination, value));
-    update_tx(`${JSON.stringify(result[0])}`);
+    update_tx(destination, `${JSON.stringify(result[0])}`);
 }
 
 
