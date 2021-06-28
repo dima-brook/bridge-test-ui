@@ -151,28 +151,28 @@ function update_tx(nw) {
 async function withdraw_xpnet_e2p(key, destination, value) {
     update_tx("please wait...")
     const result = await post(`${url}/xpnet/withdraw`, heco_req_data(key, destination, value));
-    update_tx(`${JSON.stringify(result[0])}`)
+    update_tx(`dest: ${destination}\n${JSON.stringify(result[0])}`)
 }
 
 // Return wrapped HT from Parachain -> HECO
 async function withdraw_ht_p2e(sender_addr, sender_key, destination, value) {
     update_tx("please wait...")
     const result = await post(`${url}/ht/withdraw`, polkadot_req_data(sender_addr, sender_key, destination, value));
-    update_tx(`${JSON.stringify(result[0])}`)
+    update_tx(`dest: ${destination}\n${JSON.stringify(result[0])}`)
 }
 
 // Freeze XPNET in a Parachain and release wrapped XPNET in HECO
 async function transfer_xpnet_p2e(sender_addr, sender_key, destination, value) {
     update_tx("please wait...")
     const result = await post(`${url}/xpnet/transfer`, polkadot_req_data(sender_addr, sender_key, destination, value));
-    update_tx(`${JSON.stringify(result[0])}`);
+    update_tx(`dest: ${destination}\n${JSON.stringify(result[0])}`);
 }
 
 // Freeze HT in a Heco and mint wrapped HT in Parachain
 async function transfer_ht_e2p(key, destination, value) {
     update_tx("please wait...")
     const result = await post(`${url}/ht/transfer`, heco_req_data(key, destination, value));
-    update_tx(`${JSON.stringify(result[0])}`);
+    update_tx(`dest: ${destination}\n${JSON.stringify(result[0])}`);
 }
 
 
