@@ -7,7 +7,8 @@
 
 
 // Endpont url global constant:
-const url = "http://localhost:8000";
+// const url = "http://localhost:8000";
+const url = "http://52.16.109.21:8000";
 
 
 // Send tokens from a Parachain to Elrond:

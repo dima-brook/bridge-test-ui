@@ -1,0 +1,31 @@
+{
+  "name": "bridge_test_ui",
+  "version": "1.0.0",
+  "description": "The SPEC-B test UI",
+  "main": "server.js",
+  "scripts": {
+    "start":"node server.js",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/xp-network/bridge-test-ui.git"
+  },
+  "keywords": [
+    "Polkadot",
+    "Parachain",
+    "communication",
+    "bridge",
+    "test",
+    "UI"
+  ],
+  "author": "Dima Brook",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/xp-network/bridge-test-ui/issues"
+  },
+  "homepage": "https://github.com/xp-network/bridge-test-ui#readme",
+  "dependencies": {
+    "express": "^4.17.1"
+  }
+}
