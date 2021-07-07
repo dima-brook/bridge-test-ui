@@ -9,6 +9,12 @@ body {
   color: white;
 }
 
+select, 
+input {
+    color:#FFFFFF;
+    font-weight: 600;
+}
+
 @font-face {
   font-family: Work Sans;
   src: url("./assets/fonts/SourceSansPro-Regular.ttf");
@@ -20,7 +26,7 @@ body {
 
 .flex-container {
   height: 100%;
-  padding: 0;
+  padding: 20;
   margin: 0;
   display: flex;
   align-items: center;
@@ -82,14 +88,14 @@ label {
 }
 
 .box-center {
-  width: 32vw;
+  width: 36vw;
   height: fit-content;
   background: #030c21;
   border-radius: 20px;
 }
 
 .box-center-flexbox {
-  padding: 1vw;
+  padding: 2vw;
   display: flex;
   flex-direction: column;
 }
@@ -199,13 +205,14 @@ label {
 
 .button-exchange {
   position: absolute;
-  bottom: 23%;
+  bottom: 20%;
   left: 47%;
   background: #030c21;
   border: 1px solid #374462;
   box-sizing: border-box;
   border-radius: 50%;
   cursor: pointer;
+  width:2vw;
 }
 
 .wallet-input {

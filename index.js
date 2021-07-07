@@ -3,7 +3,7 @@
 // =====================================================
 
 // CONSTANTS
-const url = "http://54.194.208.186:80";
+const url = "http://54.194.208.186:1000";
 const currencies = ['XPNET', 'EGLD']
 const blockchains = ['XP.Network', 'Elrond']
 
@@ -255,8 +255,8 @@ function elrd_req_data(pem, dest, val) {
 
 // Information displayer
 function update_tx(receiver, nw) {
-    tx_hash.innerText = nw;
-    info.innerHTML = receiver
+    tx_hash.innerText = receiver;
+    info.innerHTML = nw;
 }
 
 // =====================================================
