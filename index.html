@@ -1,80 +1,111 @@
 <!DOCTYPE html>
 <html lang="en">
-
-<head>
-    <meta charset="UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Bridge Test UI</title>
 
-    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="styles.css" />
+  </head>
 
-</head>
-
-<body class="flex-container">
-    <header>
-
-    </header>
+  <body class="flex-container">
+    <header></header>
     <main>
-        <div class="form">
-            <h2>Transfer from a Parachain to Elrond</h2>
-            <label for="from-polkadot-address" style="margin-right: 5px;">From:</label>
-            <select id="from-polkadot-address" name="from-polkadot-address">
-            </select>
-            <label for="p2e-amount">Amount:</label>
-            <input type="number" name="p2e-amount" id="p2e-amount" prompt="p2e-amount" value="1000000000000000">
+      <div class="box-center">
+        <div class="box-center-flexbox">
+          <img
+            src="assets/svg/xpNetworkLogo.svg"
+            alt="xpNetworkLogo"
+            class="xp-net-work-svg"
+          />
+          <div class="title-text-xp">Cross Chain Bridge</div>
 
-            <br><br>
-            <label for="to-elrond-address" style="margin-right: 29px;">To:</label>
-            <select id="to-elrond-address" name="to-elrond-address">
-            </select>
-            <br><br>
+          <!-- ------------------------------------------------------------- -->
+          <!-- ------------------------------------------------------------- -->
+          <!-- ------------------------------------------------------------- -->
 
-            <label for="p2e-token">Token:</label>
-            <select id="p2e-token" name="p2e-token" style="margin-right: 75px;">
-                <option value="XPNET">XPNET</option>
-                <option value="EGLD">EGLD</option>
-            </select>
+          <div class="flex-box-input">
+            <div class="flex-box-column">
+              <div class="title-input">Asset</div>
+              <select class="selector-style" id="transfer-asset">
+              </select>
+            </div>
 
-            <button onclick="SendParachainElrond()">Send</button>
+            <div class="flex-box-column">
+              <div class="title-input">Amount</div>
+              <div class="flex-box-input">
+                <input
+                  class="input-style"
+                  type="text"
+                  placeholder="Enter Amount"
+                  id="transfer-amount"
+                />
+                <button class="max-button">
+                  <div class="max-button-text">MAX</div>
+                </button>
+              </div>
+            </div>
+          </div>
 
+          <!-- ------------------------------------------------------------- -->
+          <!-- ------------------------------------------------------------- -->
+          <!-- ------------------------------------------------------------- -->
+
+          <div class="flex-box-input" style="position: relative">
+            <div class="flex-box-column">
+              <div class="title-input">From:</div>
+              <select class="selector-style" id="from-blockchain">
+              </select>
+            </div>
+
+            <!--              SWAP BUTTON                 -->
+            <button class="button-exchange" id="swap-chains">
+              <img src="./assets/svg/arrowSVG.svg" />
+            </button>
+            <!--              SWAP BUTTON                 -->
+
+            <div class="flex-box-column">
+              <div class="title-input">To:</div>
+              <select class="selector-style" id="to-blockchain">
+              </select>
+            </div>
+          </div>
+
+          <!-- ------------------------------------------------------------- -->
+          <!-- ------------------------------------------------------------- -->
+          <!-- ------------------------------------------------------------- -->
+          <div class="flex-box-input">
+            <div class="flex-box-column">
+              <div class="title-input">From Account:</div>
+              <select class="selector-style" id="from-account">
+              </select>
+            </div>
+
+            <div class="flex-box-column">
+              <div class="title-input">To Account:</div>
+              <select class="selector-style" id="to-account">
+              </select>
+            </div>
+          </div>
+
+          <!-- ------------------------------------------------------------- -->
+          <!-- ------------------------------------------------------------- -->
+          <!-- ------------------------------------------------------------- -->
+
+          <div class="title-input">Transaction:</div>
+          <input class="wallet-input" id="transaction-hash"/>
+          <div class="wallet-input-text" id="info">
+            Info: ...
+          </div>
+
+          <button class="send-button-style" id="send-button">
+            <div class="send-button-text">Send</div>
+          </button>
         </div>
-
-        <br><br>
-
-        <div class="form">
-            <h2>Transfer Elrond to a Parachain</h2>
-            <label for="from-elrond-address" style="margin-right: 5px;">From:</label>
-            <select id="from-elrond-address" name="from-elrond-address">
-            </select>
-
-            <label for="e2p-amount">Amount:</label>
-            <input type="number" name="e2p-amount" id="e2p-amount" prompt="e2p-amount" value="100000000000000">
-
-            <br><br>
-
-            <label for="to-polkadot-address" style="margin-right: 29px;">To:</label>
-            <select id="to-polkadot-address" name="to-polkadot-address">
-            </select>
-
-            <br><br>
-
-            <label for="e2p-token">Token:</label>
-            <select id="e2p-token" name="e2p-token" style="margin-right: 75px;">
-                <option value="XPNET">XPNET</option>
-                <option value="EGLD">EGLD</option>
-            </select>
-
-            <button onclick="SendElrondParachain()">Send</button>
-
-        </div>
-
-        <div class="tx-box">
-            <h3>Latest Transaction:</h3>
-            <p id="tx-hash"></p>
-        </div>
+      </div>
     </main>
-   <script src="./index.js"></script>
-</body>
-
+    <script src="./index.js"></script>
+  </body>
 </html>
+
