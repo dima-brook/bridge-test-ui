@@ -130,7 +130,6 @@ send_button.addEventListener('click', async () => {
     let key;
     const targetWallet = to_account.value;
     const token = asset;
-    let func;
 
     // XP.network => Elrond
     if (directionFrom === blockchains[0] && directionTo === blockchains[1]){
@@ -140,9 +139,9 @@ send_button.addEventListener('click', async () => {
 
         // Choice of the target function
         if (token === currencies[0]) { //XPNET
-            func = transfer_xpnet_p2e;
+            transfer_xpnet_p2e(acctAddress, key, targetWallet, amount);
         } else {
-            func = withdraw_egold_p2e;
+            withdraw_egold_p2e(acctAddress, key, targetWallet, amount);
         }
 
     }else{ // Elrond => XP.network
@@ -153,9 +152,9 @@ send_button.addEventListener('click', async () => {
 
         // Choice of the target function
         if (token === currencies[0]) { //XPNET
-            func = transfer_xpnet_p2e;
+            withdraw_xpnet_e2p(key, targetWallet, amount);
         } else {
-            func = withdraw_egold_p2e;
+            transfer_egold_e2p(key, targetWallet, amount);
         }
     }
 
@@ -167,10 +166,6 @@ send_button.addEventListener('click', async () => {
         console.log("To Account:",targetWallet)
         console.log("Token:", token);
         console.log(amount, typeof amount);
-
-        
-        // Chosen function call
-        func(acctAddress, key, targetWallet, amount);
     
 });
 
