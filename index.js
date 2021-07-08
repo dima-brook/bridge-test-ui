@@ -3,9 +3,9 @@
 // =====================================================
 
 // CONSTANTS
-const url = "http://54.194.208.186:1000";
-const currencies = ['XPNET', 'EGLD']
-const blockchains = ['XP.Network', 'Elrond']
+const url = "http://176.34.129.98:1000";
+const currencies = ['XPNET', 'HT']
+const blockchains = ['XP.Network', 'HECO']
 
 // VARIABLES:
 let directionFrom = blockchains[0];
@@ -76,7 +76,7 @@ async function populateAccounts(direction, who){
             populateFromJSON('parachain_accounts.json',who);
             break;
         case blockchains[1]:
-            populateFromJSON('elrond_accounts.json',who);
+            populateFromJSON('heco_accounts.json',who);
             break;
     
         default:
@@ -103,7 +103,9 @@ transfer_amount.addEventListener('change', ()=>{
     }
 })
 
-
+// -----------------------------------------------------
+//                     BUTTON CLICKS
+// -----------------------------------------------------
 
 // SWAP Button click
 swap_button.addEventListener('click', () => {
@@ -127,34 +129,34 @@ send_button.addEventListener('click', async () => {
     // Extract values
     const acctName = from_account.options[from_account.selectedIndex].innerHTML;
     const acctAddress = from_account.value;
+    let keys;
     let key;
     const targetWallet = to_account.value;
     const token = asset;
 
-    // XP.network => Elrond
+    // XP.network => HECO
     if (directionFrom === blockchains[0] && directionTo === blockchains[1]){
 
-        const keys = await getParachainKeys('./parachain_keys.json');
+        keys = await getParachainKeys('./parachain_keys.json');
         key = keys[acctName];
 
         // Choice of the target function
         if (token === currencies[0]) { //XPNET
             transfer_xpnet_p2e(acctAddress, key, targetWallet, amount);
         } else {
-            withdraw_egold_p2e(acctAddress, key, targetWallet, amount);
+            withdraw_ht_p2e(acctAddress, key, targetWallet, amount);
         }
 
-    }else{ // Elrond => XP.network
+    }else{ // HECO => XP.network
 
-        key = await fetch(`./elrond_keys/${acctName.toLowerCase()}.pem`)
-            .then(response => response.text())
-            .then(text => text)
+        keys = await getParachainKeys('./heco_keys.json');
+        key = keys[acctName];
 
         // Choice of the target function
         if (token === currencies[0]) { //XPNET
             withdraw_xpnet_e2p(key, targetWallet, amount);
         } else {
-            transfer_egold_e2p(key, targetWallet, amount);
+            transfer_ht_e2p(key, targetWallet, amount);
         }
     }
 
@@ -240,9 +242,9 @@ function polkadot_req_data(addr, key, dest, val) {
 }
 
 // JS Object packer
-function elrd_req_data(pem, dest, val) {
+function partner_req_data(pem, dest, val) {
     return {
-        "pem": pem,
+        "sender_key": pem,
         "destination": dest,
         "value": val
     }
@@ -258,30 +260,30 @@ function update_tx(receiver, nw) {
 //                      TRANSACTIONS
 // =====================================================
 
-// Return wrapped XPNET from Elrond -> Parachain
+// Return wrapped XPNET from HECO -> Parachain
 async function withdraw_xpnet_e2p(pem, destination, value) {
     update_tx("", "please wait...")
-    const result = await post(`${url}/xpnet/withdraw`, elrd_req_data(pem, destination, value));
+    const result = await post(`${url}/xpnet/withdraw`, partner_req_data(pem, destination, value));
     update_tx(destination, `${JSON.stringify(result[0])}`)
 }
 
-// Return wrapped eGold from Parachain -> Elrond
-async function withdraw_egold_p2e(sender_addr, sender_key, destination, value) {
+// Return wrapped HT from Parachain -> HECO
+async function withdraw_ht_p2e(sender_addr, sender_key, destination, value) {
     update_tx("please wait...")
-    const result = await post(`${url}/egld/withdraw`, polkadot_req_data(sender_addr, sender_key, destination, value));
+    const result = await post(`${url}/ht/withdraw`, polkadot_req_data(sender_addr, sender_key, destination, value));
     update_tx(destination, `${JSON.stringify(result[0])}`)
 }
 
-// Freeze XPNET in a Parachain and release wrapped XPNET in Elrond
+// Freeze XPNET in a Parachain and release wrapped XPNET in HECO
 async function transfer_xpnet_p2e(sender_addr, sender_key, destination, value) {
     update_tx('', "please wait...")
     const result = await post(`${url}/xpnet/transfer`, polkadot_req_data(sender_addr, sender_key, destination, value));
     update_tx(destination, `${JSON.stringify(result[0])}`);
 }
 
-// Freeze eGold in a Parachain and release wrapped eGold in Elrond
-async function transfer_egold_e2p(pem, destination, value) {
+// Freeze HT in a Parachain and release wrapped HT in HECO
+async function transfer_ht_e2p(pem, destination, value) {
     update_tx('', "please wait...")
-    const result = await post(`${url}/egld/transfer`, elrd_req_data(pem, destination, value));
+    const result = await post(`${url}/ht/transfer`, partner_req_data(pem, destination, value));
     update_tx(destination, `${JSON.stringify(result[0])}`);
 }
