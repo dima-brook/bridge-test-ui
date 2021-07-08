@@ -250,7 +250,7 @@ function elrd_req_data(pem, dest, val) {
 
 // Information displayer
 function update_tx(receiver, nw) {
-    tx_hash.innerText = receiver;
+    tx_hash.value = receiver;
     info.innerHTML = nw;
 }
 
