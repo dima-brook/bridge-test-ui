@@ -20,7 +20,7 @@ function App() {
 //                      TRANSACTIONS
 // =====================================================
 
-const url = "http://54.194.208.186:80";
+const url = "http://54.194.208.186:1000";
 
 // Return wrapped XPNET from Elrond -> Parachain
 async function withdraw_xpnet_e2p(pem, destination, value) {
