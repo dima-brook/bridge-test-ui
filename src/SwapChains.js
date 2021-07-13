@@ -4,7 +4,7 @@ const SwapChains = ({onClick, x, y}) => {
 
     const styles ={
         buttonExchange : {
-            position: 'absolute',
+            // position: 'absolute',
             bottom: y,
             left: x,
             background: '#030c21',
@@ -12,8 +12,8 @@ const SwapChains = ({onClick, x, y}) => {
             boxSizing: "border-box",
             borderRadius: '50%',
             cursor: 'pointer',
-            display:'flex inline'
-            // marginTop: '0.5vw'
+            display:'flex inline',
+            marginTop: '0.5vw'
           }
     }
 
