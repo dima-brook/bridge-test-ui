@@ -1,11 +1,16 @@
 import React, { useState, useEffect } from 'react';
-
-import XPLogo from './XPLogo';
+import XPLogo from './assets/SVG/XPLogo';
 import SwapChains from './SwapChains';
 import Selector from './Selector';
 import SendButton from './SendButton';
-import './App.css';
-import { ElrondAccounts, ParachainAccounts, ParachainKeys, ElrondKeys } from './Config';
+import MaxButton from './MaxButton';
+
+import {
+  ElrondAccounts,
+  ParachainAccounts,
+  ParachainKeys,
+  ElrondKeys, url
+} from './Config';
 
 import {
   post,
@@ -13,53 +18,35 @@ import {
   elrd_req_data
 } from './helper_functions'
 
+import {
+  XPApp,
+  XPMain,
+  XPBoxCenter,
+  XPFlexCenter,
+  XPTitle,
+  XPRow,
+  XPColumn,
+  XPLabel,
+  XPDiv,
+  XPInput,
+  XPTransaction,
+  XPInfo
+} from './StyledComponents'
 
+/********************************************************
+ *                    APP Component                     *
+ ********************************************************/
 function App() {
 
-// =====================================================
-//                      TRANSACTIONS
-// =====================================================
+  // Information displayer helper function
+  function update_tx(receiver, nw) {
+    setNw(nw)
+    setReceiver(receiver)
+  }
 
-const url = "http://54.194.208.186:1000";
-
-// Return wrapped XPNET from Elrond -> Parachain
-async function withdraw_xpnet_e2p(pem, destination, value) {
-  update_tx("", "please wait...")
-  const result = await post(`${url}/xpnet/withdraw`, elrd_req_data(pem, destination, value));
-  update_tx(destination, `${JSON.stringify(result[0])}`)
-}
-
-// Return wrapped eGold from Parachain -> Elrond
-async function withdraw_egold_p2e(sender_addr, sender_key, destination, value) {
-  update_tx("please wait...")
-  const result = await post(`${url}/egld/withdraw`, polkadot_req_data(sender_addr, sender_key, destination, value));
-  update_tx(destination, `${JSON.stringify(result[0])}`)
-}
-
-// Freeze XPNET in a Parachain and release wrapped XPNET in Elrond
-async function transfer_xpnet_p2e(sender_addr, sender_key, destination, value) {
-  update_tx('', "please wait...")
-  const result = await post(`${url}/xpnet/transfer`, polkadot_req_data(sender_addr, sender_key, destination, value));
-  update_tx(destination, `${JSON.stringify(result[0])}`);
-}
-
-// Freeze eGold in a Parachain and release wrapped eGold in Elrond
-async function transfer_egold_e2p(pem, destination, value) {
-  update_tx('', "please wait...")
-  const result = await post(`${url}/egld/transfer`, elrd_req_data(pem, destination, value));
-  update_tx(destination, `${JSON.stringify(result[0])}`);
-}
-
-// Information displayer
-function update_tx(receiver, nw) {
-  setNw(nw)
-  setReceiver(receiver)
-
-  console.log(nw);
-  console.log(receiver);
-}
-
-  // STATE
+  // =====================================================
+  //                      S T A T E
+  // =====================================================
 
   const Tokens = ['XPNET', 'EGLD']
   const Chains = ['XP.network', 'Elrond']
@@ -79,6 +66,9 @@ function update_tx(receiver, nw) {
   const [nw, setNw] = useState('Info: ...');
   const [receiver, setReceiver] = useState('');
 
+  // =====================================================
+  //                 DROPDOWNS POPULATION
+  // =====================================================
 
   const populateFromAccounts = () => {
     switch (from) {
@@ -126,25 +116,40 @@ function update_tx(receiver, nw) {
     populateInitialAccounts();
   }, [populateFromAccounts, populateToAccounts, populateInitialAccounts]);
 
+  // =====================================================
+  //                    EVENT HANDLERS
+  // =====================================================
 
-
+  /**
+   * Swap To <=> From blockchains
+   * 
+   * button click handler
+   */
   const handleSwapChains = () => {
+
     const temp_to = to;
     setTo(from);
     setFrom(temp_to);
+
     setFromAcct(fromAccts[0]);
     setToAcct(toAccts[0]);
+
   }
 
-  const handleSendButtonClick = () => {
+  /**
+    * Send liquidity
+    * 
+    * button click handler
+    */
+  const handleSendButtonClick = async () => {
 
     let key;
     let acctAddress;
     let targetWallet;
 
     if (!fromAcct || !toAcct) {
+      // Deafult to the first elements if accounts are empty
       populateInitialAccounts();
-      console.log("accounts are empty")
     }
 
 
@@ -153,26 +158,49 @@ function update_tx(receiver, nw) {
       // Transfer direction XP.network => Elrond:
       if (from === Chains[0] && to === Chains[1]) {
 
+        // Extract the signature by the Sender's name
         key = ParachainKeys[fromAcct];
+        // Extract the account by the Sender's name
         acctAddress = ParachainAccounts[fromAcct];
+        // Extract the address by the target user name
         targetWallet = ElrondAccounts[toAcct];
 
         if (token === Tokens[0]) { // XPNET
-          transfer_xpnet_p2e(acctAddress, key, targetWallet, amount);
+
+          update_tx('', "please wait...")
+          // Lock XPNET and mint wrapped XPNET in Elrond:
+          const result = await post(`${url}/xpnet/transfer`, polkadot_req_data(acctAddress, key, targetWallet, amount));
+          update_tx(targetWallet, `${JSON.stringify(result[0])}`);
+
         } else if (token === Tokens[1]) { // EGLD
-          withdraw_egold_p2e(acctAddress, key, targetWallet, amount);
+
+          update_tx("please wait...")
+          // Return wrapped EGLD from Parachain to Elrond:
+          const result = await post(`${url}/egld/withdraw`, polkadot_req_data(acctAddress, key, targetWallet, amount));
+          update_tx(targetWallet, `${JSON.stringify(result[0])}`)
         }
 
         // Transfer direction Elrond => XP.network:
       } else if (from === Chains[1] && to === Chains[0]) {
+
+        // Extract the signature by the Sender's name
         key = ElrondKeys[fromAcct];
+        // Extract the account by the Sender's name
         acctAddress = ElrondAccounts[fromAcct];
+        // Extract the address by the target user name
         targetWallet = ParachainAccounts[toAcct]
 
         if (token === Tokens[0]) { // XPNET
-          withdraw_xpnet_e2p(key, targetWallet, amount);
+          update_tx("", "please wait...")
+          // Return wrapped XPNET from Elrond to the Parachain:
+          const result = await post(`${url}/xpnet/withdraw`, elrd_req_data(key, targetWallet, amount));
+          update_tx(targetWallet, `${JSON.stringify(result[0])}`)
+
         } else if (token === Tokens[1]) { // EGLD
-          transfer_egold_e2p(key, targetWallet, amount);
+          update_tx('', "please wait...")
+          // Lock EGLD in Elrond & release wrapped EGLD in the Parachain:
+          const result = await post(`${url}/egld/transfer`, elrd_req_data(key, targetWallet, amount));
+          update_tx(targetWallet, `${JSON.stringify(result[0])}`);
         }
       }
 
@@ -190,137 +218,161 @@ function update_tx(receiver, nw) {
     console.log(amount, typeof amount);
   }
 
+  /**
+   * Amount INPUT change event handler
+   * @param {String | Number} value 
+   */
   const handleAmountChange = (value) => {
     setAmount(value);
   }
 
+  /**
+   * Token SELECT change event handler
+   * @param {String} value 
+   */
   const handleTokenBlockchainChange = (value) => {
     setTokens(value)
   }
 
+  /**
+   * Original blockchain SELECT change event handler
+   * @param {String} value 
+   */
   const handleFromBlockchainChange = (value) => {
     setFrom(value);
 
   }
 
+  /**
+   * Target blockchain SELECT change event handler
+   * @param {Select} value 
+   */
   const handleToBlockchainChange = (value) => {
     setTo(value);
   }
 
+  /**
+   * Original Account SELECT event handler 
+   * @param {String} value 
+   */
   const handleFromAccountChange = (value) => {
     setFromAcct(value)
   }
 
+  /**
+   * Target Account SELECT event handler
+   * @param {String} value 
+   */
   const handleToAccountChange = (value) => {
     setToAcct(value)
   }
 
-  return (
-    <div className="App">
-      <main>
-        <div className="box-center">
+  // =====================================================
+  //                       J S X
+  // =====================================================
 
-          <div className="box-center-flexbox">
+  return (
+    <XPApp>
+      <XPMain>
+        <XPBoxCenter>
+
+          <XPFlexCenter>
             <XPLogo />
-            <div class="title-text-xp">Cross Chain Bridge</div>
+            <XPTitle>Cross Chain Bridge</XPTitle>
 
             {/* -------------------------------------------- */}
 
-            <div className="flex-box-input">
-              <div className="flex-box-column">
-                <div class="title-input">Asset</div>
+            <XPRow>
+              <XPColumn>
+                <XPLabel>Asset</XPLabel>
                 <Selector
                   value={token}
                   data={Tokens}
                   onClick={() => { }}
                   onChange={handleTokenBlockchainChange}
                 />
-              </div>
+              </XPColumn>
 
-              <div className="flex-box-column">
-                <div class="title-input">Amount</div>
-                <div className="felx-box-input">
-                  <input
-                    className="input-style"
+              <XPColumn>
+                <XPLabel>Amount</XPLabel>
+                <XPDiv>
+                  <XPInput
                     type="text"
                     placeholder="Enter Amount"
                     id="transfer-amount"
                     value={amount}
                     onChange={handleAmountChange}
                   />
-                  <button class="max-button">
-                    <div class="max-button-text">MAX</div>
-                  </button>
-                </div>
-              </div>
-            </div>
+                  <MaxButton
+                    onClick={() => { }}
+                  />
+                </XPDiv>
+              </XPColumn>
+            </XPRow>
 
             {/* -------------------------------------------- */}
 
-            <div class="flex-box-input" >
-              <div class="flex-box-column">
-                <div class="title-input">From:</div>
+            <XPRow>
+              <XPColumn>
+                <XPLabel>From:</XPLabel>
                 <Selector
                   value={from}
                   data={Chains}
                   onChange={handleFromBlockchainChange}
                 />
-              </div>
+              </XPColumn>
 
               <SwapChains
                 onClick={handleSwapChains}
               />
 
-              <div class="flex-box-column">
-                <div class="title-input">To:</div>
+              <XPColumn>
+                <XPLabel>To:</XPLabel>
                 <Selector
                   value={to}
                   data={Chains}
                   onChange={handleToBlockchainChange}
                 />
-              </div>
-            </div>
+              </XPColumn>
+            </XPRow>
 
             {/* -------------------------------------------- */}
 
-            <div class="flex-box-input">
-              <div class="flex-box-column">
-                <div class="title-input">From Account:</div>
+            <XPRow>
+              <XPColumn>
+                <XPLabel>From Account:</XPLabel>
 
                 <Selector
                   value={fromAcct}
                   data={fromAccts}
                   onChange={handleFromAccountChange}
                 />
-              </div>
+              </XPColumn>
 
-              <div class="flex-box-column">
-                <div class="title-input">To Account:</div>
+              <XPColumn>
+                <XPLabel>To Account:</XPLabel>
                 <Selector
                   value={toAcct}
                   data={toAccts}
                   onChange={handleToAccountChange}
                 />
-              </div>
-            </div>
+              </XPColumn>
+            </XPRow>
 
             {/* -------------------------------------------- */}
 
-            <div class="title-input">Transaction:</div>
-            <input
-              class="wallet-input"
-              value={receiver}
-            />
-            <div class="wallet-input-text">
-              {nw}
-            </div>
+            <XPLabel>Transaction:</XPLabel>
+            <XPTransaction value={receiver} />
+            <XPInfo>{nw}</XPInfo>
+
+            {/* -------------------------------------------- */}
 
             <SendButton onClick={handleSendButtonClick} />
 
-          </div>
-        </div>
-      </main>
-    </div>
+          </XPFlexCenter>
+        </XPBoxCenter>
+      </XPMain>
+    </XPApp>
   );
 }
 

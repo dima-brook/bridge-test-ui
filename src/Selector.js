@@ -1,8 +1,8 @@
 import React, { useState } from 'react'
-import ElrondLogo from './Elrond.js'
-import SubstrateLogo from "./substrateLogo.js";
+import ElrondLogo from './assets/SVG/Elrond.js'
+import SubstrateLogo from "./assets/SVG/substrateLogo.js";
 import styled from "styled-components";
-import ChevronDown from './ShevronDown.js';
+import ChevronDown from './assets/SVG/ShevronDown.js';
 
 const Wrapper = styled('div')`
 height: 100%;

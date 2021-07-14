@@ -1,4 +1,4 @@
-import ArrowSVG from './ArrowSVG';
+import ArrowSVG from './assets/SVG/ArrowSVG';
 
 const SwapChains = ({onClick, x, y}) => {
 
