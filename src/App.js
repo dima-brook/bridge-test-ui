@@ -125,6 +125,9 @@ function App() {
     }
   }
 
+  /**
+   * Catches the change events and updates related fields
+   */
   useEffect(() => {
     populateFromAccounts();
     populateToAccounts();
@@ -254,7 +257,11 @@ function App() {
    */
   const handleFromBlockchainChange = (value) => {
     setFrom(value);
-
+    populateFromAccounts()
+    populateToAccounts()
+    populateInitialAccounts()
+    setFromAcct(fromAccts[0]);
+    setToAcct(toAccts[0]);
   }
 
   /**
@@ -263,6 +270,11 @@ function App() {
    */
   const handleToBlockchainChange = (value) => {
     setTo(value);
+    populateFromAccounts()
+    populateToAccounts()
+    populateInitialAccounts()
+    setFromAcct(fromAccts[0]);
+    setToAcct(toAccts[0]);
   }
 
   /**
