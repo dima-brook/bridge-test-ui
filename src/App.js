@@ -258,10 +258,7 @@ function App() {
   const handleFromBlockchainChange = (value) => {
     setFrom(value);
     populateFromAccounts()
-    populateToAccounts()
-    populateInitialAccounts()
     setFromAcct(fromAccts[0]);
-    setToAcct(toAccts[0]);
   }
 
   /**
@@ -270,10 +267,7 @@ function App() {
    */
   const handleToBlockchainChange = (value) => {
     setTo(value);
-    populateFromAccounts()
     populateToAccounts()
-    populateInitialAccounts()
-    setFromAcct(fromAccts[0]);
     setToAcct(toAccts[0]);
   }
 
