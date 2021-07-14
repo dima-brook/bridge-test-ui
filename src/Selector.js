@@ -102,7 +102,7 @@ const Selector = ({ value, data, onClick, onChange }) => {
                 {   // Loop over the data elements:
                     data.map(item => {
                         return (
-                            <XPDropDownElement>
+                            <XPDropDownElement onClick={() => handleXPDropDownClick(item)}>
                                 <XPWrapper>
                                     {/* ================================== 1. SVG ICON =================================*/}
                                     {
@@ -111,11 +111,7 @@ const Selector = ({ value, data, onClick, onChange }) => {
                                             : <SubstrateLogo />
                                     }
                                     {/* ================================= 2. TEXT FIELD ================================*/}
-                                    <XPStyledText
-                                        onClick={() => handleXPDropDownClick(item)}
-                                    >
-                                        {item}
-                                    </XPStyledText>
+                                    <XPStyledText>{item}</XPStyledText>
                                 </XPWrapper>
                             </XPDropDownElement>
                         )
