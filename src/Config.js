@@ -1,5 +1,3 @@
-export const url = "http://54.194.208.186:100";
-
 export const ElrondAccounts = {
     "XP-ALICE":"erd14jjddnkallyr5y4zsy5jwz507pq8gaanwk97ykq6lt94v4ke9mesqgdngj",
     "XP-BOB":"erd14js0zjnej264rt0dqqtuf4jal3nwaxv5gmhn54psaru0aa8f44nqsd0k29",
@@ -18,12 +16,30 @@ export const ParachainAccounts = {
 }
 
 export const ParachainKeys = {
-    "ALICE": "0x33a6f3093f158a7109f679410bef1a0c54168145e0cecb4df006c1c2fffb1f09925a225d97aa00682d6a59b95b18780c10d7032336e88f3442b42361f4a66011",
-    "BOB": "0xe1c39e72cca724caa697d64a58e10bd95ffa63d1922962f7e27f8a09dda1370b41ae88f85d0c1bfc37be41c904e1dfc01de8c8067b0d6d5df25dd1ac0894a325",
-    "CHARLIE": "0x551e1bc6a2c0a5abed4ed6bebf2b2b2851041492a4f934607678288d7de8d40c8faf12ff39cd4e5d92bb773972f41a7a5279ebc2ed92264bed8f47d344f8f18c",
-    "DAVE": "0x049c4a50d9e80ebc9d17cb555327cbbe7d47839250f7c2bce90d1d6d7165af0b108c4487b9323b98b11fe36cb301b084e920f7b7895536809a6d62a451b25568",
-    "EVE": "0xadc66eb5bf6b586a8edc846924416b439e83226a8fbd9cef8fa118b89d095c0d3dbf386b7828f348abe15d76973a72009e6ef86a5c91db2990cb36bb657c6587",
-    "FERDIE": "0xb746f8a10820eff9292a07c0f5f3b5115e0d9b0d0d835082a54e6569e5be690803e4f21bc6cc62bb4eeed5a9cce642c25e2d2ac1464093b50f6196d78e3a7426"
+    "ALICE": {
+        publickey: "0xd43593c715fdd31c61141abd04a99fd6822c8558854ccde39a5684e7a56da27d",
+        secretkey: "0x33a6f3093f158a7109f679410bef1a0c54168145e0cecb4df006c1c2fffb1f09925a225d97aa00682d6a59b95b18780c10d7032336e88f3442b42361f4a66011"
+    },
+    "BOB": {
+        publickey: "0x8eaf04151687736326c9fea17e25fc5287613693c912909cb226aa4794f26a48",
+        secretkey: "0xe1c39e72cca724caa697d64a58e10bd95ffa63d1922962f7e27f8a09dda1370b41ae88f85d0c1bfc37be41c904e1dfc01de8c8067b0d6d5df25dd1ac0894a325"
+    },
+    "CHARLIE": {
+        publickey: "0x90b5ab205c6974c9ea841be688864633dc9ca8a357843eeacf2314649965fe22",
+        secretkey: "0x551e1bc6a2c0a5abed4ed6bebf2b2b2851041492a4f934607678288d7de8d40c8faf12ff39cd4e5d92bb773972f41a7a5279ebc2ed92264bed8f47d344f8f18c"
+    },
+    "DAVE": {
+        publickey: "0x306721211d5404bd9da88e0204360a1a9ab8b87c66c1bc2fcdd37f3c2222cc20",
+        secretkey: "0x049c4a50d9e80ebc9d17cb555327cbbe7d47839250f7c2bce90d1d6d7165af0b108c4487b9323b98b11fe36cb301b084e920f7b7895536809a6d62a451b25568"
+    },
+    "EVE": {
+        publickey: "0xe659a7a1628cdd93febc04a4e0646ea20e9f5f0ce097d9a05290d4a9e054df4e",
+        secretkey: "0xadc66eb5bf6b586a8edc846924416b439e83226a8fbd9cef8fa118b89d095c0d3dbf386b7828f348abe15d76973a72009e6ef86a5c91db2990cb36bb657c6587"
+    },
+    "FERDIE": {
+        publickey: "0x1cbd2d43530a44705ad088af313e18f80b53ef16b36177cd4b77b846f2a5f07c",
+        secretkey: "0xb746f8a10820eff9292a07c0f5f3b5115e0d9b0d0d835082a54e6569e5be690803e4f21bc6cc62bb4eeed5a9cce642c25e2d2ac1464093b50f6196d78e3a7426"
+    }
 }
 
 export const ElrondKeys = {
@@ -52,4 +68,17 @@ export const ElrondKeys = {
     M2ZhZWUyMjY2MmU4ZjNmNzAxYWRlMWRkYTgxNjdiN2YxOGRiYWI4ZDQyYzc2M2U3
     YTM1NTM5ZjMxOTdhOTRhZmVmYTFkNjNhYTJkYjA4MWU=
     -----END PRIVATE KEY for erd1qxk7rhdgzeah7xxm4wx593mru7342w0nr9afftl058tr4gkmpq0qvz74uh-----`
+}
+
+
+export const ChainConfig = {
+    "xpnode": "ws://localhost:9944",
+    "xp_faucet": ParachainKeys["ALICE"],
+    "xp_freezer": "5HFujrmKZoF8iNNu3cM8y1S1x8ogfa1nzxueJvy11AFD8pJu",
+    "elrond_node": "http://localhost:7950",
+    "elrond_faucet": ElrondKeys["XP-ALICE"],
+    "elrond_minter": "erd1qqqqqqqqqqqqqpgqygvvtlty3v7cad507v5z793duw9jjmlxd8sszs8a2y",
+    "elrond_event_rest": "http://localhost:6644",
+    "elrond_esdt": "XPNET-4e6ce6",
+    "elrond_esdt_nft": "XPNFT-734aca"
 }
