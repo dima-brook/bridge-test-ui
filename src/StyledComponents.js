@@ -23,7 +23,7 @@ export const XPButtonText = styled("div")`
 font-family: Inter;
 font-style: normal;
 font-weight: 500;
-font-size: 16px;
+font-size: 1.2vw;
 line-height: 126%;
 display:flex;
 align-items: center;
@@ -38,31 +38,46 @@ text-align: center;
 
 export const XPMain = styled('main')`
 align-content: center;
+text-align: center;
 `
 
 export const XPFlexCenter = styled('div')`
 padding: 1vw;
 display: flex;
 flex-direction: column;
+text-align: center;
 `
 
 export const XPBoxCenter = styled('div')`
-width: 33vw;
+width: 34vw;
 height: fit-content;
 background: #030c21;
 border: 1px solid ${borderColor};
 border-radius: ${borderRadius};
 padding: 1.5vw;
+
+@media (max-width: 700px){
+  width: 60%;
+  margin-left: 15%;
+}
+@media (max-width: 400px){
+  width: 70%;
+  // margin-left: 20%;
+}
+@media (max-width: 340px){
+  width: 70%;
+  // margin-left: 40%;
+}
 `
 
 export const XPLabel = styled('div')`
-width: 100px;
-height: 30px;
+width: 10vw;
+height: 1.5vw;
 
 font-family: Inter;
 font-style: normal;
 font-weight: 500;
-font-size: 12px;
+font-size: 1vw;
 line-height: 126%;
 
 display: flex;
@@ -89,7 +104,7 @@ width: 339px;
 height: 33px;
 font-family: Work Sans;
 font-weight: bold;
-font-size: 26px;
+font-size: 2vw;
 text-align: left;
 margin-top: 1vw;
 letter-spacing: 0.03em;
@@ -104,6 +119,7 @@ border: 1px solid ${borderColor};
 box-sizing: border-box;
 border-radius: 6px;
 color: ${textColor};
+font-size:1vw;
 width: 11.5vw;
 height: ${eltHeight};
 caret-color: ${textColor};
@@ -120,7 +136,7 @@ height: 1.9vw;
 font-family: Inter;
 font-style: normal;
 font-weight: 500;
-font-size: 12px;
+font-size: 1vw;
 line-height: 126%;
 display: flex;
 align-items: center;
@@ -164,6 +180,7 @@ font-family: Work Sans;
 margin-left: 1vw; 
 order:2; 
 flex-grow: 4;
+font-size:1.2vw;
 `
 
 export const XPDropDown = styled('div')`
@@ -183,10 +200,9 @@ height: ${eltHeight};
 export const XPDropDownContent = styled('div')`
 display: none;
 position: absolute;
-background-color: #f1f1f1;
-min-width: 160px;
 box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
 z-index: 1;
+width: 14.5vw;
 margin-left:-20px;
 `
 /**
@@ -195,7 +211,7 @@ margin-left:-20px;
  * On hover changes background color to light blue
  */
 export const XPDropDownElement = styled('a')`
-padding: 12px 16px;
+padding: 1vw 1.2vw;
 display: block;
 background: ${bgField};
 border: 1px solid ${borderColor};

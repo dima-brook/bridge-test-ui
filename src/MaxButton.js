@@ -14,7 +14,7 @@ cursor: pointer;
 
 const Text = styled('div')`
 font-family: Inter;
-font-size: 13px;
+font-size: 1vw;
 height: 10px;
 display: flex;
 align-items: center;

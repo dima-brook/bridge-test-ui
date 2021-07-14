@@ -15,7 +15,7 @@ const SwapChains = ({onClick}) => {
             borderRadius: '50%',
             cursor: 'pointer',
             display:'flex inline',
-            marginTop: '0.5vw'
+            // marginTop: '0.5vw'
           }
     }
 
