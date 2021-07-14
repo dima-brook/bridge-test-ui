@@ -1,77 +1,45 @@
 import React, { useState } from 'react'
 import ElrondLogo from './assets/SVG/Elrond.js'
 import SubstrateLogo from "./assets/SVG/substrateLogo.js";
-import styled from "styled-components";
 import ChevronDown from './assets/SVG/ShevronDown.js';
+import {
+    XPDropDown,
+    XPWrapper,
+    XPStyledText,
+    XPDropDownContent,
+    XPDropDownElement
+} from './StyledComponents';
 
-const Wrapper = styled('div')`
-height: 100%;
-padding: 0;
-margin: 0;
-display: flex;
-align-items: center;
-justify-content: center;
-flex-direction: row;
-flex-grow: 4;
-`;
-
-const StyledText = styled('span')`
-display: flex;
-align-items: center;
-font-family: Work Sans; 
-margin-left: 1vw; 
-order:2; 
-flex-grow: 4;
-`
-
-const DropDown = styled('div')`
-background: #051937;
-border: 1px solid #374462;
-box-sizing: border-box;
-border-radius: 6px;
-padding-inline-start: 20px;
-width: 14.5vw;
-height: 2.5vw;
-color: white;
-`
-
-const DropdownContent = styled('div')`
-display: none;
-position: absolute;
-background-color: #f1f1f1;
-min-width: 160px;
-box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
-z-index: 1;
-`
-
-const DropDownElement = styled('a')`
-color: black;
-  padding: 12px 16px;
-  text-decoration: none;
-  display: block;
-  background: #051937;
-border: 1px solid #374462;
-box-sizing: border-box;
-padding-inline-start: 20px;
-width: 14.5vw;
-height: 2.5vw;
-color: white;
-text-align: left;
-  &:hover {background-color: #ddd;}
-`
-
+/**
+ * Custom SELECT component
+ * @param {String} value the default or selected option
+ * @param {Array} data an Array || Object mapping user names to hashes
+ * @param {Event} onClick click event handler
+ * @param {Event} onChange change event handler
+ * @returns the custom SELECT
+ */
 const Selector = ({ value, data, onClick, onChange }) => {
 
     const [display, setDisplay] = useState('none');
 
-    if ("ALICE" in data || "XP-ALICE" in data){
+    // If the data contains account in an Object
+    // Like {KEY:"value"}
+    // Extract the keys only
+    if ("ALICE" in data || "XP-ALICE" in data) {
         data = Object.keys(data)
     }
 
-    if (!value){
+    // If no value is available
+    // Default to the first element in data
+    if (!value) {
         value = data[0]
     }
 
+    /**
+     * SELECT element onClick event handler
+     * 
+     * Swaps the dropdown menu visibility
+     */
     const handleClick = () => {
 
         if (display === 'none') {
@@ -82,7 +50,13 @@ const Selector = ({ value, data, onClick, onChange }) => {
 
     }
 
-    const handleDropDownClick = (datum) => {
+    /**
+     * Dropdown menu onClick event handler
+     * 
+     * Passes the element's value to the parent
+     * @param {String} datum 
+     */
+    const handleXPDropDownClick = (datum) => {
         if (display === 'block') {
             setDisplay('none');
         }
@@ -92,49 +66,65 @@ const Selector = ({ value, data, onClick, onChange }) => {
 
     return (
 
-        <DropDown
+        // ========================================================================================
+        //                                  SELECT DropDown Top Window                            =
+        // ========================================================================================
+
+        <XPDropDown
             onClick={() => handleClick()}
         >
-            
-            <Wrapper>
+
+            <XPWrapper>
+
+                {/* ================================== 1. SVG ICON =================================*/}
                 {
-                    value && (value === 'Elrond' || value === 'EGLD' || value.slice(0,3) === 'XP-')
+                    value && (value === 'Elrond' || value === 'EGLD' || value.slice(0, 3) === 'XP-')
                         ? <ElrondLogo />
                         : <SubstrateLogo />
                 }
-                <StyledText>
-                    {value}
-                </StyledText>
+
+                {/* ================================= 2. TEXT FIELD ================================*/}
+                <XPStyledText>{value}</XPStyledText>
+
+                {/* ================================ 3. Chevron Down ===============================*/}
                 <ChevronDown />
-            </Wrapper>
-            
-            <DropdownContent
+
+            </XPWrapper>
+
+            {/* ======================================================================================== */}
+            {/*                               SELECT DropDown Menu                                       */}
+            {/* ======================================================================================== */}
+
+            <XPDropDownContent
                 style={{ display }}
-                
+
             >
-                {
+                {   // Loop over the data elements:
                     data.map(item => {
                         return (
-                            <DropDownElement>
-                            <Wrapper>
-                                {
-                                    item && (item === 'Elrond' || item === 'EGLD'  || item.slice(0,3) === 'XP-')
-                                        ? <ElrondLogo />
-                                        : <SubstrateLogo />
-                                }
-                                <StyledText
-                                onClick={() => handleDropDownClick(item)}
-                                >
-                                    {item}
-                                </StyledText>
-                            </Wrapper>
-                        </DropDownElement>
-                    )})
+                            <XPDropDownElement>
+                                <XPWrapper>
+                                    {/* ================================== 1. SVG ICON =================================*/}
+                                    {
+                                        item && (item === 'Elrond' || item === 'EGLD' || item.slice(0, 3) === 'XP-')
+                                            ? <ElrondLogo />
+                                            : <SubstrateLogo />
+                                    }
+                                    {/* ================================= 2. TEXT FIELD ================================*/}
+                                    <XPStyledText
+                                        onClick={() => handleXPDropDownClick(item)}
+                                    >
+                                        {item}
+                                    </XPStyledText>
+                                </XPWrapper>
+                            </XPDropDownElement>
+                        )
+                    })
                 }
 
-            </DropdownContent>
-            
-        </DropDown>
+            </XPDropDownContent>
+
+        </XPDropDown>
     )
 }
 

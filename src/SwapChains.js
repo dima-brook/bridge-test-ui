@@ -1,12 +1,14 @@
 import ArrowSVG from './assets/SVG/ArrowSVG';
 
-const SwapChains = ({onClick, x, y}) => {
+/**
+ * Swaps the Source <=> Target blockchains
+ * @param {Event} onClick 
+ * @returns round button JSX
+ */
+const SwapChains = ({onClick}) => {
 
     const styles ={
         buttonExchange : {
-            // position: 'absolute',
-            bottom: y,
-            left: x,
             background: '#030c21',
             border: "1px solid #374462",
             boxSizing: "border-box",

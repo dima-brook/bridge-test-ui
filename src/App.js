@@ -70,6 +70,11 @@ function App() {
   //                 DROPDOWNS POPULATION
   // =====================================================
 
+  /**
+   * Checks wich blockchain is the Source
+   * 
+   * Populates the FROM with the respective accounts
+   */
   const populateFromAccounts = () => {
     switch (from) {
       case Chains[0]:
@@ -83,6 +88,11 @@ function App() {
     }
   }
 
+  /**
+   * Checks wich blockchain is the Target
+   * 
+   * Populates the FROM with the respective accounts
+   */
   const populateToAccounts = () => {
     switch (to) {
       case Chains[0]:
@@ -96,6 +106,11 @@ function App() {
     }
   }
 
+  /**
+   * Checks the Source / Target blockchains
+   * 
+   * Defaults to the first accounts
+   */
   const populateInitialAccounts = () => {
     if (!fromAcct && from === Chains[0]) {
       setFromAcct(Object.keys(ParachainAccounts)[0])
@@ -208,8 +223,7 @@ function App() {
       console.error(error)
     }
 
-    // Check the extracted values
-    // TODO: remove before production
+    // Check the extracted values:
     console.log("From:", fromAcct)
     console.log("Account:", acctAddress)
     console.log("Key:", key)
@@ -267,9 +281,9 @@ function App() {
     setToAcct(value)
   }
 
-  // =====================================================
-  //                       J S X
-  // =====================================================
+  // ==========================================================
+  //                            J S X
+  // ==========================================================
 
   return (
     <XPApp>
@@ -280,6 +294,8 @@ function App() {
             <XPLogo />
             <XPTitle>Cross Chain Bridge</XPTitle>
 
+            {/* -------------------------------------------- */}
+            {/* ---------- The first Row of elements ------- */}
             {/* -------------------------------------------- */}
 
             <XPRow>
@@ -303,13 +319,15 @@ function App() {
                     value={amount}
                     onChange={handleAmountChange}
                   />
-                  <MaxButton
-                    onClick={() => { }}
-                  />
+                  {/* Extracts the sum total form the account */}
+                  {/* P.S. Not implemented yet...             */}
+                  <MaxButton onClick={() => { }}/>
                 </XPDiv>
               </XPColumn>
             </XPRow>
 
+            {/* -------------------------------------------- */}
+            {/* --------- The second Row of elements ------- */}
             {/* -------------------------------------------- */}
 
             <XPRow>
@@ -322,9 +340,7 @@ function App() {
                 />
               </XPColumn>
 
-              <SwapChains
-                onClick={handleSwapChains}
-              />
+              <SwapChains onClick={handleSwapChains}/>
 
               <XPColumn>
                 <XPLabel>To:</XPLabel>
@@ -336,6 +352,8 @@ function App() {
               </XPColumn>
             </XPRow>
 
+            {/* -------------------------------------------- */}
+            {/* ---------- The third Row of elements ------- */}
             {/* -------------------------------------------- */}
 
             <XPRow>
@@ -360,11 +378,15 @@ function App() {
             </XPRow>
 
             {/* -------------------------------------------- */}
+            {/* --------- The informational elements ------- */}
+            {/* -------------------------------------------- */}
 
             <XPLabel>Transaction:</XPLabel>
             <XPTransaction value={receiver} />
             <XPInfo>{nw}</XPInfo>
 
+            {/* -------------------------------------------- */}
+            {/* --------------- The Send Button ------------ */}
             {/* -------------------------------------------- */}
 
             <SendButton onClick={handleSendButtonClick} />

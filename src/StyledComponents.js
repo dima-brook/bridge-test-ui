@@ -1,5 +1,29 @@
 import styled from "styled-components";
 
+export const XPButton = styled('button')`
+margin-top: 1vw;
+  height: 3vw;
+  background: #045adb;
+  opacity: 0.9;
+  border: none;
+  margin-bottom: 0.5vw;
+  box-shadow: inset 0px 2px 2px rgba(104, 164, 255, 0.25);
+  border-radius: 6px;
+`
+
+export const XPButtonText = styled("div")`
+font-family: Inter;
+font-style: normal;
+font-weight: 500;
+font-size: 16px;
+line-height: 126%;
+display:flex;
+  align-items: center;
+  justify-content: center;
+letter-spacing: 0.03em;
+color: #FFFFFF;
+`
+
 export const XPApp = styled('div')`
 text-align: center;
 `
@@ -113,4 +137,61 @@ font-weight: 500;
 font-size: 0.8em;
 color: #FFFFFF;
 }
+`
+
+export const XPWrapper = styled('div')`
+height: 100%;
+padding: 0;
+margin: 0;
+display: flex;
+align-items: center;
+justify-content: center;
+flex-direction: row;
+flex-grow: 4;
+`;
+
+export const XPStyledText = styled('span')`
+display: flex;
+align-items: center;
+font-family: Work Sans; 
+margin-left: 1vw; 
+order:2; 
+flex-grow: 4;
+`
+
+export const XPDropDown = styled('div')`
+background: #051937;
+border: 1px solid #374462;
+box-sizing: border-box;
+border-radius: 6px;
+padding-inline-start: 20px;
+width: 14.5vw;
+height: 2.5vw;
+color: white;
+`
+
+export const XPDropDownContent = styled('div')`
+display: none;
+position: absolute;
+background-color: #f1f1f1;
+min-width: 160px;
+box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
+z-index: 1;
+margin-left:-20px;
+`
+
+export const XPDropDownElement = styled('a')`
+color: black;
+  padding: 12px 16px;
+  text-decoration: none;
+  display: block;
+  background: #051937;
+border: 1px solid #374462;
+box-sizing: border-box;
+padding-inline-start: 20px;
+width: 14.5vw;
+height: 2.5vw;
+color: white;
+text-align: left;
+  &:hover {background-color: #045adb;}
 `
