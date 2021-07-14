@@ -1,5 +1,7 @@
 import styled from "styled-components";
 
+const bgField = '#051937'
+
 export const XPButton = styled('button')`
 margin-top: 1vw;
   height: 3vw;
@@ -26,6 +28,8 @@ color: #FFFFFF;
 
 export const XPApp = styled('div')`
 text-align: center;
+border: 1px solid #374462;
+border-radius: 20px;
 `
 
 export const XPMain = styled('main')`
@@ -91,7 +95,7 @@ color: #ffffff;
 export const XPDiv = styled('div')``
 
 export const XPInput = styled('input')`
-background: #051937;
+background: ${bgField};
 border: 1px solid #374462;
 box-sizing: border-box;
 border-radius: 6px;
@@ -124,7 +128,7 @@ opacity: 0.6;
 export const XPTransaction = styled('input')`
 height: 2.5vw;
 width: 100%;
-background: #051937;
+background: ${bgField};
 border: 1px solid #374462;
 box-sizing: border-box;
 border-radius: 6px;
@@ -160,10 +164,10 @@ flex-grow: 4;
 `
 
 export const XPDropDown = styled('div')`
-background: #051937;
+background: ${bgField};
 border: 1px solid #374462;
-box-sizing: border-box;
 border-radius: 6px;
+box-sizing: border-box;
 padding-inline-start: 20px;
 width: 14.5vw;
 height: 2.5vw;
@@ -185,7 +189,7 @@ color: black;
   padding: 12px 16px;
   text-decoration: none;
   display: block;
-  background: #051937;
+  background: ${bgField};
 border: 1px solid #374462;
 box-sizing: border-box;
 padding-inline-start: 20px;
