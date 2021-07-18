@@ -10,6 +10,12 @@ border-left: none;
 height: 2.5vw;
 width: 3vw;
 cursor: pointer;
+
+@media (max-width: 1024px) {
+    height: 40px;
+    width: 50px
+  }
+
 `
 
 const Text = styled('div')`
@@ -21,6 +27,11 @@ align-items: center;
 justify-content: center;
 letter-spacing: 0.03em;
 color: #1972f9;
+@media (max-width: 1024px) {
+    font-size: 15px;
+
+  }
+
 `
 
 const MaxButton = ({onClick}) => {

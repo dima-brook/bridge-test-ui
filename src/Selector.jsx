@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useState, useRef } from 'react'
 import ElrondLogo from './assets/SVG/Elrond.js'
 import SubstrateLogo from "./assets/SVG/substrateLogo.js";
 import ChevronDown from './assets/SVG/ShevronDown.js';
@@ -9,6 +9,7 @@ import {
     XPDropDownContent,
     XPDropDownElement
 } from './StyledComponents';
+import {DetectOutsideClick} from "./@utils/closeDropDown";
 
 /**
  * Custom SELECT component
@@ -21,6 +22,9 @@ import {
 const Selector = ({ value, data, onClick, onChange }) => {
 
     const [display, setDisplay] = useState('none');
+
+    //ref to close dropdown
+    const closeDropDownRef = useRef(null);
 
     // If the data contains account in an Object
     // Like {KEY:"value"}
@@ -40,15 +44,7 @@ const Selector = ({ value, data, onClick, onChange }) => {
      * 
      * Swaps the dropdown menu visibility
      */
-    const handleClick = () => {
 
-        if (display === 'none') {
-            setDisplay('block');
-        } else {
-            setDisplay('none');
-        }
-
-    }
 
     /**
      * Dropdown menu onClick event handler
@@ -64,13 +60,25 @@ const Selector = ({ value, data, onClick, onChange }) => {
         onChange(datum)
     }
 
+
+    //short if statement
+    const handleClick = () => display === "none" ? setDisplay("block") : setDisplay("none");
+    
+    
+    //close dropdown when click outside
+    DetectOutsideClick(closeDropDownRef, (datum) =>
+    setTimeout(() => {
+        handleXPDropDownClick(datum);
+    }, 100)
+  );
+
     return (
 
         // ========================================================================================
         //                                  SELECT DropDown Top Window                            =
         // ========================================================================================
 
-        <XPDropDown
+        <XPDropDown 
             onClick={() => handleClick()}
         >
 
@@ -100,10 +108,10 @@ const Selector = ({ value, data, onClick, onChange }) => {
 
             >
                 {   // Loop over the data elements:
-                    data.map(item => {
+                    data.map((item,i) => {
                         return (
-                            <XPDropDownElement onClick={() => handleXPDropDownClick(item)}>
-                                <XPWrapper>
+                            <XPDropDownElement  key={i} onClick={() => handleXPDropDownClick(item)} ref={closeDropDownRef}>
+                                <XPWrapper >
                                     {/* ================================== 1. SVG ICON =================================*/}
                                     {
                                         item && (item === 'Elrond' || item === 'EGLD' || item.slice(0, 3) === 'XP-')

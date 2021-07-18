@@ -3,7 +3,11 @@ import styled from "styled-components";
 const StyledSVG = styled('svg')`
     display: flex;
     align-items: center;
-    order: 1
+    order: 1;
+    width: 1.1vw;
+    height: 1.1vw;
+    
+      
 `
 
 const ElrondLogo = () => {
