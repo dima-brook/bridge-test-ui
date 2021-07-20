@@ -1,3 +1,5 @@
+@import url('https://fonts.googleapis.com/css2?family=Work+Sans:wght@700&display=swap');
+
 html,
 body {
   height: 100%;
@@ -17,16 +19,6 @@ body {
   text-rendering: optimizeLegibility !important;
   -webkit-font-smoothing: antialiased !important;
   -webkit-text-stroke: 0.025em rgba(51, 51, 51, 0.1);
-}
-
-@font-face {
-  font-family: Work Sans;
-  src: url("../fonts/SourceSansPro-Regular.ttf");
-}
-
-@font-face {
-  font-family: WorkSansBold;
-  src: url("https://fonts.googleapis.com/css2?family=Work+Sans:wght@700&display=swap");
 }
 
 @font-face {

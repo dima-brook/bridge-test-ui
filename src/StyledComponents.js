@@ -124,7 +124,7 @@ justify-content: space-between;
 export const XPTitle = styled('div')`
 font-size: 26px;
 line-height: 126%;
-font-family: WorkSansBold;
+font-family: 'Work Sans', sans-serif;
 font-style: normal;
 font-weight: bold;
 display: flex;
@@ -295,6 +295,7 @@ display: none;
 width: 48.7%;
 position: absolute;
 box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
+overflow: auto !important;
 z-index: 1;
   margin-left: -21px;
   @media (max-width: 1300px) {
@@ -302,6 +303,7 @@ z-index: 1;
   @media (max-width: 768px) {
     width: 100%;
     overflow:scroll;
+    
     max-height: 150px;
     z-index:999;
   }
@@ -347,7 +349,7 @@ export const XPDropDownElement = styled('a')`
   }
 
   @media (max-width: 1300px) {
-    width: 92%;
+    width: 91%;
     height: 40px;
   }
 
