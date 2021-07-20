@@ -173,7 +173,7 @@ export const XPInfo = styled("div")`
   font-family: Inter;
   font-style: normal;
   font-weight: 500;
-  font-size: 15px;
+  font-size: 13px;
   line-height: 126%;
   display: flex;
   align-items: center;
@@ -186,7 +186,11 @@ export const XPInfo = styled("div")`
     
   }
   @media (max-width: 768px) {
-    font-size: 16px;
+    font-size: 12px;
+    width: 100%;
+  }
+  @media (max-width: 450px) {
+    word-break: break-all;
     width: 100%;
   }
 `;
@@ -197,6 +201,7 @@ export const XPTransaction = styled("input")`
   border: 1px solid ${borderColor};
   box-sizing: border-box;
   border-radius: 6px;
+  color: ${textColor};
   width: 100%;
   padding-left: 10px;
   &:focus {
@@ -204,13 +209,27 @@ export const XPTransaction = styled("input")`
     font-family: Inter;
     font-weight: 500;
     font-size: 0.8em;
-    color: ${textColor};
   }
   @media (max-width: 1300px) {
     height: 45px;
   }
   @media (max-width: 768px) {
     font-size: 16px;
+    width: 100%;
+    height: 56px;
+  }
+  @media (max-width: 450px) {
+    font-size: 12px;
+    width: 100%;
+    height: 56px;
+  }
+  @media (max-width: 375px) {
+    font-size: 10px;
+    width: 100%;
+    height: 56px;
+  }
+  @media (max-width: 330px) {
+    font-size: 9px;
     width: 100%;
     height: 56px;
   }
