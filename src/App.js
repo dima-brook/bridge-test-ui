@@ -336,29 +336,28 @@ function App() {
             {/* --------- The second Row of elements ------- */}
             {/* -------------------------------------------- */}
 
-            <XPRow>
+            <div className="from-to-style">
+                
               <XPColumn>
-                <XPLabel>From:</XPLabel>
+                <XPLabel>From</XPLabel>
                 <Selector
                   value={from}
                   data={Chains}
                   onChange={handleFromBlockchainChange}
                 />
               </XPColumn>
-
-              <SwapChains onClick={handleSwapChains}/>
-
+              <div className="swap-button-absolute">
+                  <SwapChains onClick={handleSwapChains} />
+                </div>
               <XPColumn>
-                <XPLabel>To:</XPLabel>
+                <XPLabel>To</XPLabel>
                 <Selector
                   value={to}
                   data={Chains}
                   onChange={handleToBlockchainChange}
                 />
               </XPColumn>
-            </XPRow>
-
-            {/* -------------------------------------------- */}
+            </div>            {/* -------------------------------------------- */}
             {/* ---------- The third Row of elements ------- */}
             {/* -------------------------------------------- */}
 

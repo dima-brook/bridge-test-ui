@@ -1,3 +1,6 @@
+@import url('https://fonts.googleapis.com/css2?family=Roboto&display=swap');
+
+
 .Xp-svg-logo {
   width: 118px;
   height: 18px;
@@ -20,25 +23,7 @@
   left: 47.5%;
   top: 37%;
 }
-/* width */
-::-webkit-scrollbar {
-  width: 10px;
-}
 
-/* Track */
-::-webkit-scrollbar-track {
-  background: #fff; 
-}
- 
-/* Handle */
-::-webkit-scrollbar-thumb {
-  background: #030c21; 
-}
-
-/* Handle on hover */
-::-webkit-scrollbar-thumb:hover {
-  background: #030c21; 
-}
 #selector-dropdown {
 
 }
@@ -52,6 +37,10 @@
   height: 100%;
   max-width: 35px;
   max-height: 35px;
+}
+
+.buttonExchange:focus-visible{
+  outline: none;
 }
 
 #transfer-amount::placeholder {
@@ -83,6 +72,29 @@
   .from-to-style {
     flex-direction: column;
   }
+
+
+  #dropdown::-webkit-scrollbar {
+    width: 0px;
+  }
+  
+  /* Track */
+  #dropdown::-webkit-scrollbar-track {
+    visibility: hidden;
+
+  }
+   
+  /* Handle */
+  #dropdown::-webkit-scrollbar-thumb {
+    visibility: hidden;
+ 
+  }
+  
+  /* Handle on hover */
+  #dropdown::-webkit-scrollbar-thumb:hover {
+    visibility: hidden;
+  }
+
 
   .swap-button-absolute {
     transform: rotate(90deg);
@@ -123,4 +135,5 @@
     height: 45px;
   }
 }
+
 

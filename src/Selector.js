@@ -102,7 +102,7 @@ const Selector = ({ value, data, onClick, onChange }) => {
 
             <XPDropDownContent
                 style={{ display }}
-		id="selector-dropdown"
+                id="dropdown"
             >
                 {   // Loop over the data elements:
                     data.map(item => {
