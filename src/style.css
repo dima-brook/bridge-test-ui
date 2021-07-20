@@ -1,0 +1,49 @@
+.Xp-svg-logo {
+  width: 118px;
+  height: 18px;
+}
+
+.arrows-svg-switch {
+  margin-top: 3px;
+  width: 1.5vw;
+  height: 1.5vw;
+  margin-left: -1px;
+}
+
+.from-to-style {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  position: relative;
+}
+
+.swap-button-absolute {
+  position: absolute;
+  left: 47%;
+  top: 37%;
+}
+
+.buttonExchange {
+  background: #030c21;
+  border: 1px solid #374462;
+  box-sizing: border-box;
+  border-radius: 50%;
+  cursor: pointer;
+  width: 100%;
+  height: 100%;
+}
+
+@media (max-width: 1024px) {
+  .swap-button-absolute {
+    left: 46%;
+  }
+
+  .arrows-svg-switch {
+    width: 30px;
+    height: 30px;
+  }
+  .buttonExchange {
+    width: 40px;
+    height: 40px;
+  }
+}

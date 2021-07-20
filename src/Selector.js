@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useState, useRef } from 'react'
 import ElrondLogo from './assets/SVG/Elrond.js'
 import SubstrateLogo from "./assets/SVG/substrateLogo.js";
 import ChevronDown from './assets/SVG/ShevronDown.js';
@@ -9,6 +9,7 @@ import {
     XPDropDownContent,
     XPDropDownElement
 } from './StyledComponents';
+import {DetectOutsideClick} from "./@utils/closeDropDown";
 
 /**
  * Custom SELECT component
@@ -21,6 +22,9 @@ import {
 const Selector = ({ value, data, onClick, onChange }) => {
 
     const [display, setDisplay] = useState('none');
+
+    //ref to close dropdown
+    const closeDropDownRef = useRef(null);
 
     // If the data contains account in an Object
     // Like {KEY:"value"}

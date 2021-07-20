@@ -1,4 +1,4 @@
-export const url = "http://54.194.208.186:100";
+export const url = "http://54.194.208.186:1000";
 
 export const ElrondAccounts = {
     "XP-ALICE":"erd14jjddnkallyr5y4zsy5jwz507pq8gaanwk97ykq6lt94v4ke9mesqgdngj",
