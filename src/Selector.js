@@ -68,6 +68,15 @@ const Selector = ({ value, data, onClick, onChange }) => {
         onChange(datum)
     }
 
+    DetectOutsideClick(closeDropDownRef, () =>
+    setTimeout(() => {
+        if(display !== "none") {
+            setBorderRadius(6)
+            setDisplay('none')
+        }
+    }, 100)
+  );
+
     return (
 
         // ========================================================================================
@@ -107,7 +116,7 @@ const Selector = ({ value, data, onClick, onChange }) => {
                 {   // Loop over the data elements:
                     data.map(item => {
                         return (
-                            <XPDropDownElement onClick={() => handleXPDropDownClick(item)}>
+                            <XPDropDownElement onClick={() => handleXPDropDownClick(item)} ref={closeDropDownRef}>
                                 <XPWrapper>
                                     {/* ================================== 1. SVG ICON =================================*/}
                                     {
