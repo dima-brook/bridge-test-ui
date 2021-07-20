@@ -22,6 +22,7 @@ import {DetectOutsideClick} from "./@utils/closeDropDown";
 const Selector = ({ value, data, onClick, onChange }) => {
 
     const [display, setDisplay] = useState('none');
+    const [borderRadius, setBorderRadius] = useState(6)
 
     //ref to close dropdown
     const closeDropDownRef = useRef(null);
@@ -60,17 +61,32 @@ const Selector = ({ value, data, onClick, onChange }) => {
         onChange(datum)
     }
 
+    const borderRadiusHandler = () => display === "none" ? setBorderRadius(0) : setBorderRadius(6);
 
     //short if statement
-    const handleClick = () => display === "none" ? setDisplay("block") : setDisplay("none");
+    const handleClick = () => {
+        borderRadiusHandler();
+        display === "none" 
+     ? setDisplay("block") 
+     : setDisplay("none");
+    }
+
     
     
     //close dropdown when click outside
     DetectOutsideClick(closeDropDownRef, (datum) =>
     setTimeout(() => {
+        if(display !== "none") setBorderRadius(6)
         handleXPDropDownClick(datum);
+
     }, 100)
   );
+
+
+//   &:focus{
+//     border-bottom-left-radius: 0px;
+//     border-bottom-right-radius: 0px;
+//   }
 
     return (
 
@@ -78,8 +94,9 @@ const Selector = ({ value, data, onClick, onChange }) => {
         //                                  SELECT DropDown Top Window                            =
         // ========================================================================================
 
-        <XPDropDown 
+        <XPDropDown  
             onClick={() => handleClick()}
+            style={{borderBottomRightRadius: borderRadius + "px" ,borderBottomLeftRadius: borderRadius + "px"}}
         >
 
             <XPWrapper>
@@ -104,8 +121,8 @@ const Selector = ({ value, data, onClick, onChange }) => {
             {/* ======================================================================================== */}
 
             <XPDropDownContent
-                style={{ display }}
-
+                style={{ display } }
+                id="selector-dropdown"
             >
                 {   // Loop over the data elements:
                     data.map((item,i) => {

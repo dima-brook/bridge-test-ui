@@ -9,7 +9,7 @@ import MaxButton from "./MaxButton";
 import * as freezer_abi from "./assets/freezer.json";
 import { Keyring } from "@polkadot/keyring";
 import { UserSigner, parseUserKey } from "@elrondnetwork/erdjs";
-import XPLogoSvg from "./assets/SVG/XPLogo.svg";
+import XPLogoSvg from "./assets/SVG/XPLogo.png";
 
 import {
   ElrondAccounts,
