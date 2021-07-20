@@ -239,8 +239,8 @@ function App() {
    * Amount INPUT change event handler
    * @param {String | Number} value 
    */
-  const handleAmountChange = (value) => {
-    setAmount(value);
+  const handleAmountChange = (e) => {
+    setAmount(e.target.value);
   }
 
   /**
