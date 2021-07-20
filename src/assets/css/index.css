@@ -8,12 +8,27 @@ body {
   background-color: #071128;
   margin: 0;
   color: white;
+
+  line-height: 1;
+  opacity: 1 !important;
+  overflow-x: hidden;
+
+  text-shadow: 1px 1px 1px rgba(0, 0, 0, 0.004);
+  text-rendering: optimizeLegibility !important;
+  -webkit-font-smoothing: antialiased !important;
+  -webkit-text-stroke: 0.025em rgba(51, 51, 51, 0.1);
 }
 
 @font-face {
   font-family: Work Sans;
   src: url("../fonts/SourceSansPro-Regular.ttf");
 }
+
+@font-face {
+  font-family: WorkSansBold;
+  src: url("../fonts/WorkSans-Bold.ttf");
+}
+
 @font-face {
   font-family: Inter;
   src: url("../fonts/Inter-Regular.ttf");

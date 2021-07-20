@@ -3,14 +3,15 @@ import styled from "styled-components";
 const bgField = '#051937';
 const lightBlue = '#045adb';
 const borderColor = '#374462';
-const eltHeight = '2.5vw';
+const eltHeight = '56px';
 const textColor = '#FFFFFF';
 const paddingStart = '20px';
 const borderRadius = '20px';
+const XPDropDownBorder = "6px";
 
 export const XPButton = styled('button')`
 margin-top: 1vw;
-height: 3vw;
+height: 56px;
 background: ${lightBlue};
 opacity: 0.9;
 border: none;
@@ -23,7 +24,7 @@ export const XPButtonText = styled("div")`
 font-family: Inter;
 font-style: normal;
 font-weight: 500;
-font-size: 1.2vw;
+font-size: 16px;
 line-height: 126%;
 display:flex;
 align-items: center;
@@ -34,50 +35,61 @@ color: ${textColor};
 
 export const XPApp = styled('div')`
 text-align: center;
+ @media (max-width: 768px) {
+    width: 100%;
+
+  }
 `
 
 export const XPMain = styled('main')`
 align-content: center;
 text-align: center;
-`
+  width: 780px;
+  @media (max-width: 1300px) {
+    width: 720px
+  }
+  @media (max-width: 768px) {
+    width: 100%;
+  }
+`;
 
 export const XPFlexCenter = styled('div')`
 padding: 1vw;
 display: flex;
 flex-direction: column;
 text-align: center;
+  @media (max-width: 768px) {
+    width: 100%;
+  }
 `
 
 export const XPBoxCenter = styled('div')`
-width: 34vw;
+
 height: fit-content;
 background: #030c21;
+padding: 30px;
 border: 1px solid ${borderColor};
 border-radius: ${borderRadius};
-padding: 1.5vw;
+padding: 1%;
 
-@media (max-width: 700px){
-  width: 60%;
-  margin-left: 15%;
-}
-@media (max-width: 400px){
-  width: 70%;
-  // margin-left: 20%;
-}
-@media (max-width: 340px){
-  width: 70%;
-  // margin-left: 40%;
-}
+  @media (max-width: 1300px) {
+    width: 100%;
+  }
+  @media (max-width: 768px) {
+    width: calc(100% - 40px);
+    padding: 20px;
+    border: none;
+  }
 `
 
 export const XPLabel = styled('div')`
-width: 10vw;
-height: 1.5vw;
+width: 100px;
+height: 30px;
 
 font-family: Inter;
 font-style: normal;
 font-weight: 500;
-font-size: 1vw;
+font-size: 12px;
 line-height: 126%;
 
 display: flex;
@@ -91,58 +103,102 @@ export const XPColumn = styled('div')`
 display: flex;
 flex-direction: column;
 padding-bottom: 0.8vw;
+  width: 350px;
+  @media(max-width: 1300px){
+  }
+  @media (max-width: 768px) {
+    width: 100%;
+  }
 `
 
 export const XPRow = styled('div')`
 display: flex;
 align-items: center;
+position: relative;
 justify-content: space-between;
+ @media (max-width: 768px) {
+    flex-direction: column;
+  }
 `
 
 export const XPTitle = styled('div')`
-width: 339px;
-height: 33px;
-font-family: Work Sans;
+font-size: 26px;
+line-height: 126%;
+font-family: WorkSansBold;
+font-style: normal;
 font-weight: bold;
-font-size: 2vw;
-text-align: left;
-margin-top: 1vw;
+display: flex;
+align-items: center;
 letter-spacing: 0.03em;
+margin 15px 0;
 color: ${textColor};
+  @media (max-width: 768px){
+    font-size: 20px;
+    width: 100%;
+  }
 `
 
-export const XPDiv = styled('div')``
+export const XPDiv = styled('div')`
+display: flex;
+align-items: center;
+justify-content: center;
+`
 
 export const XPInput = styled('input')`
-background: ${bgField};
-border: 1px solid ${borderColor};
-box-sizing: border-box;
-border-radius: 6px;
-color: ${textColor};
-font-size:1vw;
-width: 11.5vw;
-height: ${eltHeight};
-caret-color: ${textColor};
-padding-inline-start: ${paddingStart};
-border-bottom-right-radius: 0px;
-border-top-right-radius: 0px;
-&:focus {
-  outline: none;
-}
+  background: ${bgField};
+  border: 1px solid ${borderColor};
+  box-sizing: border-box;
+  border-radius: 6px 0 0 6px;
+  border-bottom-right-radius: 0px   !important  ;
+  border-top-right-radius: 0px   !important;
+  width: 100%;
+
+  color: ${textColor};
+  height: ${eltHeight};
+  caret-color: ${textColor};
+  padding-inline-start: ${paddingStart};
+  border-bottom-right-radius: 6px;
+  border-top-right-radius: 6px;
+
+  vertical-align: middle;
+
+  &:focus {
+    outline: none;
+  }
+
+  @media (max-width: 1300px) {
+    width: 100%;
+    height: 56px;
+    margin-bottom: 10px;
+  }
+
+  @media (max-width: 768px) {
+    height: 56px;
+    width: 100%;
+    font-size:16px;
+  }
 `
 
 export const XPInfo = styled('div')`
-height: 1.9vw;
+//height: 1.9vw;
 font-family: Inter;
 font-style: normal;
 font-weight: 500;
-font-size: 1vw;
+font-size: 15px;
 line-height: 126%;
 display: flex;
 align-items: center;
 letter-spacing: 0.03em;
 color: ${textColor};
 opacity: 0.6;
+@media (max-width: 1300px) {
+    font-size: 12px;
+    margin-bottom: 20px;
+  }
+    @media (max-width: 768px) {
+    font-size: 16px;
+    width: 100%;
+  }
 `
 
 export const XPTransaction = styled('input')`
@@ -160,6 +216,15 @@ font-weight: 500;
 font-size: 0.8em;
 color: ${textColor};
 }
+
+  @media (max-width: 1300px) {
+    height: 45px;
+  }
+    @media (max-width: 768px) {
+    font-size: 16px;
+    width: 100%;
+    height: 56px;
+  }
 `
 
 export const XPWrapper = styled('div')`
@@ -174,24 +239,52 @@ flex-grow: 4;
 `;
 
 export const XPStyledText = styled('span')`
-display: flex;
-align-items: center;
-font-family: Work Sans; 
-margin-left: 1vw; 
-order:2; 
-flex-grow: 4;
-font-size:1.2vw;
+  display: flex;
+  font-family: Inter;
+  margin-left: 1vw;
+  order: 2;
+  flex-grow: 4;
+  cursor: pointer
+  font-style: normal;
+  font-weight: 500;
+  font-size: 16px;
+  line-height: 126%;
+  align-items: center;
+  letter-spacing: 0.03em;
+  color: #ffffff;
+  
+    @media (max-width: 1300px) {
+    
+    height: 56px;   
+    margin-left: 20px;
+  }
+  @media (max-width: 768px){
+    height: 56px;
+  }
 `
 
 export const XPDropDown = styled('div')`
-background: ${bgField};
-border: 1px solid ${borderColor};
-border-radius: 6px;
-box-sizing: border-box;
-color: ${textColor};
-padding-inline-start: ${paddingStart};
-width: 14.5vw;
-height: ${eltHeight};
+  background: ${bgField};
+  border: 1px solid ${borderColor};
+  border-top-left-radius: ${XPDropDownBorder};
+  border-top-right-radius: ${XPDropDownBorder};
+  border-bottom-left-radius: 6px;
+  border-bottom-right-radius: 6px;
+  box-sizing: border-box;
+  color: ${textColor};
+  padding-inline-start: ${paddingStart};
+  cursor:pointer;
+  height: ${eltHeight};
+  @media (max-width: 1300px) {
+    width: 100%;
+    height: 56px;
+    margin-bottom: 10px;
+  }
+  @media (max-width: 768px) {
+    font-size: 16px;
+    width: 100%;
+    height: 56px;
+  }
 `
 
 /**
@@ -199,28 +292,68 @@ height: ${eltHeight};
  */
 export const XPDropDownContent = styled('div')`
 display: none;
+width: 48.7%;
 position: absolute;
 box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
 z-index: 1;
-width: 14.5vw;
-margin-left:-20px;
-`
+  margin-left: -21px;
+  @media (max-width: 1300px) {
+  }
+  @media (max-width: 768px) {
+    width: 100%;
+    overflow:scroll;
+    max-height: 150px;
+    z-index:999;
+  }
+`;
 /**
  * An item of the option menu
  * 
  * On hover changes background color to light blue
  */
 export const XPDropDownElement = styled('a')`
-padding: 1vw 1.2vw;
-display: block;
-background: ${bgField};
-border: 1px solid ${borderColor};
-box-sizing: border-box;
-padding-inline-start: ${paddingStart};
-width: 14.5vw;
-height: ${eltHeight};
-color: ${textColor};
-text-decoration: none;
-text-align: left;
-  &:hover {background-color: ${lightBlue};}
-`
+  padding: 1vw 1.2vw;
+  margin-inline-start: 0px;
+
+  display: block;
+  background: ${bgField};
+  border-bottom: 1px solid ${borderColor};
+  border-left: 1px solid ${borderColor};
+  border-right: 1px solid ${borderColor};
+  box-sizing: border-box;
+  padding-inline-start: ${paddingStart};
+  height: ${eltHeight};
+  color: ${textColor};
+  text-decoration: none;
+  text-align: left;
+  cursor: pointer;
+  font-family: Inter;
+  font-style: normal;
+  font-weight: 500;
+  font-size: 16px;
+  line-height: 126%;
+
+  &:hover {
+    background-color: ${lightBlue};
+  }
+
+  &:last-child {
+    border-bottom-left-radius: 6px;
+    border-bottom-right-radius: 6px;
+  }
+
+  &:first-child {
+    border-top: 1px solid ${borderColor};
+  }
+
+  @media (max-width: 1300px) {
+    width: 92%;
+    height: 40px;
+  }
+
+  @media (max-width: 768px) {
+    width: 100%;
+    height: 55px;
+    max-height: 100px;
+  }
+`;

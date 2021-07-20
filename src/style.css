@@ -4,10 +4,9 @@
 }
 
 .arrows-svg-switch {
+  width: 25px;
+  height: 35px;
   margin-top: 3px;
-  width: 1.5vw;
-  height: 1.5vw;
-  margin-left: -1px;
 }
 
 .from-to-style {
@@ -16,13 +15,33 @@
   justify-content: space-between;
   position: relative;
 }
-
 .swap-button-absolute {
   position: absolute;
-  left: 47%;
+  left: 47.5%;
   top: 37%;
 }
+/* width */
+::-webkit-scrollbar {
+  width: 10px;
+}
 
+/* Track */
+::-webkit-scrollbar-track {
+  background: #fff; 
+}
+ 
+/* Handle */
+::-webkit-scrollbar-thumb {
+  background: #030c21; 
+}
+
+/* Handle on hover */
+::-webkit-scrollbar-thumb:hover {
+  background: #030c21; 
+}
+#selector-dropdown {
+
+}
 .buttonExchange {
   background: #030c21;
   border: 1px solid #374462;
@@ -31,19 +50,77 @@
   cursor: pointer;
   width: 100%;
   height: 100%;
+  max-width: 35px;
+  max-height: 35px;
 }
 
-@media (max-width: 1024px) {
+#transfer-amount::placeholder {
+  opacity: 0.6;
+  color: #ffffff;
+  font-size: 16px;
+  font-family: Inter;
+  line-height: 126%;
+  letter-spacing: 0.03em;
+}
+
+@media (max-width: 1300px) {
   .swap-button-absolute {
-    left: 46%;
+    left: 47.5%;
+    top: 39%;
   }
 
   .arrows-svg-switch {
-    width: 30px;
-    height: 30px;
+    width: 24px;
+    height: 24px;
   }
   .buttonExchange {
-    width: 40px;
-    height: 40px;
+    width: 36px;
+    height: 36px;
   }
 }
+
+@media (max-width: 768px) {
+  .from-to-style {
+    flex-direction: column;
+  }
+
+  .swap-button-absolute {
+    transform: rotate(90deg);
+  }
+
+  body {
+    overflow-y: scroll;
+    overflow-x: hidden;
+    background-color: #030c21;
+  }
+
+  .swap-button-absolute {
+    display: flex;
+    position: relative;
+    align-items: center;
+    justify-content: center;
+    margin-inline-end: auto;
+    margin-bottom: -15px;
+    margin-left: -15px;
+  }
+
+  #root {
+    width: 100%;
+  }
+
+  .arrows-svg-switch {
+    width: 37px;
+    height: 37px;
+    margin-inline-start: 0px;
+  }
+  .flex-container {
+    margin-top: 100px;
+    margin-bottom: 100px;
+  }
+
+  .buttonExchange {
+    width: 45px;
+    height: 45px;
+  }
+}
+

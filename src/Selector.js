@@ -22,6 +22,7 @@ import {DetectOutsideClick} from "./@utils/closeDropDown";
 const Selector = ({ value, data, onClick, onChange }) => {
 
     const [display, setDisplay] = useState('none');
+    const [borderRadius, setBorderRadius] = useState(6)
 
     //ref to close dropdown
     const closeDropDownRef = useRef(null);
@@ -39,19 +40,18 @@ const Selector = ({ value, data, onClick, onChange }) => {
         value = data[0]
     }
 
+    const borderRadiusHandler = () => display === "none" ? setBorderRadius(0) : setBorderRadius(6);
+
     /**
      * SELECT element onClick event handler
      * 
      * Swaps the dropdown menu visibility
      */
     const handleClick = () => {
-
-        if (display === 'none') {
-            setDisplay('block');
-        } else {
-            setDisplay('none');
-        }
-
+        borderRadiusHandler();
+        display === "none" 
+     ? setDisplay("block") 
+     : setDisplay("none");
     }
 
     /**
@@ -76,6 +76,7 @@ const Selector = ({ value, data, onClick, onChange }) => {
 
         <XPDropDown
             onClick={() => handleClick()}
+	    style={{borderBottomRightRadius: borderRadius + "px" ,borderBottomLeftRadius: borderRadius + "px"}}
         >
 
             <XPWrapper>
@@ -101,7 +102,7 @@ const Selector = ({ value, data, onClick, onChange }) => {
 
             <XPDropDownContent
                 style={{ display }}
-
+		id="selector-dropdown"
             >
                 {   // Loop over the data elements:
                     data.map(item => {
