@@ -1,15 +1,26 @@
-import {XPButton, XPButtonText} from './StyledComponents'
+import { XPButton, XPButtonText } from './StyledComponents'
 
 /**
  * The button that triggers liquidity transfer
  * @param {Event} onClick param
  * @returns a JSX button
  */
-const SendButton = ({onClick}) => {
+const SendButton = ({ onClick, inactive }) => {
 
     return (
-        <XPButton onClick={onClick}>
-            <XPButtonText>Send</XPButtonText>
+        <XPButton
+            onClick={onClick}
+            disabled={inactive}
+        >
+            <XPButtonText
+                disabled={inactive}
+            >
+                {
+                    inactive
+                    ? 'Executing'
+                    : 'Send'
+                }
+            </XPButtonText>
         </XPButton>
     )
 }

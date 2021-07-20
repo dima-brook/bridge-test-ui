@@ -66,6 +66,8 @@ function App() {
   const [nw, setNw] = useState('Info: ...');
   const [receiver, setReceiver] = useState('');
 
+  const [sendInactive, setSendInactive] = useState(false);
+
   // =====================================================
   //                 DROPDOWNS POPULATION
   // =====================================================
@@ -165,6 +167,8 @@ function App() {
     let acctAddress;
     let targetWallet;
 
+    setSendInactive(true);
+
     if (!fromAcct || !toAcct) {
       // Deafult to the first elements if accounts are empty
       populateInitialAccounts();
@@ -221,9 +225,11 @@ function App() {
           update_tx(targetWallet, `${JSON.stringify(result[0])}`);
         }
       }
+      setSendInactive(false);
 
     } catch (error) {
       console.error(error)
+      setSendInactive(false);
     }
 
     // Check the extracted values:
@@ -394,7 +400,7 @@ function App() {
             {/* --------------- The Send Button ------------ */}
             {/* -------------------------------------------- */}
 
-            <SendButton onClick={handleSendButtonClick} />
+            <SendButton onClick={handleSendButtonClick} inactive={sendInactive}/>
 
           </XPFlexCenter>
         </XPBoxCenter>

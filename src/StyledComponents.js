@@ -18,6 +18,9 @@ export const XPButton = styled("button")`
   margin-bottom: 0.5vw;
   box-shadow: inset 0px 2px 2px rgba(104, 164, 255, 0.25);
   border-radius: 6px;
+  &:disabled{
+    background: #374462;
+  }
 `;
 
 export const XPButtonText = styled("div")`
@@ -31,6 +34,9 @@ export const XPButtonText = styled("div")`
   justify-content: center;
   letter-spacing: 0.03em;
   color: ${textColor};
+  &:disabled{
+    color:#AAA;
+  }
 `;
 
 export const XPApp = styled("div")`
