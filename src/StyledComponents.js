@@ -43,7 +43,12 @@ export const XPApp = styled("div")`
   text-align: center;
   @media (max-width: 768px) {
     width: 100%;
-    
+    margin-top: 100px;
+  }
+  @media(orientation: landscape)
+    and (max-width: 1000px)
+  {
+    margin-top: 450px;
   }
 `;
 
@@ -74,13 +79,19 @@ export const XPBoxCenter = styled("div")`
   padding: 30px;
   border: 1px solid ${borderColor};
   border-radius: ${borderRadius};
+  margin-left:0px;
   @media (max-width: 1300px) {
     width: 100%;
+    margin-left:0;
+  }
+  @media (max-width: 1024px){
+    margin-left:-30px;
   }
   @media (max-width: 768px) {
     width: calc(100% - 40px);
     padding: 20px;
     border: none;
+    margin-left:0;
   }
 `;
 
