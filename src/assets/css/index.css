@@ -26,7 +26,7 @@ body {
 
 @font-face {
   font-family: WorkSansBold;
-  src: url("../fonts/WorkSans-Bold.ttf");
+  src: url("https://fonts.googleapis.com/css2?family=Work+Sans:wght@700&display=swap");
 }
 
 @font-face {

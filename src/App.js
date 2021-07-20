@@ -4,7 +4,7 @@ import SwapChains from './SwapChains';
 import Selector from './Selector';
 import SendButton from './SendButton';
 import MaxButton from './MaxButton';
-
+import "./style.css";
 import {
   ElrondAccounts,
   ParachainAccounts,

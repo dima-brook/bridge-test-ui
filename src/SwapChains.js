@@ -10,8 +10,8 @@ const SwapChains = ({ onClick }) => {
   return (
     <Fragment>
       <button className="buttonExchange" onClick={onClick}>
-	  {/*<img src={arrowsSvgSwitch} alt="ArrowSVG" class="arrows-svg-switch"/>*/}
-	  <SvgComponentArrowSwitch className="arrows-svg-switch"/>
+        <SvgComponentArrowSwitch className="arrows-svg-switch"/>
+        {/* <img src={arrowsSvgSwitch} alt="ArrowSVG" class="arrows-svg-switch"/> */}
       </button>
     </Fragment>
   );
