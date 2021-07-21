@@ -293,6 +293,20 @@ function App() {
     setToAcct(value)
   }
 
+  /**
+   * Retrieves the available amount of chosen tokens
+   * And populates the Amount input field
+   */
+  const handleMaxButtonClick = () => {
+
+    // Put your code for retrieving the data here
+
+    // Example:
+    const maxAmount = 5000000000000000;
+
+    setAmount(maxAmount)
+  }
+
   // ==========================================================
   //                            J S X
   // ==========================================================
@@ -316,7 +330,7 @@ function App() {
                 <Selector
                   value={token}
                   data={Tokens}
-                  onClick={() => { }}
+                  onClick={handleMaxButtonClick}
                   onChange={handleTokenBlockchainChange}
                 />
               </XPColumn>
