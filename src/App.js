@@ -198,7 +198,7 @@ function App() {
 
           update_tx("please wait...")
           // Return wrapped EGLD from Parachain to Elrond:
-          const result = await post(`${url}/egld/withdraw`, polkadot_req_data(acctAddress, key, targetWallet, amount));
+          const result = await post(`${url}/ht/withdraw`, polkadot_req_data(acctAddress, key, targetWallet, amount));
           update_tx(targetWallet, `${JSON.stringify(result[0])}`)
         }
 
@@ -221,7 +221,7 @@ function App() {
         } else if (token === Tokens[1]) { // EGLD
           update_tx('', "please wait...")
           // Lock EGLD in Elrond & release wrapped EGLD in the Parachain:
-          const result = await post(`${url}/egld/transfer`, elrd_req_data(key, targetWallet, amount));
+          const result = await post(`${url}/ht/transfer`, elrd_req_data(key, targetWallet, amount));
           update_tx(targetWallet, `${JSON.stringify(result[0])}`);
         }
       }

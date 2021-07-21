@@ -76,7 +76,7 @@ export function polkadot_req_data(addr, key, dest, val) {
  */
 export function elrd_req_data(pem, dest, val) {
     return {
-        "pem": pem,
+        "sender_key": pem,
         "destination": dest,
         "value": val
     }
