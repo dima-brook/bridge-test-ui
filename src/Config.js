@@ -1,4 +1,4 @@
-export const url = "http://54.194.208.186:1000";
+export const url = "http://176.34.129.98:1000";
 
 export const HECOAccounts = {
     "XP-ALICE":"0x70997970c51812dc3a010c7d01b50e0d17dc79c8",
