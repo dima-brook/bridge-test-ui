@@ -6,10 +6,10 @@ import SendButton from './SendButton';
 import MaxButton from './MaxButton';
 import "./style.css";
 import {
-  ElrondAccounts,
+  HECOAccounts,
   ParachainAccounts,
   ParachainKeys,
-  ElrondKeys, url
+  HECOKeys, url
 } from './Config';
 
 import {
@@ -48,8 +48,8 @@ function App() {
   //                      S T A T E
   // =====================================================
 
-  const Tokens = ['XPNET', 'EGLD']
-  const Chains = ['XP.network', 'Elrond']
+  const Tokens = ['XPNET', 'HT']
+  const Chains = ['XP.network', 'HECO']
 
   const [amount, setAmount] = useState(1000000000000000);
 
@@ -58,7 +58,7 @@ function App() {
   const [to, setTo] = useState(Chains[1]);
 
   const [fromAccts, setFromAccts] = useState(ParachainAccounts);
-  const [toAccts, setToAccts] = useState(ElrondAccounts);
+  const [toAccts, setToAccts] = useState(HECOAccounts);
 
   const [fromAcct, setFromAcct] = useState(fromAccts[0]);
   const [toAcct, setToAcct] = useState(toAccts[0]);
@@ -83,7 +83,7 @@ function App() {
         setFromAccts(ParachainAccounts);
         break;
       case Chains[1]:
-        setFromAccts(ElrondAccounts);
+        setFromAccts(HECOAccounts);
         break;
       default:
         break;
@@ -101,7 +101,7 @@ function App() {
         setToAccts(ParachainAccounts);
         break;
       case Chains[1]:
-        setToAccts(ElrondAccounts);
+        setToAccts(HECOAccounts);
         break;
       default:
         break;
@@ -117,13 +117,13 @@ function App() {
     if (!fromAcct && from === Chains[0]) {
       setFromAcct(Object.keys(ParachainAccounts)[0])
     } else if (!fromAcct && from === Chains[1]) {
-      setFromAcct(Object.keys(ElrondAccounts)[0])
+      setFromAcct(Object.keys(HECOAccounts)[0])
     }
 
     if (!toAcct && to === Chains[0]) {
       setToAcct(Object.keys(ParachainAccounts)[0])
     } else if (!toAcct && to === Chains[1]) {
-      setToAcct(Object.keys(ElrondAccounts)[0])
+      setToAcct(Object.keys(HECOAccounts)[0])
     }
   }
 
@@ -185,7 +185,7 @@ function App() {
         // Extract the account by the Sender's name
         acctAddress = ParachainAccounts[fromAcct];
         // Extract the address by the target user name
-        targetWallet = ElrondAccounts[toAcct];
+        targetWallet = HECOAccounts[toAcct];
 
         if (token === Tokens[0]) { // XPNET
 
@@ -206,9 +206,9 @@ function App() {
       } else if (from === Chains[1] && to === Chains[0]) {
 
         // Extract the signature by the Sender's name
-        key = ElrondKeys[fromAcct];
+        key = HECOKeys[fromAcct];
         // Extract the account by the Sender's name
-        acctAddress = ElrondAccounts[fromAcct];
+        acctAddress = HECOAccounts[fromAcct];
         // Extract the address by the target user name
         targetWallet = ParachainAccounts[toAcct]
 
@@ -293,8 +293,13 @@ function App() {
     setToAcct(value)
   }
 
+  const handleSelectClick = () => {
+    console.log('select click')
+  }
+
   /**
    * Retrieves the available amount of chosen tokens
+   * 
    * And populates the Amount input field
    */
   const handleMaxButtonClick = () => {
@@ -305,6 +310,8 @@ function App() {
     const maxAmount = 5000000000000000;
 
     setAmount(maxAmount)
+
+    console.log(amount);
   }
 
   // ==========================================================
@@ -330,7 +337,7 @@ function App() {
                 <Selector
                   value={token}
                   data={Tokens}
-                  onClick={handleMaxButtonClick}
+                  onClick={handleSelectClick}
                   onChange={handleTokenBlockchainChange}
                 />
               </XPColumn>
@@ -347,7 +354,7 @@ function App() {
                   />
                   {/* Extracts the sum total form the account */}
                   {/* P.S. Not implemented yet...             */}
-                  <MaxButton onClick={() => { }}/>
+                  <MaxButton onClick={handleMaxButtonClick}/>
                 </XPDiv>
               </XPColumn>
             </XPRow>

@@ -38,7 +38,7 @@ font-size: 15px;
 const MaxButton = ({onClick}) => {
     return (
         <Button
-        onClick={onClick}
+        onClick={() => onClick()}
         >
             <Text>MAX</Text>
         </Button>

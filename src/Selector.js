@@ -52,6 +52,7 @@ const Selector = ({ value, data, onClick, onChange }) => {
         display === "none" 
      ? setDisplay("block") 
      : setDisplay("none");
+
     }
 
     /**
@@ -92,7 +93,7 @@ const Selector = ({ value, data, onClick, onChange }) => {
 
                 {/* ================================== 1. SVG ICON =================================*/}
                 {
-                    value && (value === 'Elrond' || value === 'EGLD' || value.slice(0, 3) === 'XP-')
+                    value && (value === 'HECO' || value === 'HT' || value.slice(0, 3) === 'XP-')
                         ? <ElrondLogo />
                         : <SubstrateLogo />
                 }
@@ -120,7 +121,7 @@ const Selector = ({ value, data, onClick, onChange }) => {
                                 <XPWrapper>
                                     {/* ================================== 1. SVG ICON =================================*/}
                                     {
-                                        item && (item === 'Elrond' || item === 'EGLD' || item.slice(0, 3) === 'XP-')
+                                        item && (item === 'HECO' || item === 'HT' || item.slice(0, 3) === 'XP-')
                                             ? <ElrondLogo />
                                             : <SubstrateLogo />
                                     }

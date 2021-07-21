@@ -1,11 +1,11 @@
 export const url = "http://54.194.208.186:1000";
 
-export const ElrondAccounts = {
-    "XP-ALICE":"erd14jjddnkallyr5y4zsy5jwz507pq8gaanwk97ykq6lt94v4ke9mesqgdngj",
-    "XP-BOB":"erd14js0zjnej264rt0dqqtuf4jal3nwaxv5gmhn54psaru0aa8f44nqsd0k29",
-    "XP-CAROL":"erd1xwg525k3fhga5c62707g4k8lqpjv24ewjmgmzh4p59xw4e8nesvstwppfv",
-    "XP-DAN":"erd1p2jndnqn9stphpcm48kkwwu2k7w27awfcn4x6kkss6revrryl8hqz8nzew",
-    "XP-EVE":"erd1qxk7rhdgzeah7xxm4wx593mru7342w0nr9afftl058tr4gkmpq0qvz74uh"
+export const HECOAccounts = {
+    "XP-ALICE":"0x70997970c51812dc3a010c7d01b50e0d17dc79c8",
+    "XP-BOB":"0x3c44cdddb6a900fa2b585dd299e03d12fa4293bc",
+    "XP-CAROL":"0x90f79bf6eb2c4f870365e785982e1f101e93b906",
+    "XP-DAN":"0x15d34aaf54267db7d7c367839aaf71a00a2c6a65",
+    "XP-EVE":"0x9965507d1a55bcc2695c58ba16fb37d819b0a4dc"
 }
 
 export const ParachainAccounts = {
@@ -26,30 +26,10 @@ export const ParachainKeys = {
     "FERDIE": "0xb746f8a10820eff9292a07c0f5f3b5115e0d9b0d0d835082a54e6569e5be690803e4f21bc6cc62bb4eeed5a9cce642c25e2d2ac1464093b50f6196d78e3a7426"
 }
 
-export const ElrondKeys = {
-    "XP-ALICE":`-----BEGIN PRIVATE KEY for erd14jjddnkallyr5y4zsy5jwz507pq8gaanwk97ykq6lt94v4ke9mesqgdngj-----
-    ZWY1ZmY4MDJkYmIwNjJiYjg3ZDI0ZDAzZDM3ZDE2NTJmMDExOWJjNjUwZjQyOTg2
-    ZjcwNGM1MTY1NTczNDljNGFjYTRkNmNlZGRmZmM4M2ExMmEyODEyOTI3MGE4ZmYw
-    NDA3NDc3YjM3NThiZTI1ODFhZmFjYjU2NTZkOTJlZjM=
-    -----END PRIVATE KEY for erd14jjddnkallyr5y4zsy5jwz507pq8gaanwk97ykq6lt94v4ke9mesqgdngj-----`,
-    "XP-BOB":`-----BEGIN PRIVATE KEY for erd14js0zjnej264rt0dqqtuf4jal3nwaxv5gmhn54psaru0aa8f44nqsd0k29-----
-    YzJjYzg5ZDhhYjFlYjk5NDYyNmI1NGQyZGZkZmFjNjZmNTc2NmU0NjYyMTIxYTRk
-    ODg3ODBmY2ZlMDAzMWJhZGFjYTBmMTRhNzk5MmI1NTFhZGVkMDAxN2M0ZDY1ZGZj
-    NjZlZTk5OTQ0NmVmM2E1NDMwZThmOGZlZjRlOWFkNjY=
-    -----END PRIVATE KEY for erd14js0zjnej264rt0dqqtuf4jal3nwaxv5gmhn54psaru0aa8f44nqsd0k29-----`,
-    "XP-CAROL":`-----BEGIN PRIVATE KEY for erd1xwg525k3fhga5c62707g4k8lqpjv24ewjmgmzh4p59xw4e8nesvstwppfv-----
-    ZDVmOTcxMDZiN2ZjN2Q5ZDI5ZjUxM2U0YTMwNjdkNTlhMzExZDUzOTU5NWMxOGY5
-    NTljZDM4YmVjOTk3OTc1MDMzOTE0NTUyZDE0ZGQxZGE2MzRhZjNmYzhhZDhmZjAw
-    NjRjNTU3MmU5NmQxYjE1ZWExYTE0Y2VhZTRmM2NjMTk=
-    -----END PRIVATE KEY for erd1xwg525k3fhga5c62707g4k8lqpjv24ewjmgmzh4p59xw4e8nesvstwppfv-----`,
-    "XP-DAN":`-----BEGIN PRIVATE KEY for erd1p2jndnqn9stphpcm48kkwwu2k7w27awfcn4x6kkss6revrryl8hqz8nzew-----
-    OTZlMWEzZWI0ZTMwMTliMTA3ODMzNjI0NmVjZGNkYTViNDNmOWQyOTAwMGY4Yjk3
-    OGU3MTYwNTgxOWRhZmMxZjBhYTUzNmNjMTMyYzE2MWI4NzFiYTllZDY3M2I4YWI3
-    OWNhZjc1YzljNGVhNmQ1YWQwODY4Nzk2MGM2NGY5ZWU=
-    -----END PRIVATE KEY for erd1p2jndnqn9stphpcm48kkwwu2k7w27awfcn4x6kkss6revrryl8hqz8nzew-----`,
-    "XP-EVE":`-----BEGIN PRIVATE KEY for erd1qxk7rhdgzeah7xxm4wx593mru7342w0nr9afftl058tr4gkmpq0qvz74uh-----
-    Y2FjNjg1MDc4MWViZTgyOTMyYmUzZmI4OWM2Y2I4MDE5ZWY1NmZjOTJkYTg4OWE0
-    M2ZhZWUyMjY2MmU4ZjNmNzAxYWRlMWRkYTgxNjdiN2YxOGRiYWI4ZDQyYzc2M2U3
-    YTM1NTM5ZjMxOTdhOTRhZmVmYTFkNjNhYTJkYjA4MWU=
-    -----END PRIVATE KEY for erd1qxk7rhdgzeah7xxm4wx593mru7342w0nr9afftl058tr4gkmpq0qvz74uh-----`
+export const HECOKeys = {
+    "XP-ALICE":"0x59c6995e998f97a5a0044966f0945389dc9e86dae88c7a8412f4603b6b78690d",
+    "XP-BOB":"0x5de4111afa1a4b94908f83103eb1f1706367c2e68ca870fc3fb9a804cdab365a",
+    "XP-CAROL":"0x7c852118294e51e653712a81e05800f419141751be58f605c371e15141b007a6",
+    "XP-DAN":"0x47e179ec197488593b187f80a00eb0da91f1b9d0b13f8733639f19c30a34926a",
+    "XP-EVE":"0x8b3a350cf5c34c9194ca85829a2df0ec3153be0318b5e2d3348e872092edffba"
 }
