@@ -6,17 +6,12 @@ import SendButton from './SendButton';
 import MaxButton from './MaxButton';
 import "./style.css";
 import {
+  ChainConfig,
   ElrondAccounts,
   ParachainAccounts,
   ParachainKeys,
-  ElrondKeys, url
+  ElrondKeys
 } from './Config';
-
-import {
-  post,
-  polkadot_req_data,
-  elrd_req_data
-} from './helper_functions'
 
 import {
   XPApp,
@@ -32,6 +27,8 @@ import {
   XPTransaction,
   XPInfo
 } from './StyledComponents'
+import { polkadotPalletHelperFactory } from 'testysuite-ts';
+import { elrondHelperFactory } from 'testsuite-ts';
 
 /********************************************************
  *                    APP Component                     *
@@ -156,6 +153,36 @@ function App() {
 
   }
 
+  const ChainHandlers = {
+    _polka: undefined,
+    _elrd: undefined,
+    async polka() {
+      if (!this._polka) {
+        this._polka = await polkadotPalletHelperFactory(
+          ChainConfig.xpnode,
+          ChainConfig.xp_freezer,
+          ChainConfig.xp_freezer
+        );
+      }
+
+      return this._polka;
+    },
+    async elrd() {
+      if (!this._elrd) {
+        this._elrd = await elrondHelperFactory(
+          ChainConfig.elrond_node,
+          ChainConfig.elrond_faucet,
+          ChainConfig.elrond_minter,
+          ChainConfig.elrond_event_rest,
+          ChainConfig.elrond_esdt,
+          ChainConfig.elrond_esdt_nft
+        );
+
+        return this._elrd;
+      }
+    }
+  }
+
   /**
     * Send liquidity
     * 
@@ -174,37 +201,34 @@ function App() {
       populateInitialAccounts();
     }
 
+    const polka = await ChainHandlers.polka();
+    const elrd = await ChainHandlers.elrd();
+
 
     try {
 
+      update_tx('', "please wait...")
+      let result;
+      let key;
+
       // Transfer direction XP.network => Elrond:
       if (from === Chains[0] && to === Chains[1]) {
-
         // Extract the signature by the Sender's name
-        key = ParachainKeys[fromAcct];
+        key = ParachainKeys[fromAcct]();
         // Extract the account by the Sender's name
         acctAddress = ParachainAccounts[fromAcct];
         // Extract the address by the target user name
         targetWallet = ElrondAccounts[toAcct];
 
         if (token === Tokens[0]) { // XPNET
-
-          update_tx('', "please wait...")
           // Lock XPNET and mint wrapped XPNET in Elrond:
-          const result = await post(`${url}/xpnet/transfer`, polkadot_req_data(acctAddress, key, targetWallet, amount));
-          update_tx(targetWallet, `${JSON.stringify(result[0])}`);
-
+          result = await polka.transferNativeToForeign(key, targetWallet, amount);
         } else if (token === Tokens[1]) { // EGLD
-
-          update_tx("please wait...")
           // Return wrapped EGLD from Parachain to Elrond:
-          const result = await post(`${url}/egld/withdraw`, polkadot_req_data(acctAddress, key, targetWallet, amount));
-          update_tx(targetWallet, `${JSON.stringify(result[0])}`)
+          result = await polka.unfreezeWrapped(key, targetWallet, amount);
         }
-
         // Transfer direction Elrond => XP.network:
       } else if (from === Chains[1] && to === Chains[0]) {
-
         // Extract the signature by the Sender's name
         key = ElrondKeys[fromAcct];
         // Extract the account by the Sender's name
@@ -213,20 +237,16 @@ function App() {
         targetWallet = ParachainAccounts[toAcct]
 
         if (token === Tokens[0]) { // XPNET
-          update_tx("", "please wait...")
           // Return wrapped XPNET from Elrond to the Parachain:
-          const result = await post(`${url}/xpnet/withdraw`, elrd_req_data(key, targetWallet, amount));
-          update_tx(targetWallet, `${JSON.stringify(result[0])}`)
-
+          result = await elrd.unfreezeWrapped(key, targetWallet, amount);
         } else if (token === Tokens[1]) { // EGLD
-          update_tx('', "please wait...")
           // Lock EGLD in Elrond & release wrapped EGLD in the Parachain:
-          const result = await post(`${url}/egld/transfer`, elrd_req_data(key, targetWallet, amount));
-          update_tx(targetWallet, `${JSON.stringify(result[0])}`);
+          result = await elrd.transferNativeToForeign(key, targetWallet, amount);
         }
       }
-      setSendInactive(false);
+      update_tx(targetWallet, `${JSON.stringify(result[0])}`);
 
+      setSendInactive(false);
     } catch (error) {
       console.error(error)
       setSendInactive(false);
@@ -297,14 +317,28 @@ function App() {
    * Retrieves the available amount of chosen tokens
    * And populates the Amount input field
    */
-  const handleMaxButtonClick = () => {
+  const handleMaxButtonClick = async () => {
 
     // Put your code for retrieving the data here
 
+    let chain;
+    let acc;
     // Example:
-    const maxAmount = 5000000000000000;
-
-    setAmount(maxAmount)
+    switch (from) {
+      case Chains[0]:
+        chain = await ChainHandlers.polka();
+        acc = ParachainAccounts[fromAcct];
+        break;
+      case Chains[1]:
+        chain = await ChainHandlers.elrd();
+        acc = ElrondAccounts[fromAcct]
+        break;
+      default:
+        break;
+    }
+  
+    console.log(chain)
+    setAmount((await chain.balance(acc)).toString())
   }
 
   // ==========================================================
@@ -330,7 +364,7 @@ function App() {
                 <Selector
                   value={token}
                   data={Tokens}
-                  onClick={handleMaxButtonClick}
+                  onClick={() => {}}
                   onChange={handleTokenBlockchainChange}
                 />
               </XPColumn>
@@ -347,7 +381,7 @@ function App() {
                   />
                   {/* Extracts the sum total form the account */}
                   {/* P.S. Not implemented yet...             */}
-                  <MaxButton onClick={() => { }}/>
+                  <MaxButton onClick={handleMaxButtonClick}/>
                 </XPDiv>
               </XPColumn>
             </XPRow>
