@@ -87,7 +87,6 @@ export const ParachainKeys = {
 export const ChainConfig = {
     "xpnode": "ws://localhost:9944",
     "xp_faucet": ParachainKeys["ALICE"],
-    "xp_freezer": "5HFujrmKZoF8iNNu3cM8y1S1x8ogfa1nzxueJvy11AFD8pJu",
     "elrond_node": "http://localhost:7950",
     "elrond_faucet": ElrondKeys["ALICE"],
     "elrond_minter": "erd1qqqqqqqqqqqqqpgqygvvtlty3v7cad507v5z793duw9jjmlxd8sszs8a2y",

@@ -8,8 +8,6 @@ import "./style.css";
 import {
   ChainConfig,
   ElrondAccounts,
-  ParachainAccounts,
-  ParachainKeys,
   ElrondKeys
 } from './Config';
 
@@ -27,8 +25,9 @@ import {
   XPTransaction,
   XPInfo
 } from './StyledComponents'
-import { UserSigner, parseUserKey } from '@elrondnetwork/erdjs'
+import { UserSigner, parseUserKey, ApiProvider } from '@elrondnetwork/erdjs'
 import { elrondHelperFactory, polkadotPalletHelperFactory } from 'testsuite-ts';
+import { web3Accounts, web3Enable, web3FromAddress } from '@polkadot/extension-dapp';
 
 /********************************************************
  *                    APP Component                     *
@@ -45,8 +44,10 @@ function App() {
   //                      S T A T E
   // =====================================================
 
-  const Tokens = ['XPNET', 'EGLD']
-  const Chains = ['XP.network', 'Elrond']
+  const Tokens = ['XPNET', 'EGLD'];
+  const Chains = ['XP.network', 'Elrond'];
+
+  let polkaExtInit = false;
 
   const [amount, setAmount] = useState(1000000000000000);
 
@@ -54,8 +55,8 @@ function App() {
   const [from, setFrom] = useState(Chains[0]);
   const [to, setTo] = useState(Chains[1]);
 
-  const [fromAccts, setFromAccts] = useState(ParachainAccounts);
-  const [toAccts, setToAccts] = useState(ElrondAccounts);
+  const [fromAccts, setFromAccts] = useState([]);
+  const [toAccts, setToAccts] = useState([]);
 
   const [fromAcct, setFromAcct] = useState(fromAccts[0]);
   const [toAcct, setToAcct] = useState(toAccts[0]);
@@ -69,15 +70,20 @@ function App() {
   //                 DROPDOWNS POPULATION
   // =====================================================
 
+  const polkadotAccounts = async () => {
+    (await web3Accounts())
+      .map((v) => v.address)
+  }
+
   /**
    * Checks wich blockchain is the Source
    * 
    * Populates the FROM with the respective accounts
    */
-  const populateFromAccounts = () => {
+  const populateFromAccounts = async () => {
     switch (from) {
       case Chains[0]:
-        setFromAccts(ParachainAccounts);
+        setFromAccts(await polkadotAccounts());
         break;
       case Chains[1]:
         setFromAccts(ElrondAccounts);
@@ -92,10 +98,10 @@ function App() {
    * 
    * Populates the FROM with the respective accounts
    */
-  const populateToAccounts = () => {
+  const populateToAccounts = async () => {
     switch (to) {
       case Chains[0]:
-        setToAccts(ParachainAccounts);
+        setToAccts(await polkadotAccounts());
         break;
       case Chains[1]:
         setToAccts(ElrondAccounts);
@@ -110,15 +116,15 @@ function App() {
    * 
    * Defaults to the first accounts
    */
-  const populateInitialAccounts = () => {
+  const populateInitialAccounts = async () => {
     if (!fromAcct && from === Chains[0]) {
-      setFromAcct(Object.keys(ParachainAccounts)[0])
+      setFromAcct(fromAccts[0])
     } else if (!fromAcct && from === Chains[1]) {
       setFromAcct(Object.keys(ElrondAccounts)[0])
     }
 
     if (!toAcct && to === Chains[0]) {
-      setToAcct(Object.keys(ParachainAccounts)[0])
+      setToAcct(fromAccts[0])
     } else if (!toAcct && to === Chains[1]) {
       setToAcct(Object.keys(ElrondAccounts)[0])
     }
@@ -183,12 +189,25 @@ function App() {
     }
   }
 
+
+  /// Get polkadot signer interface from polkadot{.js} extension
+  const getSigner = async (address) => {
+    if (!polkaExtInit) {
+      await web3Enable('XPNET Cross Chain Bridge');
+      polkaExtInit = true;
+    }
+
+    const injector = await web3FromAddress(address);
+
+    return { sender: address, options: { signer: injector.signer } };
+  }
+
   /**
     * Send liquidity
     * 
     * button click handler
     */
-  const handleSendButtonClick = async () => {
+  handleSendButtonClick = async () => {
 
     let key;
     let acctAddress;
@@ -214,9 +233,9 @@ function App() {
       // Transfer direction XP.network => Elrond:
       if (from === Chains[0] && to === Chains[1]) {
         // Extract the signature by the Sender's name
-        key = ParachainKeys[fromAcct]();
+        key = getSigner(fromAcct);
         // Extract the account by the Sender's name
-        acctAddress = ParachainAccounts[fromAcct];
+        acctAddress = fromAcct;
         // Extract the address by the target user name
         targetWallet = ElrondAccounts[toAcct];
 
@@ -234,7 +253,7 @@ function App() {
         // Extract the account by the Sender's name
         acctAddress = ElrondAccounts[fromAcct];
         // Extract the address by the target user name
-        targetWallet = ParachainAccounts[toAcct]
+        targetWallet = toAcct
 
         if (token === Tokens[0]) { // XPNET
           // Return wrapped XPNET from Elrond to the Parachain:
@@ -327,7 +346,7 @@ function App() {
     switch (from) {
       case Chains[0]:
         chain = await ChainHandlers.polka();
-        acc = ParachainAccounts[fromAcct];
+        acc = fromAcct;
         break;
       case Chains[1]:
         chain = await ChainHandlers.elrd();
