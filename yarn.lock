@@ -1262,7 +1262,7 @@
     assert "^2.0.0"
     perf_hooks "0.0.1"
 
-"@elrondnetwork/erdjs@^6.2.0":
+"@elrondnetwork/erdjs@^6.2.0", "@elrondnetwork/erdjs@^6.4.0":
   version "6.4.0"
   resolved "https://registry.yarnpkg.com/@elrondnetwork/erdjs/-/erdjs-6.4.0.tgz#f184933cd57412df035aee3abcc96ce327b5d43a"
   integrity sha512-iKs9cIH6B1WKt2mkVB5EHTAIf7zXR6KygxhHn0dQ50GTaZMF8USL0m5gQLyv6FZ/+l6BqCMZ0a/tENIZ3MbqCQ==
@@ -12432,7 +12432,7 @@ test-exclude@^6.0.0:
 
 "testsuite-ts@git+https://github.com/xp-network/bridge-ui-logics#master":
   version "1.0.0"
-  resolved "git+https://github.com/xp-network/bridge-ui-logics#06a4df7dcc8f87fa89b41f9543d4a3351aba433c"
+  resolved "git+https://github.com/xp-network/bridge-ui-logics#41ef2429bdf038bed8d955ad66dd20dac41a4030"
   dependencies:
     "@elrondnetwork/erdjs" "^6.2.0"
     "@polkadot/api" "^4.17.1"

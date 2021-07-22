@@ -27,8 +27,8 @@ import {
   XPTransaction,
   XPInfo
 } from './StyledComponents'
-import { polkadotPalletHelperFactory } from 'testysuite-ts';
-import { elrondHelperFactory } from 'testsuite-ts';
+import { UserSigner, parseUserKey } from '@elrondnetwork/erdjs'
+import { elrondHelperFactory, polkadotPalletHelperFactory } from 'testsuite-ts';
 
 /********************************************************
  *                    APP Component                     *
@@ -160,8 +160,8 @@ function App() {
       if (!this._polka) {
         this._polka = await polkadotPalletHelperFactory(
           ChainConfig.xpnode,
-          ChainConfig.xp_freezer,
-          ChainConfig.xp_freezer
+          //ChainConfig.xp_freezer,
+          //ChainConfig.xp_freezer
         );
       }
 
@@ -230,7 +230,7 @@ function App() {
         // Transfer direction Elrond => XP.network:
       } else if (from === Chains[1] && to === Chains[0]) {
         // Extract the signature by the Sender's name
-        key = ElrondKeys[fromAcct];
+        key = new UserSigner(parseUserKey(ElrondKeys[fromAcct]));
         // Extract the account by the Sender's name
         acctAddress = ElrondAccounts[fromAcct];
         // Extract the address by the target user name
