@@ -258,15 +258,12 @@ export const XPWrapper = styled("div")`
   margin: 0;
   display: flex;
   align-items: center;
-  justify-content: center;
-  flex-direction: row;
-  flex-grow: 4;
 `;
 
 export const XPStyledText = styled("span")`
   display: flex;
   font-family: Inter;
-  margin-left: 1vw;
+  margin-right: 1vw;
   order: 2;
   flex-grow: 4;
   cursor: pointer
@@ -277,6 +274,9 @@ export const XPStyledText = styled("span")`
   align-items: center;
   letter-spacing: 0.03em;
   color: #fff;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
   
   @media (max-width: 1300px) {
     

@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useCallback, useState, useEffect, useRef } from 'react';
 import XPLogo from './assets/SVG/XPLogo';
 import SwapChains from './SwapChains';
 import Selector from './Selector';
@@ -25,9 +25,13 @@ import {
   XPTransaction,
   XPInfo
 } from './StyledComponents'
-import { UserSigner, parseUserKey, ApiProvider } from '@elrondnetwork/erdjs'
-import { elrondHelperFactory, polkadotPalletHelperFactory } from 'testsuite-ts';
+import { ChainHandlers } from './helper_functions'
+import { UserSigner, parseUserKey } from '@elrondnetwork/erdjs'
 import { web3Accounts, web3Enable, web3FromAddress } from '@polkadot/extension-dapp';
+
+
+const Tokens = ['XPNET', 'EGLD'];
+const Chains = ['XP.network', 'Elrond'];
 
 /********************************************************
  *                    APP Component                     *
@@ -44,10 +48,7 @@ function App() {
   //                      S T A T E
   // =====================================================
 
-  const Tokens = ['XPNET', 'EGLD'];
-  const Chains = ['XP.network', 'Elrond'];
-
-  let polkaExtInit = false;
+  let polkaExtInit = useRef(false);
 
   const [amount, setAmount] = useState(1000000000000000);
 
@@ -55,11 +56,10 @@ function App() {
   const [from, setFrom] = useState(Chains[0]);
   const [to, setTo] = useState(Chains[1]);
 
-  const [fromAccts, setFromAccts] = useState([]);
-  const [toAccts, setToAccts] = useState([]);
+  let fromAccts = useRef([]);
 
-  const [fromAcct, setFromAcct] = useState(fromAccts[0]);
-  const [toAcct, setToAcct] = useState(toAccts[0]);
+  const [fromAcct, setFromAcct] = useState(undefined);
+  const toAcct = useRef();
 
   const [nw, setNw] = useState('Info: ...');
   const [receiver, setReceiver] = useState('');
@@ -71,7 +71,12 @@ function App() {
   // =====================================================
 
   const polkadotAccounts = async () => {
-    (await web3Accounts())
+    if (!polkaExtInit.current) {
+      await web3Enable('XPNET Cross Chain Bridge');
+      polkaExtInit.current = true;
+    }
+
+    return (await web3Accounts())
       .map((v) => v.address)
   }
 
@@ -80,64 +85,44 @@ function App() {
    * 
    * Populates the FROM with the respective accounts
    */
-  const populateFromAccounts = async () => {
+  const populateFromAccounts = useCallback(async () => {
     switch (from) {
       case Chains[0]:
-        setFromAccts(await polkadotAccounts());
+        fromAccts.current = await polkadotAccounts();
         break;
       case Chains[1]:
-        setFromAccts(ElrondAccounts);
+        fromAccts.current = ElrondAccounts;
         break;
       default:
         break;
     }
-  }
-
-  /**
-   * Checks wich blockchain is the Target
-   * 
-   * Populates the FROM with the respective accounts
-   */
-  const populateToAccounts = async () => {
-    switch (to) {
-      case Chains[0]:
-        setToAccts(await polkadotAccounts());
-        break;
-      case Chains[1]:
-        setToAccts(ElrondAccounts);
-        break;
-      default:
-        break;
-    }
-  }
+  }, [from]);
 
   /**
    * Checks the Source / Target blockchains
    * 
    * Defaults to the first accounts
    */
-  const populateInitialAccounts = async () => {
-    if (!fromAcct && from === Chains[0]) {
-      setFromAcct(fromAccts[0])
-    } else if (!fromAcct && from === Chains[1]) {
+  const populateInitialAccounts = useCallback(() => {
+    if (from === Chains[0]) {
+      setFromAcct(fromAccts.current[0])
+    } else if (from === Chains[1]) {
       setFromAcct(Object.keys(ElrondAccounts)[0])
     }
 
-    if (!toAcct && to === Chains[0]) {
-      setToAcct(fromAccts[0])
-    } else if (!toAcct && to === Chains[1]) {
-      setToAcct(Object.keys(ElrondAccounts)[0])
-    }
-  }
+    toAcct.current.value = "";
+  }, [from]);
 
   /**
    * Catches the change events and updates related fields
    */
   useEffect(() => {
-    populateFromAccounts();
-    populateToAccounts();
-    populateInitialAccounts();
-  }, [populateFromAccounts, populateToAccounts, populateInitialAccounts]);
+    const populate = async () => {
+      await populateFromAccounts();
+      populateInitialAccounts();
+    }
+    populate()
+  }, [populateFromAccounts, populateInitialAccounts]);
 
   // =====================================================
   //                    EVENT HANDLERS
@@ -154,60 +139,23 @@ function App() {
     setTo(from);
     setFrom(temp_to);
 
-    setFromAcct(fromAccts[0]);
-    setToAcct(toAccts[0]);
-
+    setFromAcct(fromAccts.current[0]);
+    toAcct.current.value = "";
   }
-
-  const ChainHandlers = {
-    _polka: undefined,
-    _elrd: undefined,
-    async polka() {
-      if (!this._polka) {
-        this._polka = await polkadotPalletHelperFactory(
-          ChainConfig.xpnode,
-          //ChainConfig.xp_freezer,
-          //ChainConfig.xp_freezer
-        );
-      }
-
-      return this._polka;
-    },
-    async elrd() {
-      if (!this._elrd) {
-        this._elrd = await elrondHelperFactory(
-          ChainConfig.elrond_node,
-          ChainConfig.elrond_faucet,
-          ChainConfig.elrond_minter,
-          ChainConfig.elrond_event_rest,
-          ChainConfig.elrond_esdt,
-          ChainConfig.elrond_esdt_nft
-        );
-
-        return this._elrd;
-      }
-    }
-  }
-
 
   /// Get polkadot signer interface from polkadot{.js} extension
   const getSigner = async (address) => {
-    if (!polkaExtInit) {
-      await web3Enable('XPNET Cross Chain Bridge');
-      polkaExtInit = true;
-    }
-
     const injector = await web3FromAddress(address);
 
     return { sender: address, options: { signer: injector.signer } };
-  }
+  };
 
   /**
     * Send liquidity
     * 
     * button click handler
     */
-  handleSendButtonClick = async () => {
+  const handleSendButtonClick = async () => {
 
     let key;
     let acctAddress;
@@ -215,7 +163,7 @@ function App() {
 
     setSendInactive(true);
 
-    if (!fromAcct || !toAcct) {
+    if (!fromAcct) {
       // Deafult to the first elements if accounts are empty
       populateInitialAccounts();
     }
@@ -228,16 +176,15 @@ function App() {
 
       update_tx('', "please wait...")
       let result;
-      let key;
 
       // Transfer direction XP.network => Elrond:
       if (from === Chains[0] && to === Chains[1]) {
         // Extract the signature by the Sender's name
-        key = getSigner(fromAcct);
+        key = await getSigner(fromAcct);
         // Extract the account by the Sender's name
         acctAddress = fromAcct;
         // Extract the address by the target user name
-        targetWallet = ElrondAccounts[toAcct];
+        targetWallet = toAcct.current.value;
 
         if (token === Tokens[0]) { // XPNET
           // Lock XPNET and mint wrapped XPNET in Elrond:
@@ -253,7 +200,7 @@ function App() {
         // Extract the account by the Sender's name
         acctAddress = ElrondAccounts[fromAcct];
         // Extract the address by the target user name
-        targetWallet = toAcct
+        targetWallet = toAcct.current.value;
 
         if (token === Tokens[0]) { // XPNET
           // Return wrapped XPNET from Elrond to the Parachain:
@@ -303,7 +250,7 @@ function App() {
   const handleFromBlockchainChange = (value) => {
     setFrom(value);
     populateFromAccounts()
-    setFromAcct(fromAccts[0]);
+    setFromAcct(fromAccts.current[0]);
   }
 
   /**
@@ -312,8 +259,7 @@ function App() {
    */
   const handleToBlockchainChange = (value) => {
     setTo(value);
-    populateToAccounts()
-    setToAcct(toAccts[0]);
+    toAcct.current.value = "";
   }
 
   /**
@@ -322,14 +268,6 @@ function App() {
    */
   const handleFromAccountChange = (value) => {
     setFromAcct(value)
-  }
-
-  /**
-   * Target Account SELECT event handler
-   * @param {String} value 
-   */
-  const handleToAccountChange = (value) => {
-    setToAcct(value)
   }
 
   /**
@@ -440,18 +378,14 @@ function App() {
 
                 <Selector
                   value={fromAcct}
-                  data={fromAccts}
+                  data={fromAccts.current}
                   onChange={handleFromAccountChange}
                 />
               </XPColumn>
 
               <XPColumn>
                 <XPLabel>To Account:</XPLabel>
-                <Selector
-                  value={toAcct}
-                  data={toAccts}
-                  onChange={handleToAccountChange}
-                />
+                <XPTransaction ref={toAcct} type="text" />
               </XPColumn>
             </XPRow>
 
