@@ -1,6 +1,4 @@
 import React, { useState, useRef } from 'react'
-import ElrondLogo from './assets/SVG/Elrond.js'
-import SubstrateLogo from "./assets/SVG/substrateLogo.js";
 import ChevronDown from './assets/SVG/ShevronDown.js';
 import {
     XPDropDown,
@@ -27,10 +25,7 @@ const Selector = ({ value, data, onClick, onChange }) => {
     //ref to close dropdown
     const closeDropDownRef = useRef(null);
 
-    // If the data contains account in an Object
-    // Like {KEY:"value"}
-    // Extract the keys only
-    if ("ALICE" in data || "XP-ALICE" in data) {
+    if (!Array.isArray(data)) {
         data = Object.keys(data)
     }
 
@@ -90,14 +85,6 @@ const Selector = ({ value, data, onClick, onChange }) => {
         >
 
             <XPWrapper>
-
-                {/* ================================== 1. SVG ICON =================================*/}
-                {
-                    value && (value === 'HECO' || value === 'HT' || value.slice(0, 3) === 'XP-')
-                        ? <ElrondLogo />
-                        : <SubstrateLogo />
-                }
-
                 {/* ================================= 2. TEXT FIELD ================================*/}
                 <XPStyledText>{value}</XPStyledText>
 
@@ -119,12 +106,6 @@ const Selector = ({ value, data, onClick, onChange }) => {
                         return (
                             <XPDropDownElement onClick={() => handleXPDropDownClick(item)} ref={closeDropDownRef}>
                                 <XPWrapper>
-                                    {/* ================================== 1. SVG ICON =================================*/}
-                                    {
-                                        item && (item === 'HECO' || item === 'HT' || item.slice(0, 3) === 'XP-')
-                                            ? <ElrondLogo />
-                                            : <SubstrateLogo />
-                                    }
                                     {/* ================================= 2. TEXT FIELD ================================*/}
                                     <XPStyledText>{item}</XPStyledText>
                                 </XPWrapper>

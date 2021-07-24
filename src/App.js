@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useCallback, useState, useEffect, useRef } from 'react';
 import XPLogo from './assets/SVG/XPLogo';
 import SwapChains from './SwapChains';
 import Selector from './Selector';
@@ -7,16 +7,9 @@ import MaxButton from './MaxButton';
 import "./style.css";
 import {
   HECOAccounts,
-  ParachainAccounts,
-  ParachainKeys,
-  HECOKeys, url
+  HECOKeys,
+  ChainConfig,
 } from './Config';
-
-import {
-  post,
-  polkadot_req_data,
-  elrd_req_data
-} from './helper_functions'
 
 import {
   XPApp,
@@ -32,6 +25,12 @@ import {
   XPTransaction,
   XPInfo
 } from './StyledComponents'
+import { ChainHandlers } from './helper_functions'
+import { web3Accounts, web3Enable, web3FromAddress } from '@polkadot/extension-dapp';
+
+
+const Tokens = ['XPNET', 'HT']
+const Chains = ['XP.network', 'HECO']
 
 /********************************************************
  *                    APP Component                     *
@@ -48,8 +47,8 @@ function App() {
   //                      S T A T E
   // =====================================================
 
-  const Tokens = ['XPNET', 'HT']
-  const Chains = ['XP.network', 'HECO']
+
+  let polkaExtInit = useRef(false);
 
   const [amount, setAmount] = useState(1000000000000000);
 
@@ -57,11 +56,10 @@ function App() {
   const [from, setFrom] = useState(Chains[0]);
   const [to, setTo] = useState(Chains[1]);
 
-  const [fromAccts, setFromAccts] = useState(ParachainAccounts);
-  const [toAccts, setToAccts] = useState(HECOAccounts);
+  const fromAccts = useRef([]);
 
-  const [fromAcct, setFromAcct] = useState(fromAccts[0]);
-  const [toAcct, setToAcct] = useState(toAccts[0]);
+  const [fromAcct, setFromAcct] = useState(undefined);
+  const toAcct = useRef();
 
   const [nw, setNw] = useState('Info: ...');
   const [receiver, setReceiver] = useState('');
@@ -72,69 +70,59 @@ function App() {
   //                 DROPDOWNS POPULATION
   // =====================================================
 
+  const polkadotAccounts = async () => {
+    if (!polkaExtInit.current) {
+      await web3Enable('XPNET Cross Chain Bridge');
+      polkaExtInit.current = true;
+    }
+
+    return (await web3Accounts())
+      .map((v) => v.address)
+  }
+
   /**
    * Checks wich blockchain is the Source
    * 
    * Populates the FROM with the respective accounts
    */
-  const populateFromAccounts = () => {
+  const populateFromAccounts = useCallback(async () => {
     switch (from) {
       case Chains[0]:
-        setFromAccts(ParachainAccounts);
+        fromAccts.current = await polkadotAccounts();
         break;
       case Chains[1]:
-        setFromAccts(HECOAccounts);
+        fromAccts.current = HECOAccounts;
         break;
       default:
         break;
     }
-  }
-
-  /**
-   * Checks wich blockchain is the Target
-   * 
-   * Populates the FROM with the respective accounts
-   */
-  const populateToAccounts = () => {
-    switch (to) {
-      case Chains[0]:
-        setToAccts(ParachainAccounts);
-        break;
-      case Chains[1]:
-        setToAccts(HECOAccounts);
-        break;
-      default:
-        break;
-    }
-  }
+  }, [from]);
 
   /**
    * Checks the Source / Target blockchains
    * 
    * Defaults to the first accounts
    */
-  const populateInitialAccounts = () => {
-    if (!fromAcct && from === Chains[0]) {
-      setFromAcct(Object.keys(ParachainAccounts)[0])
-    } else if (!fromAcct && from === Chains[1]) {
+  const populateInitialAccounts = useCallback(() => {
+    if (from === Chains[0]) {
+      setFromAcct(fromAccts.current[0])
+    } else if (from === Chains[1]) {
       setFromAcct(Object.keys(HECOAccounts)[0])
     }
 
-    if (!toAcct && to === Chains[0]) {
-      setToAcct(Object.keys(ParachainAccounts)[0])
-    } else if (!toAcct && to === Chains[1]) {
-      setToAcct(Object.keys(HECOAccounts)[0])
-    }
-  }
+    toAcct.current.value = "";
+  }, [from]);
 
   /**
    * Catches the change events and updates related fields
    */
   useEffect(() => {
-    populateFromAccounts();
-    populateToAccounts();
-    populateInitialAccounts();
-  }, [populateFromAccounts, populateToAccounts, populateInitialAccounts]);
+    const populate = async () => {
+      await populateFromAccounts();
+      populateInitialAccounts();
+    }
+    populate()
+  }, [populateFromAccounts, populateInitialAccounts]);
 
   // =====================================================
   //                    EVENT HANDLERS
@@ -151,10 +139,16 @@ function App() {
     setTo(from);
     setFrom(temp_to);
 
-    setFromAcct(fromAccts[0]);
-    setToAcct(toAccts[0]);
-
+    setFromAcct(fromAccts.current[0]);
+    toAcct.current.value = "";
   }
+
+  /// Get polkadot signer interface from polkadot{.js} extension
+  const getSigner = async (address) => {
+    const injector = await web3FromAddress(address);
+
+    return { sender: address, options: { signer: injector.signer } };
+  };
 
   /**
     * Send liquidity
@@ -169,64 +163,56 @@ function App() {
 
     setSendInactive(true);
 
-    if (!fromAcct || !toAcct) {
+    if (!fromAcct) {
       // Deafult to the first elements if accounts are empty
       populateInitialAccounts();
     }
 
+    const polka = await ChainHandlers.polka();
+    const elrd = await ChainHandlers.elrd();
+
 
     try {
 
+      update_tx('', "please wait...")
+      let result;
+
       // Transfer direction XP.network => Elrond:
       if (from === Chains[0] && to === Chains[1]) {
-
         // Extract the signature by the Sender's name
-        key = ParachainKeys[fromAcct];
+        key = await getSigner(fromAcct);
         // Extract the account by the Sender's name
-        acctAddress = ParachainAccounts[fromAcct];
+        acctAddress = fromAcct;
         // Extract the address by the target user name
-        targetWallet = HECOAccounts[toAcct];
+        targetWallet = toAcct.current.value;
 
         if (token === Tokens[0]) { // XPNET
-
-          update_tx('', "please wait...")
           // Lock XPNET and mint wrapped XPNET in Elrond:
-          const result = await post(`${url}/xpnet/transfer`, polkadot_req_data(acctAddress, key, targetWallet, amount));
-          update_tx(targetWallet, `${JSON.stringify(result[0])}`);
-
+          result = await polka.transferNativeToForeign(key, targetWallet, amount);
         } else if (token === Tokens[1]) { // EGLD
-
-          update_tx("please wait...")
           // Return wrapped EGLD from Parachain to Elrond:
-          const result = await post(`${url}/ht/withdraw`, polkadot_req_data(acctAddress, key, targetWallet, amount));
-          update_tx(targetWallet, `${JSON.stringify(result[0])}`)
+          result = await polka.unfreezeWrapped(key, targetWallet, amount);
         }
-
         // Transfer direction Elrond => XP.network:
       } else if (from === Chains[1] && to === Chains[0]) {
-
         // Extract the signature by the Sender's name
         key = HECOKeys[fromAcct];
         // Extract the account by the Sender's name
         acctAddress = HECOAccounts[fromAcct];
         // Extract the address by the target user name
-        targetWallet = ParachainAccounts[toAcct]
+        targetWallet = toAcct.current.value;
 
         if (token === Tokens[0]) { // XPNET
-          update_tx("", "please wait...")
           // Return wrapped XPNET from Elrond to the Parachain:
-          const result = await post(`${url}/xpnet/withdraw`, elrd_req_data(key, targetWallet, amount));
-          update_tx(targetWallet, `${JSON.stringify(result[0])}`)
-
+          result = await elrd.unfreezeWrapped(key, targetWallet, amount);
         } else if (token === Tokens[1]) { // EGLD
-          update_tx('', "please wait...")
           // Lock EGLD in Elrond & release wrapped EGLD in the Parachain:
-          const result = await post(`${url}/ht/transfer`, elrd_req_data(key, targetWallet, amount));
-          update_tx(targetWallet, `${JSON.stringify(result[0])}`);
+          result = await elrd.transferNativeToForeign(key, targetWallet, amount);
         }
       }
-      setSendInactive(false);
+      update_tx(targetWallet, `${JSON.stringify(result[0])}`);
 
+      setSendInactive(false);
     } catch (error) {
       console.error(error)
       setSendInactive(false);
@@ -264,7 +250,7 @@ function App() {
   const handleFromBlockchainChange = (value) => {
     setFrom(value);
     populateFromAccounts()
-    setFromAcct(fromAccts[0]);
+    setFromAcct(fromAccts.current[0]);
   }
 
   /**
@@ -273,8 +259,7 @@ function App() {
    */
   const handleToBlockchainChange = (value) => {
     setTo(value);
-    populateToAccounts()
-    setToAcct(toAccts[0]);
+    toAcct.current.value = "";
   }
 
   /**
@@ -286,32 +271,32 @@ function App() {
   }
 
   /**
-   * Target Account SELECT event handler
-   * @param {String} value 
-   */
-  const handleToAccountChange = (value) => {
-    setToAcct(value)
-  }
-
-  const handleSelectClick = () => {
-    console.log('select click')
-  }
-
-  /**
    * Retrieves the available amount of chosen tokens
    * 
    * And populates the Amount input field
    */
-  const handleMaxButtonClick = () => {
+  const handleMaxButtonClick = async () => {
 
     // Put your code for retrieving the data here
 
-    // Example:
-    const maxAmount = 5000000000000000;
+    let chain;
+    let acc;
 
-    setAmount(maxAmount)
-
-    console.log(amount);
+    switch (from) {
+      case Chains[0]:
+        chain = await ChainHandlers.polka();
+        acc = fromAcct;
+        break;
+      case Chains[1]:
+        chain = await ChainHandlers.elrd();
+        acc = HECOAccounts[fromAcct]
+        break;
+      default:
+        break;
+    }
+  
+    console.log(chain)
+    setAmount((await chain.balance(acc)).toString())
   }
 
   // ==========================================================
@@ -337,7 +322,7 @@ function App() {
                 <Selector
                   value={token}
                   data={Tokens}
-                  onClick={handleSelectClick}
+                  onClick={() => {}}
                   onChange={handleTokenBlockchainChange}
                 />
               </XPColumn>
@@ -394,18 +379,14 @@ function App() {
 
                 <Selector
                   value={fromAcct}
-                  data={fromAccts}
+                  data={fromAccts.current}
                   onChange={handleFromAccountChange}
                 />
               </XPColumn>
 
               <XPColumn>
                 <XPLabel>To Account:</XPLabel>
-                <Selector
-                  value={toAcct}
-                  data={toAccts}
-                  onChange={handleToAccountChange}
-                />
+                <XPTransaction ref={toAcct} type="text" />
               </XPColumn>
             </XPRow>
 

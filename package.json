@@ -3,6 +3,9 @@
   "version": "0.1.0",
   "private": true,
   "dependencies": {
+    "@elrondnetwork/erdjs": "^6.4.0",
+    "@polkadot/extension-dapp": "^0.39.1",
+    "@polkadot/keyring": "^7.0.2",
     "@testing-library/jest-dom": "^5.11.4",
     "@testing-library/react": "^11.1.0",
     "@testing-library/user-event": "^12.1.10",
@@ -13,6 +16,7 @@
     "react-scripts": "4.0.3",
     "react-select": "^4.3.1",
     "styled-components": "^5.3.0",
+    "testsuite-ts": "git+https://github.com/xp-network/bridge-ui-logics#master",
     "web-vitals": "^1.0.1"
   },
   "scripts": {

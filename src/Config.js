@@ -1,3 +1,5 @@
+import { Keyring } from '@polkadot/keyring';
+
 export const url = "http://176.34.129.98:1000";
 
 export const HECOAccounts = {
@@ -8,6 +10,9 @@ export const HECOAccounts = {
     "XP-EVE":"0x9965507d1a55bcc2695c58ba16fb37d819b0a4dc"
 }
 
+
+const keyring = new Keyring();
+
 export const ParachainAccounts = {
     "ALICE": "5GrwvaEF5zXb26Fz9rcQpDWS57CtERHpNehXCPcNoHGKutQY",
     "BOB": "5FHneW46xGXgs5mUiveU4sbTyGBzmstUspZC92UhjJM694ty",
@@ -15,16 +20,17 @@ export const ParachainAccounts = {
     "DAVE": "5DAAnrj7VHTznn2AWBemMuyBwZWs6FNFjdyVXUeYum3PTXFy",
     "EVE": "5HGjWAeFDfFCWPsjFQdVV2Msvz2XtMktvgocEZcCj68kUMaw",
     "FERDIE": "5CiPPseXPECbkjWCa6MnjNokrgYjMqmKndv2rSnekmSK2DjL"
-}
+};
 
 export const ParachainKeys = {
-    "ALICE": "0x33a6f3093f158a7109f679410bef1a0c54168145e0cecb4df006c1c2fffb1f09925a225d97aa00682d6a59b95b18780c10d7032336e88f3442b42361f4a66011",
-    "BOB": "0xe1c39e72cca724caa697d64a58e10bd95ffa63d1922962f7e27f8a09dda1370b41ae88f85d0c1bfc37be41c904e1dfc01de8c8067b0d6d5df25dd1ac0894a325",
-    "CHARLIE": "0x551e1bc6a2c0a5abed4ed6bebf2b2b2851041492a4f934607678288d7de8d40c8faf12ff39cd4e5d92bb773972f41a7a5279ebc2ed92264bed8f47d344f8f18c",
-    "DAVE": "0x049c4a50d9e80ebc9d17cb555327cbbe7d47839250f7c2bce90d1d6d7165af0b108c4487b9323b98b11fe36cb301b084e920f7b7895536809a6d62a451b25568",
-    "EVE": "0xadc66eb5bf6b586a8edc846924416b439e83226a8fbd9cef8fa118b89d095c0d3dbf386b7828f348abe15d76973a72009e6ef86a5c91db2990cb36bb657c6587",
-    "FERDIE": "0xb746f8a10820eff9292a07c0f5f3b5115e0d9b0d0d835082a54e6569e5be690803e4f21bc6cc62bb4eeed5a9cce642c25e2d2ac1464093b50f6196d78e3a7426"
-}
+    "ALICE": () => keyring.createFromUri("//Alice", undefined, 'sr25519'),
+    "BOB": () => keyring.createFromUri("//Bob", undefined, 'sr25519'),
+    "CHARLIE": () => keyring.createFromUri("//Charlie", undefined, 'sr25519'),
+    "DAVE": () => keyring.createFromUri("//Dave", undefined, 'sr25519'),
+    "EVE": () => keyring.createFromUri("//Eve", undefined, 'sr25519'),
+    "FERDIE": () => keyring.createFromUri("//Ferdie", undefined, 'sr25519')
+};
+
 
 export const HECOKeys = {
     "XP-ALICE":"0x59c6995e998f97a5a0044966f0945389dc9e86dae88c7a8412f4603b6b78690d",
@@ -33,3 +39,15 @@ export const HECOKeys = {
     "XP-DAN":"0x47e179ec197488593b187f80a00eb0da91f1b9d0b13f8733639f19c30a34926a",
     "XP-EVE":"0x8b3a350cf5c34c9194ca85829a2df0ec3153be0318b5e2d3348e872092edffba"
 }
+
+
+export const ChainConfig = {
+    "xpnode": "ws://localhost:9944",
+    "xp_faucet": ParachainKeys["ALICE"],
+    "elrond_node": "http://localhost:7950",
+    "elrond_faucet": ElrondKeys["ALICE"],
+    "elrond_minter": "erd1qqqqqqqqqqqqqpgqygvvtlty3v7cad507v5z793duw9jjmlxd8sszs8a2y",
+    "elrond_event_rest": "http://localhost:6644",
+    "elrond_esdt": "XPNET-168307",
+    "elrond_esdt_nft": "XPNFT-59b7ef"
+};

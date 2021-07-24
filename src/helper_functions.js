@@ -1,3 +1,7 @@
+import { elrondHelperFactory, polkadotPalletHelperFactory } from 'testsuite-ts';
+import { ChainConfig } from './Config';
+
+
 /**
  * Reads the parachain keys from a JSON file
  * @param {String} fileName 
@@ -82,3 +86,32 @@ export function elrd_req_data(pem, dest, val) {
     }
 }
 
+export const ChainHandlers = {
+    _polka: undefined,
+    _elrd: undefined,
+    async polka() {
+        if (!this._polka) {
+        this._polka = await polkadotPalletHelperFactory(
+            ChainConfig.xpnode,
+            //ChainConfig.xp_freezer,
+            //ChainConfig.xp_freezer
+        );
+        }
+
+        return this._polka;
+    },
+    async elrd() {
+        if (!this._elrd) {
+        this._elrd = await elrondHelperFactory(
+            ChainConfig.elrond_node,
+            ChainConfig.elrond_faucet,
+            ChainConfig.elrond_minter,
+            ChainConfig.elrond_event_rest,
+            ChainConfig.elrond_esdt,
+            ChainConfig.elrond_esdt_nft
+        );
+
+        return this._elrd;
+        }
+    }
+}
