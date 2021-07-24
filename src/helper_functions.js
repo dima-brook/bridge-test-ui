@@ -91,27 +91,27 @@ export const ChainHandlers = {
     _elrd: undefined,
     async polka() {
         if (!this._polka) {
-        this._polka = await polkadotPalletHelperFactory(
-            ChainConfig.xpnode,
-            //ChainConfig.xp_freezer,
-            //ChainConfig.xp_freezer
-        );
+            this._polka = await polkadotPalletHelperFactory(
+                ChainConfig.xpnode,
+                //ChainConfig.xp_freezer,
+                //ChainConfig.xp_freezer
+            );
         }
 
         return this._polka;
     },
     async elrd() {
         if (!this._elrd) {
-        this._elrd = await elrondHelperFactory(
-            ChainConfig.elrond_node,
-            ChainConfig.elrond_faucet,
-            ChainConfig.elrond_minter,
-            ChainConfig.elrond_event_rest,
-            ChainConfig.elrond_esdt,
-            ChainConfig.elrond_esdt_nft
-        );
+            this._elrd = await elrondHelperFactory(
+                ChainConfig.elrond_node,
+                ChainConfig.elrond_faucet,
+                ChainConfig.elrond_minter,
+                ChainConfig.elrond_event_rest,
+                ChainConfig.elrond_esdt,
+                ChainConfig.elrond_esdt_nft
+            );
+        }
 
         return this._elrd;
-        }
     }
 }
