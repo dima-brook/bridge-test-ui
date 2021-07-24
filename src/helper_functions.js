@@ -1,5 +1,9 @@
-import { elrondHelperFactory, polkadotPalletHelperFactory } from 'testsuite-ts';
+import { polkadotPalletHelperFactory } from 'testsuite-ts';
+import  { web3HelperFactory } from 'testsuite-ts/dist/helpers/web3';
 import { ChainConfig } from './Config';
+import { abi } from './assets/Minter.json'
+import { ethers } from 'ethers';
+import detectEthereumProvider from '@metamask/detect-provider';
 
 
 /**
@@ -88,30 +92,44 @@ export function elrd_req_data(pem, dest, val) {
 
 export const ChainHandlers = {
     _polka: undefined,
-    _elrd: undefined,
+    _web3: undefined,
+    _web3Provider: undefined,
     async polka() {
         if (!this._polka) {
-        this._polka = await polkadotPalletHelperFactory(
-            ChainConfig.xpnode,
-            //ChainConfig.xp_freezer,
-            //ChainConfig.xp_freezer
-        );
+            this._polka = await polkadotPalletHelperFactory(
+                ChainConfig.xpnode,
+            );
         }
 
         return this._polka;
     },
-    async elrd() {
-        if (!this._elrd) {
-        this._elrd = await elrondHelperFactory(
-            ChainConfig.elrond_node,
-            ChainConfig.elrond_faucet,
-            ChainConfig.elrond_minter,
-            ChainConfig.elrond_event_rest,
-            ChainConfig.elrond_esdt,
-            ChainConfig.elrond_esdt_nft
-        );
-
-        return this._elrd;
+    _w3eventsSetup() {
+        const nullIt = () => this._web3 = undefined;
+        this._web3Provider.provider.on('chainChanged', nullIt);
+    },
+    async _requireWeb3() {
+        if (!this._web3) {
+            const base = await detectEthereumProvider();
+            if (!base) {
+                throw Error("Metamask not installed!");
+            }
+            this._web3Provider = new ethers.providers.Web3Provider(base);
+            this._web3 = await web3HelperFactory(
+                this._web3Provider,
+                ChainConfig.heco_minter,
+                abi
+            );
+            this._w3eventsSetup();
         }
+    },
+    async web3() {
+        await this._requireWeb3();
+
+        return this._web3;
+    },
+    async innerWeb3() {
+        await this._requireWeb3();
+
+        return this._web3Provider;
     }
 }

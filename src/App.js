@@ -5,11 +5,6 @@ import Selector from './Selector';
 import SendButton from './SendButton';
 import MaxButton from './MaxButton';
 import "./style.css";
-import {
-  HECOAccounts,
-  HECOKeys,
-  ChainConfig,
-} from './Config';
 
 import {
   XPApp,
@@ -48,7 +43,8 @@ function App() {
   // =====================================================
 
 
-  let polkaExtInit = useRef(false);
+  const polkaExtInit = useRef(false);
+  const w3ExtInit = useRef(false);
 
   const [amount, setAmount] = useState(1000000000000000);
 
@@ -78,7 +74,16 @@ function App() {
 
     return (await web3Accounts())
       .map((v) => v.address)
-  }
+  };
+
+  const w3Accs = async () => {
+    const w3 = await ChainHandlers.innerWeb3();
+    if (!w3ExtInit.current) {
+      await w3.provider.request({ method: 'eth_requestAccounts' });
+    }
+  
+    return await w3.listAccounts();
+  };
 
   /**
    * Checks wich blockchain is the Source
@@ -86,12 +91,13 @@ function App() {
    * Populates the FROM with the respective accounts
    */
   const populateFromAccounts = useCallback(async () => {
+    fromAccts.current = [];
     switch (from) {
       case Chains[0]:
         fromAccts.current = await polkadotAccounts();
         break;
       case Chains[1]:
-        fromAccts.current = HECOAccounts;
+        fromAccts.current = await w3Accs();
         break;
       default:
         break;
@@ -104,14 +110,10 @@ function App() {
    * Defaults to the first accounts
    */
   const populateInitialAccounts = useCallback(() => {
-    if (from === Chains[0]) {
-      setFromAcct(fromAccts.current[0])
-    } else if (from === Chains[1]) {
-      setFromAcct(Object.keys(HECOAccounts)[0])
-    }
+    setFromAcct(fromAccts.current[0]);
 
     toAcct.current.value = "";
-  }, [from]);
+  }, []);
 
   /**
    * Catches the change events and updates related fields
@@ -144,11 +146,15 @@ function App() {
   }
 
   /// Get polkadot signer interface from polkadot{.js} extension
-  const getSigner = async (address) => {
+  const getPolkadotSigner = async (address) => {
     const injector = await web3FromAddress(address);
 
     return { sender: address, options: { signer: injector.signer } };
   };
+
+  const getW3Signer = async (address) => {
+    return (await ChainHandlers.innerWeb3()).getSigner(address);
+  }
 
   /**
     * Send liquidity
@@ -169,7 +175,7 @@ function App() {
     }
 
     const polka = await ChainHandlers.polka();
-    const elrd = await ChainHandlers.elrd();
+    const web3 = await ChainHandlers.web3();
 
 
     try {
@@ -177,37 +183,37 @@ function App() {
       update_tx('', "please wait...")
       let result;
 
-      // Transfer direction XP.network => Elrond:
+      // Transfer direction XP.network => HECO:
       if (from === Chains[0] && to === Chains[1]) {
         // Extract the signature by the Sender's name
-        key = await getSigner(fromAcct);
+        key = await getPolkadotSigner(fromAcct);
         // Extract the account by the Sender's name
         acctAddress = fromAcct;
         // Extract the address by the target user name
-        targetWallet = toAcct.current.value;
+        targetWallet = toAcct.current.value.toString();
 
         if (token === Tokens[0]) { // XPNET
-          // Lock XPNET and mint wrapped XPNET in Elrond:
+          // Lock XPNET and mint wrapped XPNET in HECO:
           result = await polka.transferNativeToForeign(key, targetWallet, amount);
         } else if (token === Tokens[1]) { // EGLD
-          // Return wrapped EGLD from Parachain to Elrond:
+          // Return wrapped EGLD from Parachain to HECO:
           result = await polka.unfreezeWrapped(key, targetWallet, amount);
         }
-        // Transfer direction Elrond => XP.network:
+        // Transfer direction HECO => XP.network:
       } else if (from === Chains[1] && to === Chains[0]) {
         // Extract the signature by the Sender's name
-        key = HECOKeys[fromAcct];
+        key = await getW3Signer();
         // Extract the account by the Sender's name
-        acctAddress = HECOAccounts[fromAcct];
+        acctAddress = await key.getAddress();
         // Extract the address by the target user name
         targetWallet = toAcct.current.value;
 
         if (token === Tokens[0]) { // XPNET
-          // Return wrapped XPNET from Elrond to the Parachain:
-          result = await elrd.unfreezeWrapped(key, targetWallet, amount);
+          // Return wrapped XPNET from HECO to the Parachain:
+          result = await web3.unfreezeWrapped(key, targetWallet, amount);
         } else if (token === Tokens[1]) { // EGLD
-          // Lock EGLD in Elrond & release wrapped EGLD in the Parachain:
-          result = await elrd.transferNativeToForeign(key, targetWallet, amount);
+          // Lock EGLD in HECO & release wrapped EGLD in the Parachain:
+          result = await web3.transferNativeToForeign(key, targetWallet, amount);
         }
       }
       update_tx(targetWallet, `${JSON.stringify(result[0])}`);
@@ -280,16 +286,14 @@ function App() {
     // Put your code for retrieving the data here
 
     let chain;
-    let acc;
+    const acc = fromAcct;
 
     switch (from) {
       case Chains[0]:
         chain = await ChainHandlers.polka();
-        acc = fromAcct;
         break;
       case Chains[1]:
-        chain = await ChainHandlers.elrd();
-        acc = HECOAccounts[fromAcct]
+        chain = await ChainHandlers.web3();
         break;
       default:
         break;
