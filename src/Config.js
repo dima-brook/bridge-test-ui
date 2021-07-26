@@ -104,8 +104,8 @@ export const ElrondDappConfig = {
     id: "devnet",
     name: "Devnet",
     egldLabel: "xEGLD",
-    walletAddress: "https://devnet-wallet.elrond.com/",
-    apiAddress: "https://devnet-api.elrond.com",
-    gatewayAddress: "https://devnet-gateway.elrond.com",
-    explorerAddress: "http://devnet-explorer.elrond.com/",
+    walletAddress: "https://testnet-wallet.elrond.com",
+    apiAddress: "https://testnet-api.elrond.com",
+    gatewayAddress: "https://testnet-gateway.elrond.com",
+    explorerAddress: "http://testnet-explorer.elrond.com/",  
 };

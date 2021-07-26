@@ -10,6 +10,7 @@ import {
   ElrondKeys
 } from './Config';
 
+import { chains, tokens } from './consts';
 import {
     XPApp,
     XPMain,
@@ -26,11 +27,7 @@ import {
 } from './StyledComponents'
 import { ChainHandlers } from './helper_functions'
 import { UserSigner, parseUserKey } from '@elrondnetwork/erdjs'
-import { web3Accounts, web3Enable, web3FromAddress } from '@polkadot/extension-dapp';
-  
-  
-const Tokens = ['XPNET', 'EGLD'];
-const Chains = ['XP.network', 'Elrond'];
+
 
 function Fungible() {
 
@@ -43,14 +40,11 @@ function Fungible() {
   // =====================================================
   //                      S T A T E
   // =====================================================
-
-  let polkaExtInit = useRef(false);
-
   const [amount, setAmount] = useState(1000000000000000);
 
-  const [token, setTokens] = useState(Tokens[0]);
-  const [from, setFrom] = useState(Chains[0]);
-  const [to, setTo] = useState(Chains[1]);
+  const [token, setTokens] = useState(tokens[0]);
+  const [from, setFrom] = useState(chains[0]);
+  const [to, setTo] = useState(chains[1]);
 
   let fromAccts = useRef([]);
 
@@ -66,16 +60,6 @@ function Fungible() {
   //                 DROPDOWNS POPULATION
   // =====================================================
 
-  const polkadotAccounts = async () => {
-    if (!polkaExtInit.current) {
-      await web3Enable('XPNET Cross Chain Bridge');
-      polkaExtInit.current = true;
-    }
-
-    return (await web3Accounts())
-      .map((v) => v.address)
-  }
-
   /**
    * Checks wich blockchain is the Source
    * 
@@ -83,10 +67,10 @@ function Fungible() {
    */
   const populateFromAccounts = useCallback(async () => {
     switch (from) {
-      case Chains[0]:
-        fromAccts.current = await polkadotAccounts();
+      case chains[0]:
+        fromAccts.current = await ChainHandlers.polkadotAccounts();
         break;
-      case Chains[1]:
+      case chains[1]:
         fromAccts.current = ElrondAccounts;
         break;
       default:
@@ -100,9 +84,9 @@ function Fungible() {
    * Defaults to the first accounts
    */
   const populateInitialAccounts = useCallback(() => {
-    if (from === Chains[0]) {
+    if (from === chains[0]) {
       setFromAcct(fromAccts.current[0])
-    } else if (from === Chains[1]) {
+    } else if (from === chains[1]) {
       setFromAcct(Object.keys(ElrondAccounts)[0])
     }
 
@@ -139,13 +123,6 @@ function Fungible() {
     toAcct.current.value = "";
   }
 
-  /// Get polkadot signer interface from polkadot{.js} extension
-  const getSigner = async (address) => {
-    const injector = await web3FromAddress(address);
-
-    return { sender: address, options: { signer: injector.signer } };
-  };
-
   /**
     * Send liquidity
     * 
@@ -174,23 +151,23 @@ function Fungible() {
       let result;
 
       // Transfer direction XP.network => Elrond:
-      if (from === Chains[0] && to === Chains[1]) {
+      if (from === chains[0] && to === chains[1]) {
         // Extract the signature by the Sender's name
-        key = await getSigner(fromAcct);
+        key = await ChainHandlers.polkadotSigner(fromAcct);
         // Extract the account by the Sender's name
         acctAddress = fromAcct;
         // Extract the address by the target user name
         targetWallet = toAcct.current.value;
 
-        if (token === Tokens[0]) { // XPNET
+        if (token === tokens[0]) { // XPNET
           // Lock XPNET and mint wrapped XPNET in Elrond:
           result = await polka.transferNativeToForeign(key, targetWallet, amount);
-        } else if (token === Tokens[1]) { // EGLD
+        } else if (token === tokens[1]) { // EGLD
           // Return wrapped EGLD from Parachain to Elrond:
           result = await polka.unfreezeWrapped(key, targetWallet, amount);
         }
         // Transfer direction Elrond => XP.network:
-      } else if (from === Chains[1] && to === Chains[0]) {
+      } else if (from === chains[1] && to === chains[0]) {
         // Extract the signature by the Sender's name
         key = new UserSigner(parseUserKey(ElrondKeys[fromAcct]));
         // Extract the account by the Sender's name
@@ -198,21 +175,19 @@ function Fungible() {
         // Extract the address by the target user name
         targetWallet = toAcct.current.value;
 
-        if (token === Tokens[0]) { // XPNET
+        if (token === tokens[0]) { // XPNET
           // Return wrapped XPNET from Elrond to the Parachain:
           result = await elrd.unfreezeWrapped(key, targetWallet, amount);
-        } else if (token === Tokens[1]) { // EGLD
+        } else if (token === tokens[1]) { // EGLD
           // Lock EGLD in Elrond & release wrapped EGLD in the Parachain:
           result = await elrd.transferNativeToForeign(key, targetWallet, amount);
         }
       }
       update_tx(targetWallet, `${JSON.stringify(result[0])}`);
-
-      setSendInactive(false);
     } catch (error) {
       console.error(error)
-      setSendInactive(false);
     }
+    setSendInactive(false);
 
     // Check the extracted values:
     console.log("From:", fromAcct)
@@ -278,11 +253,11 @@ function Fungible() {
     let acc;
     // Example:
     switch (from) {
-      case Chains[0]:
+      case chains[0]:
         chain = await ChainHandlers.polka();
         acc = fromAcct;
         break;
-      case Chains[1]:
+      case chains[1]:
         chain = await ChainHandlers.elrd();
         acc = ElrondAccounts[fromAcct]
         break;
@@ -316,7 +291,7 @@ function Fungible() {
                 <XPLabel>Asset</XPLabel>
                 <Selector
                   value={token}
-                  data={Tokens}
+                  data={tokens}
                   onClick={() => {}}
                   onChange={handleTokenBlockchainChange}
                 />
@@ -349,7 +324,7 @@ function Fungible() {
                 <XPLabel>From</XPLabel>
                 <Selector
                   value={from}
-                  data={Chains}
+                  data={chains}
                   onChange={handleFromBlockchainChange}
                 />
               </XPColumn>
@@ -360,7 +335,7 @@ function Fungible() {
                 <XPLabel>To</XPLabel>
                 <Selector
                   value={to}
-                  data={Chains}
+                  data={chains}
                   onChange={handleToBlockchainChange}
                 />
               </XPColumn>

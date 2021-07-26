@@ -1,5 +1,6 @@
 import { elrondHelperFactory, polkadotPalletHelperFactory } from 'testsuite-ts';
 import { ChainConfig } from './Config';
+import { web3Accounts, web3Enable, web3FromAddress } from '@polkadot/extension-dapp';
 
 
 /**
@@ -88,7 +89,14 @@ export function elrd_req_data(pem, dest, val) {
 
 export const ChainHandlers = {
     _polka: undefined,
+    _polkaExtInit: undefined,
     _elrd: undefined,
+    async _requirePolkadotExt() {
+        if (!this._polkaExtInit) {
+            await web3Enable('XPNET Cross Chain Bridge');
+            this._polkaExtInit = true;
+        }
+    },
     async polka() {
         if (!this._polka) {
             this._polka = await polkadotPalletHelperFactory(
@@ -100,11 +108,23 @@ export const ChainHandlers = {
 
         return this._polka;
     },
+    async polkadotAccounts() {
+        await this._requirePolkadotExt();
+
+        return (await web3Accounts())
+            .map((v) => v.address)
+    },
+    async polkadotSigner(address) {
+        await this._requirePolkadotExt();
+
+        const injector = await web3FromAddress(address);
+
+        return { sender: address, options: { signer: injector.signer } };
+    },
     async elrd() {
         if (!this._elrd) {
             this._elrd = await elrondHelperFactory(
                 ChainConfig.elrond_node,
-                ChainConfig.elrond_faucet,
                 ChainConfig.elrond_minter,
                 ChainConfig.elrond_event_rest,
                 ChainConfig.elrond_esdt,

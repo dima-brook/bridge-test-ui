@@ -103,7 +103,7 @@ const Selector = ({ value, data, onClick, onChange }) => {
                 {   // Loop over the data elements:
                     data.map(item => {
                         return (
-                            <XPDropDownElement onClick={() => handleXPDropDownClick(item)} ref={closeDropDownRef}>
+                            <XPDropDownElement onClick={() => handleXPDropDownClick(item)} ref={closeDropDownRef} key={item}>
                                 <XPWrapper>
                                     {/* ================================= 2. TEXT FIELD ================================*/}
                                     <XPStyledText>{item}</XPStyledText>
