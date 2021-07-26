@@ -94,3 +94,18 @@ export const ChainConfig = {
     "elrond_esdt": "XPNET-168307",
     "elrond_esdt_nft": "XPNFT-59b7ef"
 };
+
+export const walletConnectBridge = "https://bridge.walletconnect.org";
+export const walletConnectDeepLink =
+  "https://maiar.page.link/?apn=com.elrond.maiar.wallet&isi=1519405832&ibi=com.elrond.maiar.wallet&link=https://maiar.com/";
+
+
+export const ElrondDappConfig = {
+    id: "devnet",
+    name: "Devnet",
+    egldLabel: "xEGLD",
+    walletAddress: "https://devnet-wallet.elrond.com/",
+    apiAddress: "https://devnet-api.elrond.com",
+    gatewayAddress: "https://devnet-gateway.elrond.com",
+    explorerAddress: "http://devnet-explorer.elrond.com/",
+};
