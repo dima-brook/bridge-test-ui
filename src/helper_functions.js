@@ -1,91 +1,12 @@
 import { elrondHelperFactory, polkadotPalletHelperFactory } from 'testsuite-ts';
-import { ChainConfig } from './Config';
+import { ChainConfig, ElrondKeys } from './Config';
 import { web3Accounts, web3Enable, web3FromAddress } from '@polkadot/extension-dapp';
+import { UserSigner } from '@elrondnetwork/erdjs';
 
-
-/**
- * Reads the parachain keys from a JSON file
- * @param {String} fileName 
- * @returns JS Object of keys like {KEY:"hex encoded strings"}
- */
-export async function getKeys(fileName) {
-    const keys = await fetch(fileName)
-        .then(response => response.json())
-        .then(text => text)
-
-    return keys;
-}
-
-/**
- * POST request helper function
- * @param {String} route 
- * @param {Object} data 
- * @returns Success confirmation || Error message
- */
-export async function post(route, data) {
-
-    try {
-        // Convert the JS Object into a string:
-        const body = JSON.stringify(data);
-
-        let err;
-        // Save the result of the POST request
-        const resp = await fetch(route,
-            {
-                method: "POST",
-                headers: {
-                    'Accept': 'application/json',
-                    'Content-Type': 'application/json'
-                },
-                body
-            })
-            .catch((e) => err = e);
-
-        // On error -> print it in the console
-        err && console.log(err);
-
-        // Return the JSON formatted response
-        return [await resp.json(), err];
-    } catch (error) {
-        // On error -> print it in the console
-        console.error(error);
-        // Retur the text of the error
-        return [{}, error];
-    }
-
-}
-
-/**
- * Maps the data to the required keys
- * @param {String} addr the address of origin
- * @param {String} key the signature key
- * @param {String} dest the target address
- * @param {String | Number} val the amount
- * @returns a JS Object required by the BE
- */
-export function polkadot_req_data(addr, key, dest, val) {
-    return {
-        "sender_addr": addr,
-        "sender_key": key,
-        "destination": dest,
-        "value": val
-    }
-}
-
-/**
- * Maps the data to the required keys
- * @param {String} pem the key 
- * @param {String} dest the target address
- * @param {String | Number} val the amount
- * @returns a JS Object required by the BE
- */
-export function elrd_req_data(pem, dest, val) {
-    return {
-        "pem": pem,
-        "destination": dest,
-        "value": val
-    }
-}
+/*const nft_info_encoded_t = new StructType('EncodedNft', [
+    new StructFieldDefinition('token', '', new TokenIdentifierType()),
+    new StructFieldDefinition('nonce', '', new U64Type())
+]);*/
 
 export const ChainHandlers = {
     _polka: undefined,
@@ -97,7 +18,7 @@ export const ChainHandlers = {
             this._polkaExtInit = true;
         }
     },
-    async polka() {
+    async _requirePolka() {
         if (!this._polka) {
             this._polka = await polkadotPalletHelperFactory(
                 ChainConfig.xpnode,
@@ -105,6 +26,9 @@ export const ChainHandlers = {
                 //ChainConfig.xp_freezer
             );
         }
+    },
+    async polka() {
+        await this._requirePolka();
 
         return this._polka;
     },
@@ -121,7 +45,7 @@ export const ChainHandlers = {
 
         return { sender: address, options: { signer: injector.signer } };
     },
-    async elrd() {
+    async _requireElrd() {
         if (!this._elrd) {
             this._elrd = await elrondHelperFactory(
                 ChainConfig.elrond_node,
@@ -131,7 +55,42 @@ export const ChainHandlers = {
                 ChainConfig.elrond_esdt_nft
             );
         }
+    },
+    async elrd() {
+        await this._requireElrd();
 
         return this._elrd;
+    },
+    async elrondSigner(name) {
+        return UserSigner.fromPem(ElrondKeys[name]);
+    },
+    async checkWrappedOnPolkadot(_owner, ident) {
+        return ident === ChainConfig.elrond_esdt_nft;
+    },
+    async checkWrappedOnElrond(owner, ident) {
+        await this._requireElrd();
+        await this._requirePolka();
+
+        const nfts = await this._polka.listNft(owner);
+        const nftDatW = Buffer.from(nfts.get(ident).replace('0x', ''), 'hex').toString('utf-8');
+        const nftDat = Buffer.from(nftDatW, 'hex');
+
+        /// BinaryCodec is broken for browsers. Decode manually :|
+        if (nftDat.length < 12) {
+            return false;
+        }
+
+        const tokenLen = (new Uint32Array(nftDat.slice(0, 4).reverse()))[0];
+        console.log(tokenLen);
+        if (nftDat.length !== 12 + tokenLen) {
+            return false;
+        }
+        const token = nftDat.slice(4, 4+tokenLen).toString('utf-8');
+        // TODO: Consider LO
+        // tfw js can't convert be bytes to u64
+        const nonce = (new Uint32Array(nftDat.slice(4+tokenLen, 12 + tokenLen).reverse()))[0].toString(16);
+
+        const lockedNfts = await this._elrd.listNft(ChainConfig.elrond_minter);
+        return lockedNfts.has(`${token}-0${nonce}`);
     }
 }

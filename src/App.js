@@ -9,7 +9,7 @@ import Layout from "./LoginLayout";
 function App() {
   return (
     <Router basename={process.env.PUBLIC_URL}>
-      <ContextProvider>
+      {/*<ContextProvider>
         <Elrond.Context
           config={{
             network: ElrondDappConfig,
@@ -17,9 +17,9 @@ function App() {
             walletConnectDeepLink
           }}
         >
-          <Layout>
+          <Layout>*/}
             <Switch>
-              <Route
+              {/*<Route
                 path="/unlock"
                 component={() => (
                   <Elrond.Pages.Unlock
@@ -31,26 +31,26 @@ function App() {
                   />
                 )}
                 exact={true}
-              />
+                />
               <Route
-                path="/ledger" /* must correspond to ledgerRoute */
+                path="/ledger"
                 component={() => (
                   <Elrond.Pages.Ledger callbackRoute="/transfer" />
                 )}
                 exact={true}
-              />
+                />
               <Route
-                path="/walletconnect" /* must correspond to walletConnectRoute */
+                path="/walletconnect"
                 component={() => (
                   <Elrond.Pages.WalletConnect
                     callbackRoute="/transfer"
-                    logoutRoute="/unlock" /* redirect after logout */
+                    logoutRoute="/unlock"
                     title="Maiar Login"
                     lead="Scan the QR code using Maiar"
                   />
                 )}
                 exact={true}
-              />
+              />*/}
 
               {routes.map((route, i) => (
                 <Route
@@ -61,9 +61,9 @@ function App() {
                 />
               ))}
             </Switch>
-          </Layout>
+          {/*</Layout>
         </Elrond.Context>
-      </ContextProvider>
+      </ContextProvider>*/}
     </Router>
   )
 }

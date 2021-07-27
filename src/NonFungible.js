@@ -128,39 +128,61 @@ function NonFungible() {
    * SEND button onClick handler
    */
   const handleSendClick = async () => {
-    setExecResult(true);
+    setSendInactive(true);
 
     let info;
+    let call;
     let chain;
+    let checkWrapped;
+    let cbWrapped;
+    let cbNormal;
+    let sender;
+    let res;
 
-    if (from == chains[0]) {
+    const checkWrap = async () => {
+      if (await checkWrapped(sourceAcc.current.value, nft.current.token)) {
+        call = chain.unfreezeWrappedNft;
+        cbWrapped && cbWrapped();
+      } else {
+        call = chain.transferNftToForeign;
+        cbNormal && cbNormal();
+      }
+    };
+  
+    if (from === chains[0]) {
         info = nft.current.token;
         chain = await ChainHandlers.polka();
+        checkWrapped = ChainHandlers.checkWrappedOnElrond.bind(ChainHandlers);
+        sender = await ChainHandlers.polkadotSigner(sourceAcc.current.value)
     } else {
-        info = nft.current;
         chain = await ChainHandlers.elrd();
+        checkWrapped = ChainHandlers.checkWrappedOnPolkadot;
+        cbWrapped = () => info = nft.current.nonce;
+        cbNormal = () => info = nft.current;
+        sender = await ChainHandlers.elrondSigner(sourceAcc.current.value)
     }
 
+    await checkWrap();
+
     try {
-      await chain.transferNftToForeign(
+      console.log(call);
+      await call(
           sender,
-          targetAcc.current,
+          targetAcc.current.value,
           info
       );
 
-      // In case of success => display success for 3 sec.
-      setExecResult('success');
-
+      res = 'success';
     } catch (error) {
-      // In case of an error => display error for 3 sec.
-      setExecResult('failure'); // Failure
-
+      console.log("err", error);
+      res = 'failure';
     }
 
-    setTimeout(() => {
-        setSendInactive(false);
-        setExecResult('');
-    }, 3000)
+    setExecResult(res);
+
+    await new Promise(r => setTimeout(r, 3000));
+    setSendInactive(false);
+    setExecResult('');
   }
 
 
@@ -290,7 +312,7 @@ function NonFungible() {
             <SendButton
               onClick={handleSendClick}
               inactive={sendInactive}
-              color={execResult}
+              state={execResult}
             />
 
           </XPFlexCenter>

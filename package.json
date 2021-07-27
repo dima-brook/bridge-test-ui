@@ -4,7 +4,7 @@
   "private": true,
   "dependencies": {
     "@elrondnetwork/dapp": "^0.0.25",
-    "@elrondnetwork/erdjs": "^6.4.0",
+    "@elrondnetwork/erdjs": "^6.5.0",
     "@polkadot/extension-dapp": "^0.39.1",
     "@polkadot/keyring": "^6.11.1",
     "@testing-library/jest-dom": "^5.14.1",

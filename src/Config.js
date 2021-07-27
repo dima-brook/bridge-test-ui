@@ -86,13 +86,11 @@ export const ParachainKeys = {
 
 export const ChainConfig = {
     "xpnode": "ws://localhost:9944",
-    "xp_faucet": ParachainKeys["ALICE"],
     "elrond_node": "http://localhost:7950",
-    "elrond_faucet": ElrondKeys["ALICE"],
     "elrond_minter": "erd1qqqqqqqqqqqqqpgqygvvtlty3v7cad507v5z793duw9jjmlxd8sszs8a2y",
     "elrond_event_rest": "http://localhost:6644",
-    "elrond_esdt": "XPNET-168307",
-    "elrond_esdt_nft": "XPNFT-59b7ef"
+    "elrond_esdt": "XPNET-054f6c",
+    "elrond_esdt_nft": "XPNFT-57cb06"
 };
 
 export const walletConnectBridge = "https://bridge.walletconnect.org";
