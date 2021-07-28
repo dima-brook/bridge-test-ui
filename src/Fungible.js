@@ -27,6 +27,7 @@ import {
 } from './StyledComponents'
 import { ChainHandlers } from './helper_functions'
 import { UserSigner, parseUserKey } from '@elrondnetwork/erdjs'
+import * as Elrond from "@elrondnetwork/dapp";
 
 
 function Fungible() {
@@ -46,7 +47,7 @@ function Fungible() {
   const [from, setFrom] = useState(chains[0]);
   const [to, setTo] = useState(chains[1]);
 
-  let fromAccts = useRef([]);
+  const fromAccts = useRef([]);
 
   const [fromAcct, setFromAcct] = useState(undefined);
   const toAcct = useRef();
@@ -55,6 +56,8 @@ function Fungible() {
   const [receiver, setReceiver] = useState('');
 
   const [sendInactive, setSendInactive] = useState(false);
+
+  const sendElrdTx = Elrond.useSendTransaction();
 
   // =====================================================
   //                 DROPDOWNS POPULATION
@@ -123,6 +126,26 @@ function Fungible() {
     toAcct.current.value = "";
   }
 
+  const liqudityElrond = async () => {
+    let txGen;
+
+    const elrd = await ChainHandlers.elrd();
+  
+    if (token === tokens[0]) {
+      txGen = elrd.unsignedUnfreezeTxn;
+    } else {
+      txGen = elrd.unsignedTransferTxn;
+    }
+
+    const tx = txGen(toAcct.current.value, amount);
+    setSendInactive(false);
+
+    sendElrdTx({
+      transaction: tx,
+      callbackRoute: "/processelrd",
+    });
+  }
+
   /**
     * Send liquidity
     * 
@@ -142,8 +165,6 @@ function Fungible() {
     }
 
     const polka = await ChainHandlers.polka();
-    const elrd = await ChainHandlers.elrd();
-
 
     try {
 
@@ -168,20 +189,7 @@ function Fungible() {
         }
         // Transfer direction Elrond => XP.network:
       } else if (from === chains[1] && to === chains[0]) {
-        // Extract the signature by the Sender's name
-        key = new UserSigner(parseUserKey(ElrondKeys[fromAcct]));
-        // Extract the account by the Sender's name
-        acctAddress = ElrondAccounts[fromAcct];
-        // Extract the address by the target user name
-        targetWallet = toAcct.current.value;
-
-        if (token === tokens[0]) { // XPNET
-          // Return wrapped XPNET from Elrond to the Parachain:
-          result = await elrd.unfreezeWrapped(key, targetWallet, amount);
-        } else if (token === tokens[1]) { // EGLD
-          // Lock EGLD in Elrond & release wrapped EGLD in the Parachain:
-          result = await elrd.transferNativeToForeign(key, targetWallet, amount);
-        }
+        return await liqudityElrond();
       }
       update_tx(targetWallet, `${JSON.stringify(result[0])}`);
     } catch (error) {

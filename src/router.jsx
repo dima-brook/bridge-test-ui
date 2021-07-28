@@ -1,5 +1,6 @@
 import Fungible from "./Fungible";
 import NonFungible from './NonFungible';
+import ElrondTxnHandler from "./ElrondTxnHandler"
 
 export const routes = [
   {
@@ -9,5 +10,9 @@ export const routes = [
   {
     path: "/nft",
     component: NonFungible
+  },
+  {
+    path: "/processelrd",
+    component: ElrondTxnHandler
   }
 ]

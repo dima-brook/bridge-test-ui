@@ -73,8 +73,9 @@ export const ChainHandlers = {
 
         const nfts = await this._polka.listNft(owner);
         const nftDatW = Buffer.from(nfts.get(ident).replace('0x', ''), 'hex').toString('utf-8');
-        const nftDat = Buffer.from(nftDatW, 'hex');
+        const nftDat = Buffer.from(nftDatW, 'hex'); // binary encoded as nft_encoded_t
 
+        /// TokenLen(4 by), TokenIdent(TokenLen by), Nonce(8 by)
         /// BinaryCodec is broken for browsers. Decode manually :|
         if (nftDat.length < 12) {
             return false;

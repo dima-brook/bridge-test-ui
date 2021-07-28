@@ -9,7 +9,7 @@ import Layout from "./LoginLayout";
 function App() {
   return (
     <Router basename={process.env.PUBLIC_URL}>
-      {/*<ContextProvider>
+      <ContextProvider>
         <Elrond.Context
           config={{
             network: ElrondDappConfig,
@@ -17,9 +17,9 @@ function App() {
             walletConnectDeepLink
           }}
         >
-          <Layout>*/}
+          <Layout>
             <Switch>
-              {/*<Route
+              <Route
                 path="/unlock"
                 component={() => (
                   <Elrond.Pages.Unlock
@@ -50,7 +50,7 @@ function App() {
                   />
                 )}
                 exact={true}
-              />*/}
+              />
 
               {routes.map((route, i) => (
                 <Route
@@ -61,9 +61,9 @@ function App() {
                 />
               ))}
             </Switch>
-          {/*</Layout>
+          </Layout>
         </Elrond.Context>
-      </ContextProvider>*/}
+      </ContextProvider>*
     </Router>
   )
 }
