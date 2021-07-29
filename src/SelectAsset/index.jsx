@@ -11,32 +11,9 @@ export default function SelectAssets(props) {
         <div className="select-all-title-text">Select asset</div>
         <SelectAllButton />
       </div>
-      <div className="select-asset-container">
+      <div className="select-asset-container" id="select-asset-container-scroll">
         <ImageAsset />
-        <ImageAsset />
-        <ImageAsset />
-        <ImageAsset />
-        <ImageAsset />
-        <ImageAsset />
-        <ImageAsset />
-        <ImageAsset />
-        <ImageAsset />
-        <ImageAsset />
-        <ImageAsset />
-        <ImageAsset />
-        <ImageAsset />
-        <ImageAsset />
-        <ImageAsset />
-        <ImageAsset />
-        <ImageAsset />
-        <ImageAsset />
-        <ImageAsset />
-        <ImageAsset />
-        <ImageAsset />
-        <ImageAsset />
-        <ImageAsset />
-        <ImageAsset />
-        <ImageAsset />
+
       </div>
     </>
   );

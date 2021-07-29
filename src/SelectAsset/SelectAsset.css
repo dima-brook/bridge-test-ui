@@ -1,34 +1,36 @@
 .select-asset-container {
-  height: 200px;
-  overflow:scroll;
+  max-height: 200px;
+  overflow: scroll;
   overflow-x: hidden;
   background: #1d2797;
   border-radius: 8px;
   margin-top: 5px;
-  display:flex;
+  display: flex;
   flex-wrap: wrap;
-  justify-content: center;
   padding-top: 16px;
 }
 
 .image-assets-style {
   width: 101px;
   height: 101px;
+  padding: 0 8px;
   border-radius: 8px;
-  margin: 16px;
   margin-bottom: 0px;
   margin-top: 0px;
+  margin-top: auto;
+
+
 }
 
-.select-all-check-box-none{
-    position: absolute;
-    width: 24px;
-    height: 24px;
-    background: #FFFFFF;
-    border-radius: 2px;
-    top: 10px;
-    left: 25px;
-
+.select-all-check-box-none {
+  position: absolute;
+  width: 24px;
+  height: 24px;
+  
+  background: #ffffff;
+  border-radius: 2px;
+  top: 10px;
+  left: 20px;
 }
 
 .image-assets-text {
@@ -39,9 +41,9 @@
   letter-spacing: 0.03em;
   color: #ffffff;
   opacity: 0.7;
+  padding: 0 8px;
   margin-top: 0px;
   margin-bottom: 0px;
-  padding: 0 16px;
   text-align: left;
 }
 
@@ -70,4 +72,32 @@
   letter-spacing: 0.03em;
   color: #ffffff;
   opacity: 0.9;
+}
+
+
+#select-asset-container-scroll::-webkit-scrollbar {
+  height: 84px;
+  border: 6px solid #1d2797;
+  border-radius: 30px;
+}
+
+/* Track */
+#select-asset-container-scroll::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+/* Handle */
+#select-asset-container-scroll::-webkit-scrollbar-thumb {
+  background: #4260ff;
+  border-radius: 30px;
+  border: 6px solid #1d2797;
+
+}
+
+/* Handle on hover */
+#select-asset-container-scroll::-webkit-scrollbar-thumb:hover {
+  background: #4260ff;
+  border-radius: 30px;
+  border: 6px solid #1d2797;
+
 }

@@ -304,10 +304,11 @@ function NonFungible() {
             {/* ---------- The fifth Row of elements ------- */}
             {/* -------------------------------------------- */}
 
+
+            <XPLabel style={{ display: `${nonceDisplay}` }}>ESDT NFT nonce</XPLabel>
             <XPRow
               style={{ display: `${nonceDisplay}` }}
             >
-              <XPLabel>ESDT NFT nonce</XPLabel>
               <XPTransaction
                 onChange={handleNonceChange}
               ></XPTransaction>
