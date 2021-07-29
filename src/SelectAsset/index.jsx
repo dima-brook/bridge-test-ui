@@ -3,8 +3,10 @@ import SelectAllButton from "./parts/selectAllbutton";
 import ImageAsset from "./parts/imageAsset";
 import "./SelectAsset.css";
 
-export default function SelectAssets(props) {
-  const {} = props;
+
+// {hash, url}[]
+export default function SelectAssets({imgs}) {
+  console.log(imgs);
   return (
     <>
       <div className="select-all-flex">
@@ -12,8 +14,10 @@ export default function SelectAssets(props) {
         <SelectAllButton />
       </div>
       <div className="select-asset-container" id="select-asset-container-scroll">
-        <ImageAsset />
-
+        {imgs.map(({hash, url}) => {
+          console.log(url);
+          return <ImageAsset hash={hash} img={url} />
+        })}
       </div>
     </>
   );

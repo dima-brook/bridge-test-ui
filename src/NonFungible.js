@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState, useEffect, useRef, useCallback } from 'react';
 import * as Elrond from "@elrondnetwork/dapp";
 
 // Local imports
@@ -22,6 +22,7 @@ import SendButton from './SendButton';
 import { ChainHandlers } from './helper_functions';
 import { Address } from '@elrondnetwork/erdjs/out';
 import SelectAssets from "./SelectAsset/index";
+import { decodeAddress } from '@polkadot/keyring';
 
 
 /********************************************************
@@ -33,7 +34,7 @@ function NonFungible() {
   // =====================================================
 
   // Source blockchain
-  const sourceAcc = useRef('');
+  const [sourceAcc, setSourceAcc] = useState('');
   // Target Blockchain
   const targetAcc = useRef('');
 
@@ -41,6 +42,8 @@ function NonFungible() {
   const [from, setFrom] = useState(chains[0]);
   // Target Blockchain
   const [to, setTo] = useState(chains[1]);
+
+  const [imgs, setImgs] = useState([]);
 
   // NFT hash identifier
   const nft = useRef({token: '', nonce: 0});
@@ -79,6 +82,56 @@ function NonFungible() {
     setFrom(temp_to);
 
   }
+
+  const populateImages = useCallback(async () => {
+    let addressGetter;
+    let address;
+    let chain;
+
+    setImgs([]);
+
+    switch (from) {
+      case chains[0]: {
+        addressGetter = (addr) => {
+          decodeAddress(addr)
+
+          return addr;
+        };
+        chain = await ChainHandlers.polka();
+        break;
+      }
+      case chains[1]: {
+        addressGetter = (addr) => (new Address(addr)).toString(); // sanity check
+        chain = await ChainHandlers.elrd();
+        break;
+      }
+      default:
+        throw Error(`unhandled chain ${from}`);
+    }
+
+    try {
+      address = addressGetter(sourceAcc);
+    } catch (_) {
+      return;
+    }
+
+    console.log(chain.listNft == null);
+
+    const nfts = await chain.listNft(address);
+    const nft_imgs = Array.from(nfts.entries()).map(async ([hash, dat]) => {
+      const url = await ChainHandlers.tryFetchNftAsImg(address, from, hash, dat);
+
+      return { hash, url };
+    });
+
+    setImgs(await Promise.all(nft_imgs));
+  }, [from, sourceAcc]);
+
+  useEffect(() => {
+    (async () => {
+      await populateImages();
+    })();
+  }, [populateImages]);
 
   /**
    * Mutates the source blockchain
@@ -134,7 +187,7 @@ function NonFungible() {
 
     const elrd = await ChainHandlers.elrd();
   
-    if (await ChainHandlers.checkWrappedOnPolkadot(sourceAcc.current.value, nft.current.token)) {
+    if (await ChainHandlers.checkWrappedOnPolkadot(sourceAcc, nft.current.token)) {
       txGen = elrd.unsignedUnfreezeNftTxn;
       info = nft.current.nonce;
     } else {
@@ -142,7 +195,7 @@ function NonFungible() {
       info = nft.current;
     }
 
-    const tx = txGen(new Address(sourceAcc.current.value), targetAcc.current.value, info);
+    const tx = txGen(new Address(sourceAcc), targetAcc.current.value, info);
     setSendInactive(false);
     setExecResult('');
 
@@ -167,12 +220,12 @@ function NonFungible() {
     if (from === chains[0]) {
         info = nft.current.token;
         chain = await ChainHandlers.polka();
-        if (await ChainHandlers.checkWrappedOnElrond(sourceAcc.current.value, nft.current.token)) {
+        if (await ChainHandlers.checkWrappedOnElrond(sourceAcc, nft.current.token)) {
           call = chain.unfreezeWrappedNft;
         } else {
           call = chain.transferNftToForeign;
         }
-        sender = await ChainHandlers.polkadotSigner(sourceAcc.current.value)
+        sender = await ChainHandlers.polkadotSigner(sourceAcc)
     } else {
         return await nftElrond();
     }
@@ -239,7 +292,7 @@ function NonFungible() {
               </XPColumn>
             </div>
 
-<SelectAssets/>
+          <SelectAssets imgs={imgs}/>
             <XPRow>
               <XPColumn>
                 <XPSpace />
@@ -271,7 +324,8 @@ function NonFungible() {
               <XPLabel>Source Account</XPLabel>
             <XPRow>
               <XPTransaction
-                ref={sourceAcc}
+                value={sourceAcc}
+                onChange={(v) => setSourceAcc(v.target.value)}
               ></XPTransaction>
 
             </XPRow>
