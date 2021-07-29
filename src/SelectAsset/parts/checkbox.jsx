@@ -1,9 +1,12 @@
 import React,{useState} from 'react';
 import CheckBoxOn from "../../assets/SVG/selectAssets/check_box.svg"
-export default function Checkbox(props){
+export default function Checkbox({cb}){
     const [clickCheckBox, setClickCheckBox] = useState(true);
 
-    const onclick = () => setClickCheckBox(!clickCheckBox)
+    const onclick = () => {
+        setClickCheckBox(!clickCheckBox);
+        (clickCheckBox && cb) && cb();
+    };
     return <div onClick={onclick} className="select-all-check-box-none">
         {clickCheckBox ? "" : <img src={CheckBoxOn} alt="checkOn"/>}
     </div>

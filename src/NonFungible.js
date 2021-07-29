@@ -46,7 +46,8 @@ function NonFungible() {
   const [imgs, setImgs] = useState([]);
 
   // NFT hash identifier
-  const nft = useRef({token: '', nonce: 0});
+  const [nftToken, setNftToken] = useState('');
+  const [nftNonce, setNftNonce] = useState(0);
 
   // ESDT NFT nonce
   const [nonceDisplay, setNonceDisplay] = useState('none');
@@ -83,6 +84,23 @@ function NonFungible() {
 
   }
 
+  const imageSelectCb = useCallback((hash) => {
+    switch (from) {
+      case chains[0]: {
+        setNftToken(hash);
+        break;
+      }
+      case chains[1]: {
+        const parts = hash.split("-");
+        setNftNonce(parseInt(parts.pop(), 16));
+        setNftToken(parts.join("-"));
+        break;
+      }
+      default:
+        break;
+    }
+  }, [from])
+
   const populateImages = useCallback(async () => {
     let addressGetter;
     let address;
@@ -114,8 +132,6 @@ function NonFungible() {
     } catch (_) {
       return;
     }
-
-    console.log(chain.listNft == null);
 
     const nfts = await chain.listNft(address);
     const nft_imgs = Array.from(nfts.entries()).map(async ([hash, dat]) => {
@@ -174,11 +190,11 @@ function NonFungible() {
    * @param {Event} e an event linking to the triggering element
    */
   const handleNftChange = (e) => {
-    nft.current.token = e.target.value;
+    setNftToken(e.target.value);
   }
 
   const handleNonceChange = (e) => {
-    nft.current.nonce = e.target.value;
+    setNftNonce(e.target.value);
   }
 
   const nftElrond = async () => {
@@ -187,12 +203,12 @@ function NonFungible() {
 
     const elrd = await ChainHandlers.elrd();
   
-    if (await ChainHandlers.checkWrappedOnPolkadot(sourceAcc, nft.current.token)) {
+    if (await ChainHandlers.checkWrappedOnPolkadot(sourceAcc, nftToken)) {
       txGen = elrd.unsignedUnfreezeNftTxn;
-      info = nft.current.nonce;
+      info = nftNonce;
     } else {
       txGen = elrd.unsignedTransferNftTxn;
-      info = nft.current;
+      info = { token: nftToken, nonce: nftNonce };
     }
 
     const tx = txGen(new Address(sourceAcc), targetAcc.current.value, info);
@@ -218,9 +234,9 @@ function NonFungible() {
     let res;
   
     if (from === chains[0]) {
-        info = nft.current.token;
+        info = nftToken;
         chain = await ChainHandlers.polka();
-        if (await ChainHandlers.checkWrappedOnElrond(sourceAcc, nft.current.token)) {
+        if (await ChainHandlers.checkWrappedOnElrond(sourceAcc, nftToken)) {
           call = chain.unfreezeWrappedNft;
         } else {
           call = chain.transferNftToForeign;
@@ -292,7 +308,7 @@ function NonFungible() {
               </XPColumn>
             </div>
 
-          <SelectAssets imgs={imgs}/>
+          <SelectAssets imgs={imgs} cb={imageSelectCb}/>
             <XPRow>
               <XPColumn>
                 <XPSpace />
@@ -306,6 +322,7 @@ function NonFungible() {
             <XPLabel>Non-Fungible Token</XPLabel>
             <XPRow>
               <XPTransaction
+                value={nftToken}
                 onChange={handleNftChange}
               ></XPTransaction>
 
@@ -364,6 +381,7 @@ function NonFungible() {
               style={{ display: `${nonceDisplay}` }}
             >
               <XPTransaction
+                value={nftNonce}
                 onChange={handleNonceChange}
               ></XPTransaction>
 

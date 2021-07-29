@@ -1,11 +1,15 @@
+.scroll-wrapper {
+  display: flex;
+  margin-top: 5px;
+  border-radius: 15px;
+  overflow: hidden;
+  background: #1E2472;
+}
+
 .select-asset-container {
   max-height: 200px;
   overflow: scroll;
   overflow-x: hidden;
-  background: #1d2797;
-  border-radius: 8px;
-  margin-top: 5px;
-  display: flex;
   flex-wrap: wrap;
   padding-top: 16px;
 }
@@ -14,12 +18,10 @@
   width: 101px;
   height: 101px;
   padding: 0 8px;
-  border-radius: 8px;
+  border-radius: 10%;
   margin-bottom: 0px;
   margin-top: 0px;
   margin-top: auto;
-
-
 }
 
 .select-all-check-box-none {
@@ -39,7 +41,9 @@
   height: 26px;
   font-size: 12px;
   letter-spacing: 0.03em;
-  color: #ffffff;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  color: lightgray;
   opacity: 0.7;
   padding: 0 8px;
   margin-top: 0px;

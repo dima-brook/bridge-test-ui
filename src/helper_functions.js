@@ -118,10 +118,12 @@ export const ChainHandlers = {
                 break;
             }
             case chains[1]: {
-                if (this.checkWrappedOnPolkadot(owner, ident)) {
+                console.log(ident);
+                if (await this.checkWrappedOnPolkadot(owner, ident)) {
                     url = crossXp; // TODO: Decode Name, fetch actual image
                 } else {
-                    url = nft_dat.uris[0];
+                    url = window.atob(nft_dat.uris[0]);
+                    console.log(url);
                 }
                 break;
             }
