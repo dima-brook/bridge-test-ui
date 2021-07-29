@@ -7,7 +7,6 @@ import MaxButton from './MaxButton';
 import "./style.css";
 import {
   ElrondAccounts,
-  ElrondKeys
 } from './Config';
 
 import { chains, tokens } from './consts';
@@ -26,7 +25,6 @@ import {
     XPInfo
 } from './StyledComponents'
 import { ChainHandlers } from './helper_functions'
-import { UserSigner, parseUserKey } from '@elrondnetwork/erdjs'
 import * as Elrond from "@elrondnetwork/dapp";
 
 

@@ -1234,10 +1234,10 @@
     assert "^2.0.0"
     perf_hooks "0.0.1"
 
-"@elrondnetwork/dapp@^0.0.25":
-  version "0.0.25"
-  resolved "https://registry.yarnpkg.com/@elrondnetwork/dapp/-/dapp-0.0.25.tgz#8169ed0e22da13150feef6b0c391e883d97a27c5"
-  integrity sha512-Q7NxZy70RiP8ffFL3382tUEKcmaDM6VyF5uHIm45IzlfBgwjnbyoaMjZNr5PjwLdHI3U/mlvIaXj0blFLIwnkg==
+"@elrondnetwork/dapp@^0.0.26":
+  version "0.0.26"
+  resolved "https://registry.yarnpkg.com/@elrondnetwork/dapp/-/dapp-0.0.26.tgz#516b0cd6a7ad3db0afe92e8bad04c90fdeaad527"
+  integrity sha512-2XwzoOwz3O8KD7m7CuDI3tUZOs0n13QI1LKlYSoMOM8aHjr6765BVtNOFHSY62m/LSc+7aXucjKIAWvyCBwZ3w==
   dependencies:
     "@fortawesome/fontawesome-svg-core" "1.2.35"
     "@fortawesome/free-solid-svg-icons" "5.15.3"
@@ -13053,7 +13053,7 @@ test-exclude@^6.0.0:
 
 "testsuite-ts@git+https://github.com/xp-network/bridge-ui-logics#master":
   version "1.0.0"
-  resolved "git+https://github.com/xp-network/bridge-ui-logics#29b1932076979478b2bed12327dd920215c71f8c"
+  resolved "git+https://github.com/xp-network/bridge-ui-logics#c3e4990a151ac3919706c6327c6486f6e9a1094d"
   dependencies:
     "@elrondnetwork/erdjs" "^6.2.0"
     "@polkadot/api" "^4.17.1"

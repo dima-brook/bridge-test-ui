@@ -89,8 +89,8 @@ export const ChainConfig = {
     "elrond_node": "https://testnet-api.elrond.com",
     "elrond_minter": "erd1qqqqqqqqqqqqqpgq7fzdnxa43vgau9myeasu2kw90fvpu40cs3ys5ez6s3",
     "elrond_event_rest": "http://localhost:6644",
-    "elrond_esdt": "XPNET-054f6c",
-    "elrond_esdt_nft": "XPNFT-57cb06"
+    "elrond_esdt": "XPNET-a943bc",
+    "elrond_esdt_nft": "XPNFT-28c8da"
 };
 
 export const walletConnectBridge = "https://bridge.walletconnect.org";

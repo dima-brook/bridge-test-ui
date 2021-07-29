@@ -3,7 +3,7 @@
   "version": "0.1.0",
   "private": true,
   "dependencies": {
-    "@elrondnetwork/dapp": "^0.0.25",
+    "@elrondnetwork/dapp": "^0.0.26",
     "@elrondnetwork/erdjs": "^6.5.0",
     "@polkadot/extension-dapp": "^0.39.1",
     "@polkadot/keyring": "^6.11.1",

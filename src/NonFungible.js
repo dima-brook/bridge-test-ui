@@ -1,4 +1,5 @@
 import React, { useState, useEffect, useRef } from 'react';
+import * as Elrond from "@elrondnetwork/dapp";
 
 // Local imports
 import XPLogo from './assets/SVG/XPLogo';
@@ -19,6 +20,7 @@ import SwapChains from './SwapChains';
 import Selector from './Selector';
 import SendButton from './SendButton';
 import { ChainHandlers } from './helper_functions';
+import { Address } from '@elrondnetwork/erdjs/out';
 
 
 /********************************************************
@@ -50,6 +52,7 @@ function NonFungible() {
   // SEND button states: Success = green, Failure = red
   const [execResult, setExecResult] = useState('');
 
+  const sendElrdTx = Elrond.useSendTransaction();
 
 
   useEffect(() => {
@@ -124,6 +127,30 @@ function NonFungible() {
     nft.current.nonce = e.target.value;
   }
 
+  const nftElrond = async () => {
+    let txGen;
+    let info;
+
+    const elrd = await ChainHandlers.elrd();
+  
+    if (await ChainHandlers.checkWrappedOnPolkadot(sourceAcc.current.value, nft.current.token)) {
+      txGen = elrd.unsignedUnfreezeNftTxn;
+      info = nft.current.nonce;
+    } else {
+      txGen = elrd.unsignedTransferNftTxn;
+      info = nft.current;
+    }
+
+    const tx = txGen(new Address(sourceAcc.current.value), targetAcc.current.value, info);
+    setSendInactive(false);
+    setExecResult('');
+
+    sendElrdTx({
+      transaction: tx,
+      callbackRoute: "/processelrdnft",
+    });
+  }
+
   /**
    * SEND button onClick handler
    */
@@ -133,36 +160,21 @@ function NonFungible() {
     let info;
     let call;
     let chain;
-    let checkWrapped;
-    let cbWrapped;
-    let cbNormal;
     let sender;
     let res;
-
-    const checkWrap = async () => {
-      if (await checkWrapped(sourceAcc.current.value, nft.current.token)) {
-        call = chain.unfreezeWrappedNft;
-        cbWrapped && cbWrapped();
-      } else {
-        call = chain.transferNftToForeign;
-        cbNormal && cbNormal();
-      }
-    };
   
     if (from === chains[0]) {
         info = nft.current.token;
         chain = await ChainHandlers.polka();
-        checkWrapped = ChainHandlers.checkWrappedOnElrond.bind(ChainHandlers);
+        if (await ChainHandlers.checkWrappedOnElrond(sourceAcc.current.value, nft.current.token)) {
+          call = chain.unfreezeWrappedNft;
+        } else {
+          call = chain.transferNftToForeign;
+        }
         sender = await ChainHandlers.polkadotSigner(sourceAcc.current.value)
     } else {
-        chain = await ChainHandlers.elrd();
-        checkWrapped = ChainHandlers.checkWrappedOnPolkadot;
-        cbWrapped = () => info = nft.current.nonce;
-        cbNormal = () => info = nft.current;
-        sender = await ChainHandlers.elrondSigner(sourceAcc.current.value)
+        return await nftElrond();
     }
-
-    await checkWrap();
 
     try {
       console.log(call);

@@ -4,7 +4,8 @@ import { useEffect } from 'react';
 import { useHistory, useLocation } from 'react-router-dom';
 import { ChainHandlers } from './helper_functions';
 
-function ElrondTxnHandler() {
+function ElrondTxnHandler({ redirect }) {
+    const red = useRef(redirect);
     const history = useRef(useHistory());
     const query = useRef(new URLSearchParams(useLocation().search));
     const status = useRef(query.current.get("status"));
@@ -21,7 +22,7 @@ function ElrondTxnHandler() {
         const cb = status.current === "success" ? execTx() : new Promise((r) => r());
         cb.then(async () => {
             await new Promise(r => setTimeout(r, 3000));
-            history.current.push("/transfer");
+            history.current.push(red.current);
         })
     }, [])
 
