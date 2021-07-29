@@ -96,7 +96,7 @@ export const XPBoxCenter = styled("div")`
 `;
 
 export const XPLabel = styled("div")`
-  width: 100px;
+  width: 100%;
   height: 30px;
   font-family: Inter;
   font-style: normal;

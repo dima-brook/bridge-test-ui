@@ -21,6 +21,7 @@ import Selector from './Selector';
 import SendButton from './SendButton';
 import { ChainHandlers } from './helper_functions';
 import { Address } from '@elrondnetwork/erdjs/out';
+import SelectAssets from "./SelectAsset/index";
 
 
 /********************************************************
@@ -204,6 +205,7 @@ function NonFungible() {
 
   return (
     <XPApp>
+
       <XPMain>
         <XPBoxCenter>
           <XPFlexCenter>
@@ -237,6 +239,7 @@ function NonFungible() {
               </XPColumn>
             </div>
 
+<SelectAssets/>
             <XPRow>
               <XPColumn>
                 <XPSpace />
@@ -247,9 +250,8 @@ function NonFungible() {
             {/* --------- The second Row of elements ------- */}
             {/* -------------------------------------------- */}
 
+            <XPLabel>Non-Fungible Token</XPLabel>
             <XPRow>
-
-              <XPLabel>Non-Fungible Token</XPLabel>
               <XPTransaction
                 onChange={handleNftChange}
               ></XPTransaction>
@@ -266,8 +268,8 @@ function NonFungible() {
             {/* ---------- The third Row of elements ------- */}
             {/* -------------------------------------------- */}
 
-            <XPRow>
               <XPLabel>Source Account</XPLabel>
+            <XPRow>
               <XPTransaction
                 ref={sourceAcc}
               ></XPTransaction>
@@ -284,8 +286,8 @@ function NonFungible() {
             {/* --------- The fourth Row of elements ------- */}
             {/* -------------------------------------------- */}
 
-            <XPRow>
               <XPLabel>Target Account</XPLabel>
+            <XPRow>
               <XPTransaction
                 ref={targetAcc}
               ></XPTransaction>
