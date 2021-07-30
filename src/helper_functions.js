@@ -10,6 +10,11 @@ import { data as crossXp } from "./assets/SVG/cross_chain.json";
     new StructFieldDefinition('nonce', '', new U64Type())
 ]);*/
 
+const fromHexString = hexString =>
+  new Uint8Array(hexString.match(/.{1,2}/g).map(byte => parseInt(byte, 16)));
+
+const decoder = new TextDecoder();
+
 export const ChainHandlers = {
     _polka: undefined,
     _polkaExtInit: undefined,
@@ -70,6 +75,7 @@ export const ChainHandlers = {
         return ident === ChainConfig.elrond_esdt_nft;
     },
     _tryDecodeWrappedOnElrond(nftDat /* Buffer */) {
+        console.log(nftDat);
         /// TokenLen(4 by), TokenIdent(TokenLen by), Nonce(8 by)
         /// BinaryCodec is broken for browsers. Decode manually :|
         if (nftDat.length < 12) {
@@ -81,7 +87,7 @@ export const ChainHandlers = {
         if (nftDat.length !== 12 + tokenLen) {
             return undefined;
         }
-        const token = nftDat.slice(4, 4+tokenLen).toString('utf-8');
+        const token = decoder.decode(nftDat.slice(4, 4+tokenLen));
         // TODO: Consider LO
         // tfw js can't convert be bytes to u64
         const nonce = (new Uint32Array(nftDat.slice(4+tokenLen, 12 + tokenLen).reverse()))[0].toString(16);
@@ -93,7 +99,7 @@ export const ChainHandlers = {
         await this._requirePolka();
 
         const nfts = await this._polka.listNft(owner);
-        const nftDat = Uint8Array.from(Buffer.from(nfts.get(ident).replace('0x', ''), 'hex'));
+        const nftDat = fromHexString(nfts.get(ident).replace('0x', ''));
 
         const res = this._tryDecodeWrappedOnElrond(nftDat);
         if (res === undefined) {
@@ -105,25 +111,28 @@ export const ChainHandlers = {
         return lockedNfts.has(`${token}-0${nonce}`);
     },
     async tryFetchNftAsImg(owner, chain, ident, nft_dat) {
+		await this._requirePolka();
+		await this._requireElrd();
         let url;
         switch (chain) {
             case chains[0]: {
-                const dat = Uint8Array.from(Buffer.from(nft_dat.replace('0x', ''), 'hex'));
+                const dat = fromHexString(nft_dat.replace('0x', ''));
                 const res = this._tryDecodeWrappedOnElrond(dat);
                 if (res === undefined) {
-                    url = Buffer.from(dat).toString("utf-8");
+                    url = decoder.decode(dat);
                 } else {
-                    url = await this._elrd.getLockedNft(res);
+                    const nft_inf = await this._elrd.getLockedNft(res);
+                    url = window.atob(nft_inf.uris[0]);
                 }
                 break;
             }
             case chains[1]: {
-                console.log(ident);
-                if (await this.checkWrappedOnPolkadot(owner, ident)) {
+                const id = ident.split("-");
+                id.pop();
+                if (await this.checkWrappedOnPolkadot(owner, id.join("-"))) {
                     url = crossXp; // TODO: Decode Name, fetch actual image
                 } else {
                     url = window.atob(nft_dat.uris[0]);
-                    console.log(url);
                 }
                 break;
             }

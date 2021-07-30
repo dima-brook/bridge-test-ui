@@ -85,10 +85,10 @@ export const ParachainKeys = {
 };
 
 export const ChainConfig = {
-    "xpnode": "ws://localhost:9944",
+    "xpnode": "wss://34.246.187.188:443",
     "elrond_node": "https://testnet-api.elrond.com",
     "elrond_minter": "erd1qqqqqqqqqqqqqpgq45y5wwq3ljgvxfkhhd05h6dnkwdsvfcas3ysdmsj9r",
-    "elrond_event_rest": "http://localhost:6644",
+    "elrond_event_rest": "http://34.246.187.188:3033",
     "elrond_esdt": "XPNET-157cf1",
     "elrond_esdt_nft": "XPNFT-7cdd5c"
 };

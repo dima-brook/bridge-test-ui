@@ -5,8 +5,11 @@
   "dependencies": {
     "@elrondnetwork/dapp": "^0.0.26",
     "@elrondnetwork/erdjs": "^6.5.0",
+    "@polkadot/api": "^5.2.1",
     "@polkadot/extension-dapp": "^0.39.1",
-    "@polkadot/keyring": "^6.11.1",
+    "@polkadot/keyring": "^7.0.3",
+    "@polkadot/util": "^7.0.3",
+    "@polkadot/util-crypto": "^7.0.3",
     "@testing-library/jest-dom": "^5.14.1",
     "@testing-library/react": "^11.1.0",
     "@testing-library/user-event": "^12.1.10",
