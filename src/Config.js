@@ -86,11 +86,11 @@ export const ParachainKeys = {
 
 export const ChainConfig = {
     "xpnode": "wss://34.246.187.188:443",
-    "elrond_node": "https://testnet-api.elrond.com",
-    "elrond_minter": "erd1qqqqqqqqqqqqqpgq45y5wwq3ljgvxfkhhd05h6dnkwdsvfcas3ysdmsj9r",
+    "elrond_node": "https://devnet-api.elrond.com",
+    "elrond_minter": "erd1qqqqqqqqqqqqqpgqjawyx469sfd7k06j863dst6nn4m6w0eds3ysx82chh",
     "elrond_event_rest": "http://34.246.187.188:3033",
-    "elrond_esdt": "XPNET-157cf1",
-    "elrond_esdt_nft": "XPNFT-7cdd5c"
+    "elrond_esdt": "XPNET-99f07b",
+    "elrond_esdt_nft": "XPNFT-a5ad1f"
 };
 
 export const walletConnectBridge = "https://bridge.walletconnect.org";
@@ -102,10 +102,10 @@ export const ElrondDappConfig = {
     id: "devnet",
     name: "Devnet",
     egldLabel: "xEGLD",
-    walletAddress: "https://testnet-wallet.elrond.com",
-    apiAddress: "https://testnet-api.elrond.com",
-    gatewayAddress: "https://testnet-gateway.elrond.com",
-    explorerAddress: "http://testnet-explorer.elrond.com/",  
+    walletAddress: "https://devnet-wallet.elrond.com",
+    apiAddress: "https://devnet-api.elrond.com",
+    gatewayAddress: "https://devnet-gateway.elrond.com",
+    explorerAddress: "http://devnet-explorer.elrond.com/",  
 };
 
 
