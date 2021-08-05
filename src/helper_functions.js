@@ -26,7 +26,7 @@ export const ChainHandlers = {
         }
     },
     async _requirePolka() {
-        if (!this._polka) {
+        if (this._polka === undefined) {
             this._polka = await polkadotPalletHelperFactory(
                 ChainConfig.xpnode,
                 //ChainConfig.xp_freezer,
@@ -53,7 +53,7 @@ export const ChainHandlers = {
         return { sender: address, options: { signer: injector.signer } };
     },
     async _requireElrd() {
-        if (!this._elrd) {
+        if (this._elrd === undefined) {
             this._elrd = await elrondHelperFactory(
                 ChainConfig.elrond_node,
                 ChainConfig.elrond_minter,
@@ -75,7 +75,6 @@ export const ChainHandlers = {
         return ident === ChainConfig.elrond_esdt_nft;
     },
     _tryDecodeWrappedOnElrond(nftDat /* Buffer */) {
-        console.log(nftDat);
         /// TokenLen(4 by), TokenIdent(TokenLen by), Nonce(8 by)
         /// BinaryCodec is broken for browsers. Decode manually :|
         if (nftDat.length < 12) {
@@ -83,7 +82,6 @@ export const ChainHandlers = {
         }
 
         const tokenLen = (new Uint32Array(nftDat.slice(0, 4).reverse()))[0];
-        console.log(tokenLen);
         if (nftDat.length !== 12 + tokenLen) {
             return undefined;
         }
@@ -111,8 +109,6 @@ export const ChainHandlers = {
         return lockedNfts.has(`${token}-0${nonce}`);
     },
     async tryFetchNftAsImg(owner, chain, ident, nft_dat) {
-		await this._requirePolka();
-		await this._requireElrd();
         let url;
         switch (chain) {
             case chains[0]: {

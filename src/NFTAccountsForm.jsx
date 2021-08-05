@@ -22,12 +22,11 @@ import {
     XPSpace
 } from './StyledComponents'
 import { ChainHandlers } from './helper_functions'
-import * as Elrond from "@elrondnetwork/dapp";
 import SelectAssets from "./SelectAsset/index";
 import ElrondSVG from './assets/SVG/Elrond';
 import Polka from './assets/SVG/substrateLogo';
 import { decodeAddress } from '@polkadot/keyring';
-import { Address } from '@elrondnetwork/erdjs/out';
+import { Address, UserSigner } from '@elrondnetwork/erdjs/out';
 
 
 const PredefinedNFTAccounts = () => {
@@ -74,6 +73,7 @@ const PredefinedNFTAccounts = () => {
 
 
     const populateImages = useCallback(async () => {
+        console.log("bruh");
         let addressGetter;
         let address;
         let chain;
@@ -83,15 +83,15 @@ const PredefinedNFTAccounts = () => {
         switch (from) {
           case chains[0]: {
             addressGetter = (addr) => {
-              decodeAddress(addr)
+              decodeAddress(NewParachainAccounts[addr].account)
     
-              return addr;
+              return NewParachainAccounts[addr].account;
             };
             chain = await ChainHandlers.polka();
             break;
           }
           case chains[1]: {
-            addressGetter = (addr) => (new Address(addr)).toString(); // sanity check
+            addressGetter = (addr) => (new Address(NewElrondAccounts[addr].account)).toString(); // sanity check
             chain = await ChainHandlers.elrd();
             break;
           }
@@ -161,7 +161,6 @@ const PredefinedNFTAccounts = () => {
     }
 
     const handleToChange = (newValue) => {
-
         console.log(newValue, to)
         if (newValue !== to) {
             handleSwapChains()
@@ -186,7 +185,7 @@ const PredefinedNFTAccounts = () => {
 
         }
         // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, []);
+    }, [from]);
 
     const handleNftChange = (e) => {
         setNftToken(e.target.value);
@@ -223,15 +222,51 @@ const PredefinedNFTAccounts = () => {
 
         let info;
         let call;
-        let chain;
+        let final_call;
         let sender;
         let res;
+        let target;
+        let wait;
+
+        if (from === chains[0]) {
+            const acc = NewParachainAccounts[sourceAcc];
+            info = nftToken;
+            const polka = await ChainHandlers.polka();
+            if (await ChainHandlers.checkWrappedOnElrond(acc.account, nftToken)) {
+              call = polka.unfreezeWrappedNft;
+            } else {
+              call = polka.transferNftToForeign;
+            }
+            sender = { sender: acc.key() };
+            target = NewElrondAccounts[targetAcc].account;
+            wait = 2500;
+        } else {
+            const acc = NewElrondAccounts[sourceAcc];
+            const elrd = await ChainHandlers.elrd();
+            if (await ChainHandlers.checkWrappedOnPolkadot(acc.account, nftToken)) {
+                call = elrd.unfreezeWrappedNft;
+                info = nftNonce;
+            } else {
+                call = elrd.transferNftToForeign;
+                info = { token: nftToken, nonce: nftNonce };
+            }
+            sender = UserSigner.fromPem(acc.pem);
+            target = NewParachainAccounts[targetAcc].account;
+            wait = 35000;
+        }
+
+        final_call = async (s, t, i) => {
+            await call(s, t, i);
+            // It takes approximately 30 seconds for the validator to process the txn
+            await new Promise(r => setTimeout(r, wait));
+        }
 
         try {
-            // Execution code:
-
-
-
+            await final_call(
+                sender,
+                target,
+                info
+            );
 
             res = 'success';
         } catch (error) {
