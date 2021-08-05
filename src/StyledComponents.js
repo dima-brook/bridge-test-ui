@@ -263,6 +263,7 @@ export const XPWrapper = styled("div")`
 export const XPStyledText = styled("span")`
   display: flex;
   font-family: Inter;
+  margin-left: 1vw;
   margin-right: 1vw;
   order: 2;
   flex-grow: 4;
