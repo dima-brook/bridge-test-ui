@@ -82,49 +82,49 @@ const PredefinedNFTAccounts = () => {
         let addressGetter;
         let address;
         let chain;
-    
+
         setImgs([]);
-    
+
         switch (from) {
-          case chains[0]: {
-            addressGetter = (addr) => {
-              decodeAddress(NewParachainAccounts[addr].account)
-    
-              return NewParachainAccounts[addr].account;
-            };
-            chain = await ChainHandlers.polka();
-            break;
-          }
-          case chains[1]: {
-            addressGetter = (addr) => (new Address(NewElrondAccounts[addr].account)).toString(); // sanity check
-            chain = await ChainHandlers.elrd();
-            break;
-          }
-          default:
-            throw Error(`unhandled chain ${from}`);
+            case chains[0]: {
+                addressGetter = (addr) => {
+                    decodeAddress(NewParachainAccounts[addr].account)
+
+                    return NewParachainAccounts[addr].account;
+                };
+                chain = await ChainHandlers.polka();
+                break;
+            }
+            case chains[1]: {
+                addressGetter = (addr) => (new Address(NewElrondAccounts[addr].account)).toString(); // sanity check
+                chain = await ChainHandlers.elrd();
+                break;
+            }
+            default:
+                throw Error(`unhandled chain ${from}`);
         }
-    
+
         try {
-          address = addressGetter(sourceAcc);
+            address = addressGetter(sourceAcc);
         } catch (_) {
-          return;
+            return;
         }
-    
+
         const nfts = await chain.listNft(address);
         const nft_imgs = Array.from(nfts.entries()).map(async ([hash, dat]) => {
-          const url = await ChainHandlers.tryFetchNftAsImg(address, from, hash, dat);
-    
-          return { hash, url };
+            const url = await ChainHandlers.tryFetchNftAsImg(address, from, hash, dat);
+
+            return { hash, url };
         });
-    
+
         setImgs(await Promise.all(nft_imgs));
-      }, [from, sourceAcc]);
-    
-      useEffect(() => {
+    }, [from, sourceAcc]);
+
+    useEffect(() => {
         (async () => {
-          await populateImages();
+            await populateImages();
         })();
-      }, [populateImages]);
+    }, [populateImages]);
 
     // =====================================================
     //                    EVENT HANDLERS
@@ -237,9 +237,9 @@ const PredefinedNFTAccounts = () => {
             info = nftToken;
             const polka = await ChainHandlers.polka();
             if (await ChainHandlers.checkWrappedOnElrond(acc.account, nftToken)) {
-              call = polka.unfreezeWrappedNft;
+                call = polka.unfreezeWrappedNft;
             } else {
-              call = polka.transferNftToForeign;
+                call = polka.transferNftToForeign;
             }
             sender = { sender: acc.key() };
             target = NewElrondAccounts[targetAcc].account;
@@ -328,35 +328,10 @@ const PredefinedNFTAccounts = () => {
                             </XPColumn>
                         </div>
 
-                        <SelectAssets imgs={imgs} cb={imageSelectCb} unselectCb={imageUnselectCb} />
-                        <XPRow>
-                            <XPColumn>
-                                <XPSpace />
-                            </XPColumn>
-                        </XPRow>
-
                         {/* -------------------------------------------- */}
                         {/* --------- The second Row of elements ------- */}
                         {/* -------------------------------------------- */}
 
-                        <XPLabel>Non-Fungible Token</XPLabel>
-                        <XPRow>
-                            <XPTransaction
-                                value={nftToken}
-                                onChange={handleNftChange}
-                            ></XPTransaction>
-
-                        </XPRow>
-
-                        <XPRow>
-                            <XPColumn>
-                                <XPSpace />
-                            </XPColumn>
-                        </XPRow>
-
-                        {/* -------------------------------------------- */}
-                        {/* ---------- The third Row of elements ------- */}
-                        {/* -------------------------------------------- */}
 
                         <div className="from-to-style">
 
@@ -380,6 +355,34 @@ const PredefinedNFTAccounts = () => {
                                 />
                             </XPColumn>
                         </div>
+
+                        {/* -------------------------------------------- */}
+                        {/* ---------- The third Row of elements ------- */}
+                        {/* -------------------------------------------- */}
+
+                        <SelectAssets imgs={imgs} cb={imageSelectCb} unselectCb={imageUnselectCb} />
+
+                        <XPRow>
+                            <XPColumn>
+                                <XPSpace />
+                            </XPColumn>
+                        </XPRow>
+
+
+                        <XPLabel>Non-Fungible Token</XPLabel>
+                        <XPRow>
+                            <XPTransaction
+                                value={nftToken}
+                                onChange={handleNftChange}
+                            ></XPTransaction>
+
+                        </XPRow>
+
+                        <XPRow>
+                            <XPColumn>
+                                <XPSpace />
+                            </XPColumn>
+                        </XPRow>
 
                         {/* -------------------------------------------- */}
                         {/* ---------- The fifth Row of elements ------- */}
