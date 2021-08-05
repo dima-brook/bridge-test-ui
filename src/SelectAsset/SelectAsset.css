@@ -32,9 +32,21 @@
   height: 24px;
   
   background: #ffffff;
-  border-radius: 2px;
-  top: 10px;
-  left: 20px;
+  border-radius: 50%;
+  border: 1px solid #051937;
+  top: 3px;
+  left: 12px;
+}
+
+.inner-radio-box{
+  position: absolute;
+  width: 14px;
+  height: 14px;
+  border-radius: 100%;
+  background: #051937;
+  border: 6px solid white;
+  top: -0.5px;
+  left: -0.5px;
 }
 
 .image-assets-text {
