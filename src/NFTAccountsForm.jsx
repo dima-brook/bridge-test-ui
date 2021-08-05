@@ -71,9 +71,14 @@ const PredefinedNFTAccounts = () => {
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [from]);
 
+    const clearNft = () => {
+        setNftToken('');
+        setNftNonce('');
+    }
 
     const populateImages = useCallback(async () => {
-        console.log("bruh");
+        clearNft();
+
         let addressGetter;
         let address;
         let chain;
@@ -157,7 +162,6 @@ const PredefinedNFTAccounts = () => {
         setTargetAcc(_targetAcc);
         setSourceAccounts(_sourceAccounts);
         setTargetAccounts(_targetAccounts);
-
     }
 
     const handleToChange = (newValue) => {
@@ -187,6 +191,8 @@ const PredefinedNFTAccounts = () => {
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [from]);
 
+    const imageUnselectCb = clearNft;
+
     const handleNftChange = (e) => {
         setNftToken(e.target.value);
     }
@@ -212,9 +218,7 @@ const PredefinedNFTAccounts = () => {
         setSourceAccounts(Object.keys(NewParachainAccounts));
         setTargetAccounts(Object.keys(NewElrondAccounts));
 
-        setNftToken('');
-        setNftNonce('');
-
+        clearNft();
     }
 
     const handleSendClick = async () => {
@@ -324,7 +328,7 @@ const PredefinedNFTAccounts = () => {
                             </XPColumn>
                         </div>
 
-                        <SelectAssets imgs={imgs} cb={imageSelectCb} />
+                        <SelectAssets imgs={imgs} cb={imageSelectCb} unselectCb={imageUnselectCb} />
                         <XPRow>
                             <XPColumn>
                                 <XPSpace />
