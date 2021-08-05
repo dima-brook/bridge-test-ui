@@ -26,6 +26,8 @@ import * as Elrond from "@elrondnetwork/dapp";
 import SelectAssets from "./SelectAsset/index";
 import ElrondSVG from './assets/SVG/Elrond';
 import Polka from './assets/SVG/substrateLogo';
+import { decodeAddress } from '@polkadot/keyring';
+import { Address } from '@elrondnetwork/erdjs/out';
 
 
 const PredefinedNFTAccounts = () => {
@@ -48,7 +50,7 @@ const PredefinedNFTAccounts = () => {
 
     const [nftToken, setNftToken] = useState('');
 
-    const [nftNonce, setNftNonce] = useState();
+    const [nftNonce, setNftNonce] = useState('');
 
     const [nonceDisplay, setNonceDisplay] = useState('none');
 
@@ -68,7 +70,56 @@ const PredefinedNFTAccounts = () => {
         }
 
         // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [from])
+    }, [from]);
+
+
+    const populateImages = useCallback(async () => {
+        let addressGetter;
+        let address;
+        let chain;
+    
+        setImgs([]);
+    
+        switch (from) {
+          case chains[0]: {
+            addressGetter = (addr) => {
+              decodeAddress(addr)
+    
+              return addr;
+            };
+            chain = await ChainHandlers.polka();
+            break;
+          }
+          case chains[1]: {
+            addressGetter = (addr) => (new Address(addr)).toString(); // sanity check
+            chain = await ChainHandlers.elrd();
+            break;
+          }
+          default:
+            throw Error(`unhandled chain ${from}`);
+        }
+    
+        try {
+          address = addressGetter(sourceAcc);
+        } catch (_) {
+          return;
+        }
+    
+        const nfts = await chain.listNft(address);
+        const nft_imgs = Array.from(nfts.entries()).map(async ([hash, dat]) => {
+          const url = await ChainHandlers.tryFetchNftAsImg(address, from, hash, dat);
+    
+          return { hash, url };
+        });
+    
+        setImgs(await Promise.all(nft_imgs));
+      }, [from, sourceAcc]);
+    
+      useEffect(() => {
+        (async () => {
+          await populateImages();
+        })();
+      }, [populateImages]);
 
     // =====================================================
     //                    EVENT HANDLERS
@@ -153,6 +204,20 @@ const PredefinedNFTAccounts = () => {
         setTargetAcc(newValue);
     }
 
+    const clearFields = () => {
+
+        setFrom(chains[0]);
+        setTo(chains[1]);
+        setSourceAcc(NewParachainAccounts['Alice_Stash'].name);
+        setTargetAcc(NewElrondAccounts['Alice'].name);
+        setSourceAccounts(Object.keys(NewParachainAccounts));
+        setTargetAccounts(Object.keys(NewElrondAccounts));
+
+        setNftToken('');
+        setNftNonce('');
+
+    }
+
     const handleSendClick = async () => {
         setSendInactive(true);
 
@@ -178,6 +243,7 @@ const PredefinedNFTAccounts = () => {
             await new Promise(r => setTimeout(r, 3000));
             setSendInactive(false);
             setExecResult('');
+            clearFields();
         }
     }
 
