@@ -21,9 +21,11 @@ import {
     XPTransaction,
     XPSpace
 } from './StyledComponents'
-// import { ChainHandlers } from './helper_functions'
-// import * as Elrond from "@elrondnetwork/dapp";
+import { ChainHandlers } from './helper_functions'
+import * as Elrond from "@elrondnetwork/dapp";
 import SelectAssets from "./SelectAsset/index";
+import ElrondSVG from './assets/SVG/Elrond';
+import Polka from './assets/SVG/substrateLogo';
 
 
 const PredefinedNFTAccounts = () => {
@@ -33,105 +35,98 @@ const PredefinedNFTAccounts = () => {
     //                      S T A T E
     // =====================================================
 
-    const [state, setState] = useState({
-        // Accounts
-        sourceAcc: NewParachainAccounts['Alice_Stash'].name,
-        targetAcc: NewElrondAccounts['Alice'].name,
+    const [sourceAcc, setSourceAcc] = useState(NewParachainAccounts['Alice_Stash'].name);
+    const [targetAcc, setTargetAcc] = useState(NewElrondAccounts['Alice'].name);
 
-        sourceAccounts: Object.keys(NewParachainAccounts),
-        targetAccounts: Object.keys(NewElrondAccounts),
+    const [sourceAccounts, setSourceAccounts] = useState(Object.keys(NewParachainAccounts));
+    const [targetAccounts, setTargetAccounts] = useState(Object.keys(NewElrondAccounts));
 
-        // Blockchains
-        from: chains[0],
-        to: chains[1],
+    const [from, setFrom] = useState(chains[0]);
+    const [to, setTo] = useState(chains[1]);
 
-        // NFT images
-        imgs: [],
+    const [imgs, setImgs] = useState([]);
 
-        nftToken: '',
-        nftNonce: '',
+    const [nftToken, setNftToken] = useState('');
 
-        nonceDisplay: 'none',
+    const [nftNonce, setNftNonce] = useState();
 
-        sendInactive: false,
+    const [nonceDisplay, setNonceDisplay] = useState('none');
 
-        execResult: ''
+    const [sendInactive, setSendInactive] = useState(false);
 
-    })
+    const [execResult, setExecResult] = useState('');
 
     // =====================================================
     //                        HOOKS
     // =====================================================
 
     useEffect(() => {
-        if (state.from === chains[1]) {
-            // eslint-disable-next-line react-hooks/exhaustive-deps
-            setState({ ...state, 
-                nonceDisplay: 'flex' 
-                
-            })
+        if (from === chains[1]) {
+            setNonceDisplay('flex');
         } else {
-            // eslint-disable-next-line react-hooks/exhaustive-deps
-            setState({ ...state, 
-                nonceDisplay: 'none' 
-            })
+            setNonceDisplay('none');
         }
 
-        console.log(state.nonceDisplay)
-
         // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [state.from])
+    }, [from])
 
     // =====================================================
     //                    EVENT HANDLERS
     // =====================================================
 
     const handleFromChange = (newValue) => {
-        setState({ ...state, from: newValue })
 
-        // Avoid the same source & target blockchains
-        if (state.to === newValue) {
-            chains.forEach(chain => {
-                if (chain !== state.to) {
-                    setState({ ...state, to: chain })
-                    return state.from;
-                }
-            })
+        console.log(newValue, from)
+        if (newValue !== from) {
+            handleSwapChains()
         }
     }
 
 
     const handleSwapChains = () => {
-        const [from, to] = [state.to, state.from];
-        setState({ ...state, from, to });
+        const [
+            _from,
+            _to,
+            _sourceAcc,
+            _targetAcc,
+            _sourceAccounts,
+            _targetAccounts
+        ] = [
+                to,
+                from,
+                targetAcc,
+                sourceAcc,
+                targetAccounts,
+                sourceAccounts
+            ];
+
+        setFrom(_from);
+        setTo(_to);
+        setSourceAcc(_sourceAcc);
+        setTargetAcc(_targetAcc);
+        setSourceAccounts(_sourceAccounts);
+        setTargetAccounts(_targetAccounts);
+
     }
 
     const handleToChange = (newValue) => {
-        setState({ ...state, to: newValue })
 
-        // Avoid the same source & target blockchains
-        if (state.from === newValue) {
-            chains.forEach(chain => {
-                if (chain !== state.from) {
-                    setState({ ...state, from: chain })
-                }
-            })
+        console.log(newValue, to)
+        if (newValue !== to) {
+            handleSwapChains()
         }
     }
 
     const imageSelectCb = useCallback(hash => {
-        switch (state.from) {
+        switch (from) {
             case chains[0]: {
-                setState({ ...state, nftToken: hash })
+                setNftToken(hash)
                 break;
             }
             case chains[1]: {
                 const parts = hash.split("-");
-                setState({
-                    ...state,
-                    nftNonce: parseInt(parts.pop(), 16),
-                    nftToken: parts.join("-")
-                })
+                setNftNonce(parseInt(parts.pop(), 16));
+                setNftToken(parts.join("-"))
                 break;
             }
 
@@ -143,21 +138,47 @@ const PredefinedNFTAccounts = () => {
     }, []);
 
     const handleNftChange = (e) => {
-        setState({ ...state, nftToken: e.target.value });
+        setNftToken(e.target.value);
     }
 
     const handleNonceChange = (e) => {
-        setState({ ...state, nftNonce: e.target.value })
+        setNftNonce(e.target.value);
     }
 
-    const handleFromAccountChange = (e) => {
-        setState({...state, sourceAcc:e})
-
-        console.log(e, state.sourceAcc, state.sourceAccounts)
+    const handleFromAccountChange = (newValue) => {
+        setSourceAcc(newValue);
     }
 
-    const handleSendClick = () => {
+    const handleToAccountChange = newValue => {
+        setTargetAcc(newValue);
+    }
 
+    const handleSendClick = async () => {
+        setSendInactive(true);
+
+        let info;
+        let call;
+        let chain;
+        let sender;
+        let res;
+
+        try {
+            // Execution code:
+
+
+
+
+            res = 'success';
+        } catch (error) {
+            console.log("err", error);
+            res = 'failure';
+        } finally {
+            setExecResult(res);
+
+            await new Promise(r => setTimeout(r, 3000));
+            setSendInactive(false);
+            setExecResult('');
+        }
     }
 
 
@@ -182,7 +203,8 @@ const PredefinedNFTAccounts = () => {
                             <XPColumn>
                                 <XPLabel>From</XPLabel>
                                 <Selector
-                                    value={state.from}
+                                    img={from === chains[0] ? <Polka /> : <ElrondSVG />}
+                                    value={from}
                                     data={chains}
                                     onChange={handleFromChange}
                                 />
@@ -193,14 +215,15 @@ const PredefinedNFTAccounts = () => {
                             <XPColumn>
                                 <XPLabel>To</XPLabel>
                                 <Selector
-                                    value={state.to}
+                                    img={to === chains[0] ? <Polka /> : <ElrondSVG />}
+                                    value={to}
                                     data={chains}
                                     onChange={handleToChange}
                                 />
                             </XPColumn>
                         </div>
 
-                        <SelectAssets imgs={state.imgs} cb={imageSelectCb} />
+                        <SelectAssets imgs={imgs} cb={imageSelectCb} />
                         <XPRow>
                             <XPColumn>
                                 <XPSpace />
@@ -214,7 +237,7 @@ const PredefinedNFTAccounts = () => {
                         <XPLabel>Non-Fungible Token</XPLabel>
                         <XPRow>
                             <XPTransaction
-                                value={state.nftToken}
+                                value={nftToken}
                                 onChange={handleNftChange}
                             ></XPTransaction>
 
@@ -235,8 +258,9 @@ const PredefinedNFTAccounts = () => {
                             <XPColumn>
                                 <XPLabel>Source Account</XPLabel>
                                 <Selector
-                                    value={state.sourceAcc}
-                                    data={state.sourceAccounts}
+                                    img={from === chains[0] ? <Polka /> : <ElrondSVG />}
+                                    value={sourceAcc}
+                                    data={sourceAccounts}
                                     onChange={handleFromAccountChange}
                                 />
                             </XPColumn>
@@ -244,9 +268,10 @@ const PredefinedNFTAccounts = () => {
                             <XPColumn>
                                 <XPLabel>Target Account</XPLabel>
                                 <Selector
-                                    value={state.targetAcc}
-                                    data={state.targetAccounts}
-                                    onChange={handleToChange}
+                                    img={to === chains[0] ? <Polka /> : <ElrondSVG />}
+                                    value={targetAcc}
+                                    data={targetAccounts}
+                                    onChange={handleToAccountChange}
                                 />
                             </XPColumn>
                         </div>
@@ -256,19 +281,19 @@ const PredefinedNFTAccounts = () => {
                         {/* -------------------------------------------- */}
 
 
-                        <XPLabel style={{ display: `${state.nonceDisplay}` }}>ESDT NFT nonce</XPLabel>
+                        <XPLabel style={{ display: `${nonceDisplay}` }}>ESDT NFT nonce</XPLabel>
                         <XPRow
-                            style={{ display: `${state.nonceDisplay}` }}
+                            style={{ display: `${nonceDisplay}` }}
                         >
                             <XPTransaction
-                                value={state.nftNonce}
+                                value={nftNonce}
                                 onChange={handleNonceChange}
                             ></XPTransaction>
 
                         </XPRow>
 
                         <XPRow
-                            style={{ display: `${state.nonceDisplay}` }}
+                            style={{ display: `${nonceDisplay}` }}
                         >
                             <XPColumn>
                                 <XPSpace />
@@ -278,8 +303,8 @@ const PredefinedNFTAccounts = () => {
 
                         <SendButton
                             onClick={handleSendClick}
-                            inactive={state.sendInactive}
-                            state={state.execResult}
+                            inactive={sendInactive}
+                            state={execResult}
                         />
 
 

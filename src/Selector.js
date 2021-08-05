@@ -7,7 +7,6 @@ import {
     XPDropDownContent,
     XPDropDownElement
 } from './StyledComponents';
-import {DetectOutsideClick} from "./@utils/closeDropDown";
 
 /**
  * Custom SELECT component
@@ -17,7 +16,7 @@ import {DetectOutsideClick} from "./@utils/closeDropDown";
  * @param {Event} onChange change event handler
  * @returns the custom SELECT
  */
-const Selector = ({ value, data, onClick, onChange }) => {
+const Selector = ({ value, data, onClick, onChange, img }) => {
 
     const [display, setDisplay] = useState('none');
     const [borderRadius, setBorderRadius] = useState(6)
@@ -56,21 +55,14 @@ const Selector = ({ value, data, onClick, onChange }) => {
      * @param {String} datum 
      */
     const handleXPDropDownClick = (datum) => {
+        
+
+        onChange(datum)
+
         if (display === 'block') {
             setDisplay('none');
         }
-
-        onChange(datum)
     }
-
-    DetectOutsideClick(closeDropDownRef, () =>
-    setTimeout(() => {
-        if(display !== "none") {
-            setBorderRadius(6)
-            setDisplay('none')
-        }
-    }, 100)
-  );
 
     return (
 
@@ -82,8 +74,9 @@ const Selector = ({ value, data, onClick, onChange }) => {
             onClick={() => handleClick()}
 	    style={{borderBottomRightRadius: borderRadius + "px" ,borderBottomLeftRadius: borderRadius + "px"}}
         >
-
+            
             <XPWrapper>
+            {img}
                 {/* ================================= 2. TEXT FIELD ================================*/}
                 <XPStyledText>{value}</XPStyledText>
 
@@ -103,8 +96,9 @@ const Selector = ({ value, data, onClick, onChange }) => {
                 {   // Loop over the data elements:
                     data.map(item => {
                         return (
-                            <XPDropDownElement onClick={() => handleXPDropDownClick(item)} ref={closeDropDownRef} key={item}>
+                            <XPDropDownElement onClick={() => handleXPDropDownClick(item)}  key={item}>
                                 <XPWrapper>
+                                    {img}
                                     {/* ================================= 2. TEXT FIELD ================================*/}
                                     <XPStyledText>{item}</XPStyledText>
                                 </XPWrapper>
