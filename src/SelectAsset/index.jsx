@@ -4,18 +4,15 @@ import "./SelectAsset.css";
 
 
 // {hash, url}[]
-export default function SelectAssets({imgs, cb, unselectCb}) {
+export default function SelectAssets({ imgs, cb, unselectCb }) {
   return (
     <>
-      <div className="select-all-flex">
-        <div className="select-all-title-text">Select asset</div>
-      </div>
       <div className="scroll-wrapper">
-      <div className="select-asset-container" id="select-asset-container-scroll">
-        {imgs.map(({hash, url}) => {
-          return <ImageAsset hash={hash} img={url} cb={cb} unselectCb={unselectCb} />
-        })}
-      </div>
+        <div className="select-asset-container" id="select-asset-container-scroll">
+          {imgs.map(({ hash, url }) => {
+            return <ImageAsset hash={hash} img={url} cb={cb} unselectCb={unselectCb} />
+          })}
+        </div>
       </div>
     </>
   );

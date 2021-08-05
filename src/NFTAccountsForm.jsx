@@ -360,6 +360,7 @@ const PredefinedNFTAccounts = () => {
                         {/* ---------- The third Row of elements ------- */}
                         {/* -------------------------------------------- */}
 
+                        <XPLabel>Select asset</XPLabel>
                         <SelectAssets imgs={imgs} cb={imageSelectCb} unselectCb={imageUnselectCb} />
 
                         <XPRow>
