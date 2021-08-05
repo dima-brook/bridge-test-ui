@@ -107,3 +107,92 @@ export const ElrondDappConfig = {
     gatewayAddress: "https://testnet-gateway.elrond.com",
     explorerAddress: "http://testnet-explorer.elrond.com/",  
 };
+
+
+export const NewElrondAccounts = {
+    Alice: {
+        name:"",
+        account: "erd192jvkmmd6neqallnftgjyxpml5t7juktu38nlvq8ar7hqn4amy0sufrwer",
+        pem:`-----BEGIN PRIVATE KEY for erd192jvkmmd6neqallnftgjyxpml5t7juktu38nlvq8ar7hqn4amy0sufrwer-----
+        ZjE4ODQwOGQ2YzJlYmRiZmQ3NDhjMDlkNTdjYzMxYTU5YzFmMmM0ZWI4ZTE2OTE1
+        ZDdlZjNjYTYyOTM2NzY3MDJhYTRjYjZmNmRkNGYyMGVmZmYzNGFkMTIyMTgzYmZk
+        MTdlOTcyY2JlNDRmM2ZiMDA3ZThmZDcwNGViZGQ5MWY=
+        -----END PRIVATE KEY for erd192jvkmmd6neqallnftgjyxpml5t7juktu38nlvq8ar7hqn4amy0sufrwer-----`
+    },
+    Bob: {
+        name:"",
+        account:"erd1fj9q2y5x9laqk3w0c5tu837ht8klnrwzh6hxwum7ac5jeagu8qxscsaw8r",
+        pem:`-----BEGIN PRIVATE KEY for erd1fj9q2y5x9laqk3w0c5tu837ht8klnrwzh6hxwum7ac5jeagu8qxscsaw8r-----
+        MGI1Y2FkOGRlOGUyZmE3OTJhZThhOTFkNTZlOWRhNWYyY2MzNDllYzIyYjVlMzll
+        MGE0MjI1N2ExODFlZjE2ODRjOGEwNTEyODYyZmZhMGI0NWNmYzUxN2MzYzdkNzU5
+        ZWRmOThkYzJiZWFlNjc3MzdlZWUyOTJjZjUxYzM4MGQ=
+        -----END PRIVATE KEY for erd1fj9q2y5x9laqk3w0c5tu837ht8klnrwzh6hxwum7ac5jeagu8qxscsaw8r-----`
+    },
+    Carol: {
+        name:"",
+        account:"erd1j7jm5tugxv3tmd7s30zks2sf37te07yyralkv22xvw2a6fp453hsyvyd0q",
+        pem:`-----BEGIN PRIVATE KEY for erd1j7jm5tugxv3tmd7s30zks2sf37te07yyralkv22xvw2a6fp453hsyvyd0q-----
+        MTdiYmNmMDRlYmQ0ZGE3ZGI4MTBjOTY3ZDk1ZjUwNmEwZGMxOWQ1YmI0ZDU0MTVi
+        N2E4ODg2YTI1ZTFlZGI2ODk3YTViYTJmODgzMzIyYmRiN2QwOGJjNTY4MmEwOThm
+        OTc5N2Y4ODQxZjdmNjYyOTQ2NjM5NWRkMjQzNWE0NmY=
+        -----END PRIVATE KEY for erd1j7jm5tugxv3tmd7s30zks2sf37te07yyralkv22xvw2a6fp453hsyvyd0q-----`
+    },
+    // Daniel: {
+    //     name:"",
+    //     account:"erd1cf07h6ne48s505cua626vwhsyskamkv8fslfpccz0jre4mvm53ls5dwyk4",
+    //     pem:``
+    // },
+    // Eve: {
+    //     name:"",
+    //     account:"erd1ld936834u3knmt8jx3xk2zjek7hk0ld0yfhg0ar3agxwck99c9kqd8lhlg",
+    //     pem:``
+    // },
+    // Frank: {
+    //     name:"",
+    //     account:"erd1q533cqtr8y4q0r2maavr0h47d5gqpqslc7fndaaqdzzjfttfv7ps284zhq",
+    //     pem:``
+    // },
+    // Geoge: {
+    //     name:"",
+    //     account:"erd1gqupqgwzt75m94emg9k2slqkpg2t3k5mxr4dazncecappt98gcnq66tphc",
+    //     pem:``
+    // },
+    // Hugo: {
+    //     name:"",
+    //     account:"erd18hq8hank5cwc85ek6g7xdxcerstu8dhv7d3kldcwkl75fcgtn9ts8ujjw0",
+    //     pem:``
+    // },
+    // Ivar: {
+    //     name:"",
+    //     account:"erd1q83amu9dfv66kysnzpdg37la4jnnandxrxq7pjjngkdgghc3cyeqys3jx3",
+    //     pem:``
+    // },
+    // John: {
+    //     name:"",
+    //     account:"erd18kaedtm0g7y6qxa5xyh07a2gjver4zszj04flgqwtqhl5vkd9k7sx947kn",
+    //     pem:``
+    // },
+    // Zena: {
+    //     name:"",
+    //     account:"erd1xgamt9gqengy3a77f6zz8xnx6metrytrfc9mkwrdk0fjc3huz8dqs6sdph",
+    //     pem:``
+    // },
+}
+
+export const NewParachainAccounts = {
+    Alice_Stash:{
+        name:"Alice_Stash",
+        account: "5GNJqTPyNqANBkUVMN1LPPrxXnFouWXoe2wNSmmEoLctxiZY",
+        key:``
+    },
+    Bob:{
+        name:"Bob",
+        account: "5FHneW46xGXgs5mUiveU4sbTyGBzmstUspZC92UhjJM694ty",
+        key:``
+    },
+    Bob_Stash:{
+        name:"Bob_Stash",
+        account: "5HpG9w8EBLe5XCrbczpwq5TSXvedjrBGCwqxK1iQ7qUsSWFc",
+        key:``
+    }
+}
