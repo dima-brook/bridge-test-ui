@@ -8,7 +8,7 @@ import {
     NewElrondAccounts, NewParachainAccounts
 } from './Config';
 
-import { chains} from './consts';
+import { chains } from './consts';
 import {
     XPApp,
     XPMain,
@@ -38,8 +38,8 @@ const PredefinedNFTAccounts = () => {
         sourceAcc: NewParachainAccounts['Alice_Stash'].name,
         targetAcc: NewElrondAccounts['Alice'].name,
 
-        sourceAccounts: Object.keys(NewParachainAccounts),   
-        targetAccounts: Object.keys(NewElrondAccounts), 
+        sourceAccounts: Object.keys(NewParachainAccounts),
+        targetAccounts: Object.keys(NewElrondAccounts),
 
         // Blockchains
         from: chains[0],
@@ -66,16 +66,21 @@ const PredefinedNFTAccounts = () => {
     useEffect(() => {
         if (state.from === chains[1]) {
             // eslint-disable-next-line react-hooks/exhaustive-deps
-            setState({ ...state, nonceDisplay: 'flex' })
+            setState({ ...state, 
+                nonceDisplay: 'flex' 
+                
+            })
         } else {
             // eslint-disable-next-line react-hooks/exhaustive-deps
-            setState({ ...state, nonceDisplay: 'none' })
+            setState({ ...state, 
+                nonceDisplay: 'none' 
+            })
         }
 
         console.log(state.nonceDisplay)
 
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [])
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [state.from])
 
     // =====================================================
     //                    EVENT HANDLERS
@@ -99,8 +104,6 @@ const PredefinedNFTAccounts = () => {
     const handleSwapChains = () => {
         const [from, to] = [state.to, state.from];
         setState({ ...state, from, to });
-
-        console.log('swap', state)
     }
 
     const handleToChange = (newValue) => {
@@ -136,7 +139,7 @@ const PredefinedNFTAccounts = () => {
                 break;
 
         }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
+        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
 
     const handleNftChange = (e) => {
@@ -144,7 +147,13 @@ const PredefinedNFTAccounts = () => {
     }
 
     const handleNonceChange = (e) => {
-        setState({...state, nftNonce: e.target.value})
+        setState({ ...state, nftNonce: e.target.value })
+    }
+
+    const handleFromAccountChange = (e) => {
+        setState({...state, sourceAcc:e})
+
+        console.log(e, state.sourceAcc, state.sourceAccounts)
     }
 
     const handleSendClick = () => {
@@ -228,7 +237,7 @@ const PredefinedNFTAccounts = () => {
                                 <Selector
                                     value={state.sourceAcc}
                                     data={state.sourceAccounts}
-                                    onChange={handleFromChange}
+                                    onChange={handleFromAccountChange}
                                 />
                             </XPColumn>
 
@@ -243,35 +252,35 @@ const PredefinedNFTAccounts = () => {
                         </div>
 
                         {/* -------------------------------------------- */}
-            {/* ---------- The fifth Row of elements ------- */}
-            {/* -------------------------------------------- */}
+                        {/* ---------- The fifth Row of elements ------- */}
+                        {/* -------------------------------------------- */}
 
 
-            <XPLabel style={{ display: `${state.nonceDisplay}` }}>ESDT NFT nonce</XPLabel>
-            <XPRow
-              style={{ display: `${state.nonceDisplay}` }}
-            >
-              <XPTransaction
-                value={state.nftNonce}
-                onChange={handleNonceChange}
-              ></XPTransaction>
+                        <XPLabel style={{ display: `${state.nonceDisplay}` }}>ESDT NFT nonce</XPLabel>
+                        <XPRow
+                            style={{ display: `${state.nonceDisplay}` }}
+                        >
+                            <XPTransaction
+                                value={state.nftNonce}
+                                onChange={handleNonceChange}
+                            ></XPTransaction>
 
-            </XPRow>
+                        </XPRow>
 
-            <XPRow
-              style={{ display: `${state.nonceDisplay}` }}
-            >
-              <XPColumn>
-                <XPSpace />
-              </XPColumn>
-            </XPRow>
+                        <XPRow
+                            style={{ display: `${state.nonceDisplay}` }}
+                        >
+                            <XPColumn>
+                                <XPSpace />
+                            </XPColumn>
+                        </XPRow>
 
 
-            <SendButton
-              onClick={handleSendClick}
-              inactive={state.sendInactive}
-              state={state.execResult}
-            />
+                        <SendButton
+                            onClick={handleSendClick}
+                            inactive={state.sendInactive}
+                            state={state.execResult}
+                        />
 
 
 
