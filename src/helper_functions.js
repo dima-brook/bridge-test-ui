@@ -3,7 +3,7 @@ import { ChainConfig, ElrondKeys } from './Config';
 import { web3Accounts, web3Enable, web3FromAddress } from '@polkadot/extension-dapp';
 import { UserSigner } from '@elrondnetwork/erdjs';
 import { chains } from './consts';
-import { data as crossXp } from "./assets/SVG/cross_chain.json";
+import { Base64 } from 'js-base64';
 
 /*const nft_info_encoded_t = new StructType('EncodedNft', [
     new StructFieldDefinition('token', '', new TokenIdentifierType()),
@@ -126,7 +126,10 @@ export const ChainHandlers = {
                 const id = ident.split("-");
                 id.pop();
                 if (await this.checkWrappedOnPolkadot(owner, id.join("-"))) {
-                    url = crossXp; // TODO: Decode Name, fetch actual image
+                    await this._requirePolka();
+                    const hash = Base64.toUint8Array(nft_dat.uris[0]);
+                    const hex = await this._polka.getLockedNft(hash);
+                    url = decoder.decode(hex).replace('�', '');
                 } else {
                     url = window.atob(nft_dat.uris[0]);
                 }

@@ -41,10 +41,10 @@ const keyring = new Keyring();
 export const ChainConfig = {
     "xpnode": "wss://34.246.187.188:443",
     "elrond_node": "https://devnet-api.elrond.com",
-    "elrond_minter": "erd1qqqqqqqqqqqqqpgqjawyx469sfd7k06j863dst6nn4m6w0eds3ysx82chh",
+    "elrond_minter": "erd1qqqqqqqqqqqqqpgq7ysztrj922cs53e5wh2vdmeds9pd69wms3ysy3tyy9",
     "elrond_event_rest": "http://34.246.187.188:3033",
-    "elrond_esdt": "XPNET-99f07b",
-    "elrond_esdt_nft": "XPNFT-a5ad1f"
+    "elrond_esdt": "XPNET-cdf688",
+    "elrond_esdt_nft": "XPNFT-ff3b98"
 };
 
 export const walletConnectBridge = "https://bridge.walletconnect.org";
