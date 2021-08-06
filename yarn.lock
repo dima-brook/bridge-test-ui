@@ -13313,18 +13313,19 @@ test-exclude@^6.0.0:
 
 "testsuite-ts@git+https://github.com/xp-network/bridge-ui-logics#master":
   version "1.0.0"
-  resolved "git+https://github.com/xp-network/bridge-ui-logics#1e56d1cd91eaab3bce7576c594de43facc14f3bb"
+  resolved "git+https://github.com/xp-network/bridge-ui-logics#9c58506e7e5c9bda3b001a54778bb3e02fa5eea8"
   dependencies:
     "@elrondnetwork/erdjs" "^6.2.0"
     "@polkadot/api" "^5.2.1"
     "@polkadot/api-contract" "^5.2.1"
     "@polkadot/keyring" "^7.0.3"
     "@polkadot/types" "^5.2.1"
+    "@polkadot/util" "^7.1.1"
+    "@polkadot/util-crypto" "^7.1.1"
     axios "^0.21.1"
     bignumber.js "^9.0.1"
     ethers "^5.4.1"
     socket.io-client "^4.1.3"
-    validator "git+https://github.com/xp-network/Migration-validator#master"
 
 text-table@0.2.0, text-table@^0.2.0:
   version "0.2.0"
