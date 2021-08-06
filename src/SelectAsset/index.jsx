@@ -4,13 +4,17 @@ import "./SelectAsset.css";
 
 
 // {hash, url}[]
-export default function SelectAssets({ imgs, cb, unselectCb }) {
+export default function SelectAssets({ imgs, cb }) {
 
-  const [selected, setSelected] = useState('');
+  const [selected, setSelected] = useState(-1);
 
   const handleItemClick = (i) => {
 
-    console.log(i)
+    if (i !== selected){
+      setSelected(i)
+    }
+
+    
 
   }
 
@@ -21,11 +25,12 @@ export default function SelectAssets({ imgs, cb, unselectCb }) {
           {imgs.map(({ hash, url }, i) => {
             return <ImageAsset
               key={i}
+              index={i}
               hash={hash}
               img={url}
               cb={cb}
-              unselectCb={unselectCb}
               onClick={() => handleItemClick(i)}
+              selected={selected}
             />
           })}
         </div>

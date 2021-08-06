@@ -1,18 +1,22 @@
-import React, { useState } from 'react';
-export default function Checkbox({ cb, unselectCb }) {
-    const [clickCheckBox, setClickCheckBox] = useState(true);
+import React from 'react';
+
+export default function Checkbox({ cb, onClick, selected }) {
 
     const onclick = () => {
-        setClickCheckBox(!clickCheckBox);
-        (clickCheckBox && cb) && cb();
-        (!clickCheckBox && unselectCb) && unselectCb();
+
+        if(!selected){
+            cb();
+            onClick()
+        }
+
     };
+
     return <div
         onClick={onclick}
         className="select-all-check-box-none"
-        checked={clickCheckBox}
+        checked={selected}
 
     >
-        {clickCheckBox ? "" : <div  className="inner-radio-box"/>}
+        {selected ? <div  className="inner-radio-box"/> : ''}
     </div>
 }

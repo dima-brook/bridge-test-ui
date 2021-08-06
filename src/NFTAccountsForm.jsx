@@ -191,8 +191,6 @@ const PredefinedNFTAccounts = () => {
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [from]);
 
-    const imageUnselectCb = clearNft;
-
     const handleNftChange = (e) => {
         setNftToken(e.target.value);
     }
@@ -361,7 +359,7 @@ const PredefinedNFTAccounts = () => {
                         {/* -------------------------------------------- */}
 
                         <XPLabel>Select asset</XPLabel>
-                        <SelectAssets imgs={imgs} cb={imageSelectCb} unselectCb={imageUnselectCb} />
+                        <SelectAssets imgs={imgs} cb={imageSelectCb} />
 
                         <XPRow>
                             <XPColumn>
