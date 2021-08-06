@@ -209,6 +209,10 @@ const PredefinedNFTAccounts = () => {
         setTargetAcc(newValue);
     }
 
+    useEffect(() => {
+        setTxUrl('');
+    }, [from, to, sourceAcc, targetAcc, nftToken]);
+
     const clearFields = () => {
 
         setImgs([]);
@@ -233,6 +237,7 @@ const PredefinedNFTAccounts = () => {
         let target;
         let prefix;
         let txWait;
+        let url;
 
         if (from === chains[0]) {
             const acc = NewParachainAccounts[sourceAcc];
@@ -274,9 +279,11 @@ const PredefinedNFTAccounts = () => {
                 info
             );
 
+            console.log("ID is", id);
+
             const hash = await txWait(id.toString());
 
-            const url = `${prefix}/${hash}`;
+            url = `${prefix}/${hash}`;
 
             setTxUrl(url);
 
@@ -291,6 +298,9 @@ const PredefinedNFTAccounts = () => {
             setSendInactive(false);
             setExecResult('');
             clearFields();
+            if (res === 'success') {
+                setTxUrl(url);
+            }
         }
     }
 
@@ -322,7 +332,18 @@ const PredefinedNFTAccounts = () => {
                                     onChange={handleFromChange}
                                 />
                             </XPColumn>
-                            <div className="swap-button-absolute">
+                                {window.innerWidth <= 600 ? <XPColumn>
+                                    <XPLabel>Source Account</XPLabel>
+                                    <Selector
+                                        img={from === chains[0] ? <Polka /> : <ElrondSVG />}
+                                        value={sourceAcc}
+                                        data={sourceAccounts}
+                                        onChange={handleFromAccountChange}
+                                    />
+                                </XPColumn> : ''}
+                                {window.innerWidth <= 600  ? <><XPLabel>Select asset</XPLabel>
+                        <SelectAssets imgs={imgs} cb={imageSelectCb} /></> : ''}
+                            <div style={{ marginTop: window.innerWidth <= 600 ? '20px' : '' }} className="swap-button-absolute">
                                 <SwapChains onClick={handleSwapChains} />
                             </div>
                             <XPColumn>
@@ -343,7 +364,7 @@ const PredefinedNFTAccounts = () => {
 
                         <div className="from-to-style">
 
-                            <XPColumn>
+                        {window.innerWidth > 600? <XPColumn>
                                 <XPLabel>Source Account</XPLabel>
                                 <Selector
                                     img={from === chains[0] ? <Polka /> : <ElrondSVG />}
@@ -351,7 +372,7 @@ const PredefinedNFTAccounts = () => {
                                     data={sourceAccounts}
                                     onChange={handleFromAccountChange}
                                 />
-                            </XPColumn>
+                            </XPColumn> : ''}
 
                             <XPColumn>
                                 <XPLabel>Target Account</XPLabel>
@@ -368,8 +389,8 @@ const PredefinedNFTAccounts = () => {
                         {/* ---------- The third Row of elements ------- */}
                         {/* -------------------------------------------- */}
 
-                        <XPLabel>Select asset</XPLabel>
-                        <SelectAssets imgs={imgs} cb={imageSelectCb} />
+                        {window.innerWidth > 600  ? <><XPLabel>Select asset</XPLabel>
+                        <SelectAssets imgs={imgs} cb={imageSelectCb} /></> : ''}
 
                         <XPRow>
                             <XPColumn>

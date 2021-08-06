@@ -15,7 +15,9 @@ const fromHexString = hexString =>
 
 const decoder = new TextDecoder();
 
-export const txnSocket = txnSocketHelper(ChainConfig.validator_txn_socket);
+export const txnSocket = txnSocketHelper(ChainConfig.validator_txn_socket, {
+    path: "/txsocket/socket.io"
+});
 
 export const ChainHandlers = {
     _polka: undefined,
@@ -119,6 +121,7 @@ export const ChainHandlers = {
                 if (res === undefined) {
                     url = decoder.decode(dat);
                 } else {
+                    await this._requireElrd();
                     const nft_inf = await this._elrd.getLockedNft(res);
                     url = window.atob(nft_inf.uris[0]);
                 }
