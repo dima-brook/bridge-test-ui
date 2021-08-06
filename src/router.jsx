@@ -9,7 +9,7 @@ export const routes = [
     component: NonFungible
   },
   {
-    path: "/nft",
+    path: "/",
     component: PredefinedNFTAccounts
   },
   {

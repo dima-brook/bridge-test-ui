@@ -209,6 +209,10 @@ const PredefinedNFTAccounts = () => {
         setTargetAcc(newValue);
     }
 
+    useEffect(() => {
+        setTxUrl('');
+    }, [from, to, sourceAcc, targetAcc, nftToken]);
+
     const clearFields = () => {
 
         setImgs([]);
@@ -233,6 +237,7 @@ const PredefinedNFTAccounts = () => {
         let target;
         let prefix;
         let txWait;
+        let url;
 
         if (from === chains[0]) {
             const acc = NewParachainAccounts[sourceAcc];
@@ -274,9 +279,11 @@ const PredefinedNFTAccounts = () => {
                 info
             );
 
+            console.log("ID is", id);
+
             const hash = await txWait(id.toString());
 
-            const url = `${prefix}/${hash}`;
+            url = `${prefix}/${hash}`;
 
             setTxUrl(url);
 
@@ -291,6 +298,9 @@ const PredefinedNFTAccounts = () => {
             setSendInactive(false);
             setExecResult('');
             clearFields();
+            if (res === 'success') {
+                setTxUrl(url);
+            }
         }
     }
 
