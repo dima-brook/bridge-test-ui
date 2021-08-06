@@ -8,8 +8,8 @@ const SubstrateLogo = () => {
             <path d="M66.1897 89.7757C68.4864 92.7044 68.4864 96.9064 66.1897 99.8351L0.863233 183.112C-1.17822 185.786 0.608052 189.606 4.053 189.606H54.579C57.0032 189.606 59.4274 188.46 60.9585 186.55L128.837 99.8351C131.133 96.9064 131.133 92.7044 128.837 89.7757L60.8309 3.06091C59.2998 1.15089 57.0032 0.00488281 54.4514 0.00488281H4.053C0.735643 0.00488281 -1.17822 3.95225 0.863233 6.49894L66.1897 89.7757Z" fill="white" />
             <defs>
                 <radialGradient id="paint0_radial" cx="0" cy="0" r="1" gradientUnits="userSpaceOnUse" gradientTransform="translate(96.9764 80.7639) rotate(28.8004) scale(120.392 82.8456)">
-                    <stop stop-color="white" stop-opacity="0.116505" />
-                    <stop offset="1" stop-color="white" />
+                    <stop stopColor="white" stopOpacity="0.116505" />
+                    <stop offset="1" stopColor="white" />
                 </radialGradient>
             </defs>
         </svg>
