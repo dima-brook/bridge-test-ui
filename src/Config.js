@@ -40,10 +40,10 @@ export const ElrondKeys = {
 const keyring = new Keyring();
 
 export const ChainConfig = {
-    "xpnode": "ws://localhost:9944", //"wss://34.246.187.188:443",
+    "xpnode": "wss://34.246.187.188:443", //"ws://localhost:9944", //
     "elrond_node": "https://devnet-api.elrond.com",
     "elrond_minter": "erd1qqqqqqqqqqqqqpgq7ysztrj922cs53e5wh2vdmeds9pd69wms3ysy3tyy9", //"erd1qqqqqqqqqqqqqpgqvznxgy5avm87mfjqytu5kqy9ank09azxs3yst5fzsh", //
-    "elrond_event_rest": "http://34.246.187.188:3033", //"http://localhost:6644", //
+    "elrond_event_rest": "https://34.246.187.188:3033", //"http://localhost:6644", //
     "elrond_esdt": "XPNET-cdf688", //"XPNET-066581", //
     "elrond_esdt_nft": "XPNFT-ff3b98", //"XPNFT-941516", //
     "validator_txn_socket": "ws://34.246.187.188:3001" //"ws://localhost:3001" //

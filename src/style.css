@@ -68,6 +68,11 @@
   }
 }
 
+.tx-link {
+  color: white;
+  font-family: Inter;
+}
+
 @media (max-width: 768px) {
   .from-to-style {
     flex-direction: column;

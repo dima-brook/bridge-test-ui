@@ -58,6 +58,8 @@ const PredefinedNFTAccounts = () => {
 
     const [execResult, setExecResult] = useState('');
 
+    const [txUrl, setTxUrl] = useState('');
+
     // =====================================================
     //                        HOOKS
     // =====================================================
@@ -112,7 +114,7 @@ const PredefinedNFTAccounts = () => {
         }
 
         const nfts = await chain.listNft(address);
-        const nft_imgs = Array.from(nfts.entries()).map(async ([hash, dat]) => {
+        const nft_imgs = Array.from(nfts.entries()).reverse().map(async ([hash, dat]) => {
             const url = await ChainHandlers.tryFetchNftAsImg(address, from, hash, dat);
 
             return { hash, url };
@@ -209,6 +211,7 @@ const PredefinedNFTAccounts = () => {
 
     const clearFields = () => {
 
+        setImgs([]);
         setFrom(chains[0]);
         setTo(chains[1]);
         setSourceAcc(NewParachainAccounts['Alice_Stash'].name);
@@ -221,6 +224,7 @@ const PredefinedNFTAccounts = () => {
 
     const handleSendClick = async () => {
         setSendInactive(true);
+        setTxUrl('');
 
         let info;
         let call;
@@ -264,7 +268,7 @@ const PredefinedNFTAccounts = () => {
         }
 
         try {
-            const [_, id] = await call(
+            const [ , id] = await call(
                 sender,
                 target,
                 info
@@ -274,7 +278,7 @@ const PredefinedNFTAccounts = () => {
 
             const url = `${prefix}/${hash}`;
 
-            console.log(url);
+            setTxUrl(url);
 
             res = 'success';
         } catch (error) {
@@ -412,6 +416,11 @@ const PredefinedNFTAccounts = () => {
                                 <XPSpace />
                             </XPColumn>
                         </XPRow>
+
+                        {txUrl !== '' && (
+                            
+                                <a className="tx-link" href={txUrl} target="_blank" rel="noreferrer">Click to Check in the Explorer</a>
+                            )}
 
                         <SendButton
                             onClick={handleSendClick}
