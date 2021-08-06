@@ -5,7 +5,8 @@ import Selector from './Selector';
 import SendButton from './SendButton';
 import "./style.css";
 import {
-    NewElrondAccounts, NewParachainAccounts
+    elrondTxnPrefix,
+    NewElrondAccounts, NewParachainAccounts, polkadotBlockPrefix
 } from './Config';
 
 import { chains } from './consts';
@@ -21,7 +22,7 @@ import {
     XPTransaction,
     XPSpace
 } from './StyledComponents'
-import { ChainHandlers } from './helper_functions'
+import { ChainHandlers, txnSocket } from './helper_functions'
 import SelectAssets from "./SelectAsset/index";
 import ElrondSVG from './assets/SVG/Elrond';
 import Polka from './assets/SVG/substrateLogo';
@@ -188,7 +189,6 @@ const PredefinedNFTAccounts = () => {
                 break;
 
         }
-        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [from]);
 
     const handleNftChange = (e) => {
@@ -224,11 +224,11 @@ const PredefinedNFTAccounts = () => {
 
         let info;
         let call;
-        let final_call;
         let sender;
         let res;
         let target;
-        let wait;
+        let prefix;
+        let txWait;
 
         if (from === chains[0]) {
             const acc = NewParachainAccounts[sourceAcc];
@@ -241,7 +241,10 @@ const PredefinedNFTAccounts = () => {
             }
             sender = { sender: acc.key() };
             target = NewElrondAccounts[targetAcc].account;
-            wait = 2500;
+
+            // We are waiting for the action to execute on elrond
+            prefix = elrondTxnPrefix;
+            txWait = txnSocket.waitTxHashElrond;
         } else {
             const acc = NewElrondAccounts[sourceAcc];
             const elrd = await ChainHandlers.elrd();
@@ -254,21 +257,24 @@ const PredefinedNFTAccounts = () => {
             }
             sender = UserSigner.fromPem(acc.pem);
             target = NewParachainAccounts[targetAcc].account;
-            wait = 35000;
-        }
 
-        final_call = async (s, t, i) => {
-            await call(s, t, i);
-            // It takes approximately 30 seconds for the validator to process the txn
-            await new Promise(r => setTimeout(r, wait));
+            // We are waiting for the action to execute on polkadot
+            prefix = polkadotBlockPrefix;
+            txWait = txnSocket.waitTxHashPolkadot;
         }
 
         try {
-            await final_call(
+            const [_, id] = await call(
                 sender,
                 target,
                 info
             );
+
+            const hash = await txWait(id.toString());
+
+            const url = `${prefix}/${hash}`;
+
+            console.log(url);
 
             res = 'success';
         } catch (error) {
@@ -406,7 +412,6 @@ const PredefinedNFTAccounts = () => {
                                 <XPSpace />
                             </XPColumn>
                         </XPRow>
-
 
                         <SendButton
                             onClick={handleSendClick}

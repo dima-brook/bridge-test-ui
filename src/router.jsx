@@ -5,11 +5,11 @@ import ElrondTxnHandler from "./ElrondTxnHandler"
 
 export const routes = [
   {
-    path: "/nft",
+    path: "/nft-bridge",
     component: NonFungible
   },
   {
-    path: "/nftpredefined",
+    path: "/nft",
     component: PredefinedNFTAccounts
   },
   {
@@ -22,6 +22,6 @@ export const routes = [
   },
   {
     path: "/processelrdnft",
-    component: () => <ElrondTxnHandler redirect="/nft" />
+    component: () => <ElrondTxnHandler redirect="/nft-bridge" />
   }
 ]

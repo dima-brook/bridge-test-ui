@@ -1,6 +1,7 @@
 import { Keyring } from '@polkadot/keyring';
 
-export const url = "http://54.194.208.186:1000";
+export const polkadotBlockPrefix = "https://polkadot.js.org/apps/?rpc=wss%3A%2F%2F34.246.187.188%3A443#/explorer/query";
+export const elrondTxnPrefix = "https://devnet-explorer.elrond.com/transactions";
 
 // export const ElrondAccounts = {
 //     "XP-ALICE":"erd14jjddnkallyr5y4zsy5jwz507pq8gaanwk97ykq6lt94v4ke9mesqgdngj",
@@ -39,12 +40,13 @@ export const ElrondKeys = {
 const keyring = new Keyring();
 
 export const ChainConfig = {
-    "xpnode": "wss://34.246.187.188:443",
+    "xpnode": "ws://localhost:9944", //"wss://34.246.187.188:443",
     "elrond_node": "https://devnet-api.elrond.com",
-    "elrond_minter": "erd1qqqqqqqqqqqqqpgq7ysztrj922cs53e5wh2vdmeds9pd69wms3ysy3tyy9",
-    "elrond_event_rest": "http://34.246.187.188:3033",
-    "elrond_esdt": "XPNET-cdf688",
-    "elrond_esdt_nft": "XPNFT-ff3b98"
+    "elrond_minter": "erd1qqqqqqqqqqqqqpgq7ysztrj922cs53e5wh2vdmeds9pd69wms3ysy3tyy9", //"erd1qqqqqqqqqqqqqpgqvznxgy5avm87mfjqytu5kqy9ank09azxs3yst5fzsh", //
+    "elrond_event_rest": "http://34.246.187.188:3033", //"http://localhost:6644", //
+    "elrond_esdt": "XPNET-cdf688", //"XPNET-066581", //
+    "elrond_esdt_nft": "XPNFT-ff3b98", //"XPNFT-941516", //
+    "validator_txn_socket": "ws://34.246.187.188:3001" //"ws://localhost:3001" //
 };
 
 export const walletConnectBridge = "https://bridge.walletconnect.org";

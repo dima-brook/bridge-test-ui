@@ -23,7 +23,7 @@ function App() {
                 path="/unlock"
                 component={() => (
                   <Elrond.Pages.Unlock
-                    callbackRoute="/nft"
+                    callbackRoute="/nft-bridge"
                     title="Elrond Login"
                     lead="Please select your login method:"
                     ledgerRoute="/ledger"
@@ -35,7 +35,7 @@ function App() {
               <Route
                 path="/ledger"
                 component={() => (
-                  <Elrond.Pages.Ledger callbackRoute="/nft" />
+                  <Elrond.Pages.Ledger callbackRoute="/nft-bridge" />
                 )}
                 exact={true}
                 />
@@ -43,7 +43,7 @@ function App() {
                 path="/walletconnect"
                 component={() => (
                   <Elrond.Pages.WalletConnect
-                    callbackRoute="/nft"
+                    callbackRoute="/nft-bridge"
                     logoutRoute="/unlock"
                     title="Maiar Login"
                     lead="Scan the QR code using Maiar"

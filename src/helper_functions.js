@@ -1,4 +1,4 @@
-import { elrondHelperFactory, polkadotPalletHelperFactory } from 'testsuite-ts';
+import { elrondHelperFactory, polkadotPalletHelperFactory, txnSocketHelper } from 'testsuite-ts';
 import { ChainConfig, ElrondKeys } from './Config';
 import { web3Accounts, web3Enable, web3FromAddress } from '@polkadot/extension-dapp';
 import { UserSigner } from '@elrondnetwork/erdjs';
@@ -14,6 +14,8 @@ const fromHexString = hexString =>
   new Uint8Array(hexString.match(/.{1,2}/g).map(byte => parseInt(byte, 16)));
 
 const decoder = new TextDecoder();
+
+export const txnSocket = txnSocketHelper(ChainConfig.validator_txn_socket);
 
 export const ChainHandlers = {
     _polka: undefined,
@@ -129,7 +131,7 @@ export const ChainHandlers = {
                     await this._requirePolka();
                     const hash = Base64.toUint8Array(nft_dat.uris[0]);
                     const hex = await this._polka.getLockedNft(hash);
-                    url = decoder.decode(hex).replace('�', '');
+                    url = `http${decoder.decode(hex).split("http")[1]}`; // hack to strip off invalid data
                 } else {
                     url = window.atob(nft_dat.uris[0]);
                 }
