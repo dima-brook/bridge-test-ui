@@ -1,5 +1,8 @@
 @import url('https://fonts.googleapis.com/css2?family=Roboto&display=swap');
 
+iframe{
+  opacity: 0;
+}
 
 .Xp-svg-logo {
   width: 118px;
@@ -71,6 +74,8 @@
 .tx-link {
   color: white;
   font-family: Inter;
+  font-size:18px;
+  text-decoration: none;
 }
 
 @media (max-width: 768px) {
@@ -154,7 +159,6 @@
 
  
 }
-
 @media only screen 
     and (device-width: 390px) 
     and (device-height: 844px) 
@@ -162,6 +166,7 @@
 
       .arrows-svg-switch {
         margin-left: -5px;
+        margin-top:4px;
       }
      }
 
@@ -170,6 +175,7 @@
     and (device-height: 926px) 
     and (-webkit-device-pixel-ratio: 3) {     .arrows-svg-switch {
       margin-left: -5px;
+      margin-top:4px;
     }}
 
     @media only screen 
@@ -181,6 +187,7 @@
 
       .arrows-svg-switch {
         margin-left: -5px;
+        margin-top:4px;
       }
      }
 
@@ -191,6 +198,7 @@
 
       .arrows-svg-switch {
         margin-left: -5px;
+        margin-top:4px;
       }
      }
 
@@ -201,5 +209,6 @@
     and (-webkit-device-pixel-ratio: 3) { 
       .arrows-svg-switch {
         margin-left: -5px;
+        margin-top:4px;
       }
     }

@@ -15,7 +15,7 @@ function sanitizeState(inactive, state) {
  * @param {Event} onClick param
  * @returns a JSX button
  */
- const SendButton = ({ onClick, inactive, state }) => {
+ const SendButton = ({ onClick, inactive, state, from }) => {
     const stateS = sanitizeState(inactive, state);
 
     return (
@@ -27,7 +27,7 @@ function sanitizeState(inactive, state) {
             <XPButtonText
                 disabled={inactive}
             >
-                {stateText[stateS]}
+                {stateText[stateS] + (from === 'Elrond' && stateText[stateS] === 'Executing' ? " can take more than 30 seconds" : "")}
             </XPButtonText>
         </XPButton>
     )

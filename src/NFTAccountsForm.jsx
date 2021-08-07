@@ -24,11 +24,29 @@ import {
 } from './StyledComponents'
 import { ChainHandlers, txnSocket } from './helper_functions'
 import SelectAssets from "./SelectAsset/index";
+import Modal from 'react-modal';
+
 import ElrondSVG from './assets/SVG/Elrond';
 import Polka from './assets/SVG/substrateLogo';
 import { decodeAddress } from '@polkadot/keyring';
 import { Address, UserSigner } from '@elrondnetwork/erdjs/out';
-
+const customStyles = {
+    content: {
+      top: '50%',
+      left: '50%',
+      right: 'auto',
+      bottom: 'auto',
+      backgroundColor: '#051937',
+      padding: '80px 65px',
+      marginRight: '-50%',
+      borderRadius: '6px',
+      transform: 'translate(-50%, -50%)',
+      borderColor: '#374462'
+    },
+    overlay: {
+        backgroundColor: 'rgba(0,0,0,0.8)'
+    }
+  };
 
 const PredefinedNFTAccounts = () => {
 
@@ -39,10 +57,13 @@ const PredefinedNFTAccounts = () => {
 
     const [sourceAcc, setSourceAcc] = useState(NewParachainAccounts['Alice_Stash'].name);
     const [targetAcc, setTargetAcc] = useState(NewElrondAccounts['Alice'].name);
-
+    const [isOpen, setOpen] = useState(false)
     const [sourceAccounts, setSourceAccounts] = useState(Object.keys(NewParachainAccounts));
     const [targetAccounts, setTargetAccounts] = useState(Object.keys(NewElrondAccounts));
-
+    const toggle = () => {
+        
+        setOpen(!isOpen)
+    }
     const [from, setFrom] = useState(chains[0]);
     const [to, setTo] = useState(chains[1]);
 
@@ -165,6 +186,8 @@ const PredefinedNFTAccounts = () => {
         setTargetAcc(_targetAcc);
         setSourceAccounts(_sourceAccounts);
         setTargetAccounts(_targetAccounts);
+        setExecResult('')
+        setSendInactive(false)
     }
 
     const handleToChange = (newValue) => {
@@ -286,7 +309,6 @@ const PredefinedNFTAccounts = () => {
             url = `${prefix}/${hash}`;
 
             setTxUrl(url);
-
             res = 'success';
         } catch (error) {
             console.log("err", error);
@@ -294,11 +316,14 @@ const PredefinedNFTAccounts = () => {
         } finally {
             setExecResult(res);
 
-            await new Promise(r => setTimeout(r, 3000));
-            setSendInactive(false);
-            setExecResult('');
+            // await new Promise(r => setTimeout(r, 3000));
+            // setSendInactive(false);
+            // setExecResult('');
             clearFields();
             if (res === 'success') {
+                if (from === chains[0]){
+                    toggle()
+                }
                 setTxUrl(url);
             }
         }
@@ -437,20 +462,21 @@ const PredefinedNFTAccounts = () => {
                                 <XPSpace />
                             </XPColumn>
                         </XPRow>
-
-                        {txUrl !== '' && (
-                            
-                                <a className="tx-link" href={txUrl} target="_blank" rel="noreferrer">Click to Check in the Explorer</a>
-                            )}
-
+                            <Modal
+                                isOpen={isOpen}
+                                shouldCloseOnOverlayClick={true}
+                                onRequestClose={toggle}
+                                style={customStyles}
+                                contentLabel="Example Modal"
+                            >
+                                <a className="tx-link" href={txUrl} target="_blank" rel="noreferrer">View Transaction</a>
+                            </Modal>
                         <SendButton
                             onClick={handleSendClick}
                             inactive={sendInactive}
                             state={execResult}
+                            from={from}
                         />
-
-
-
                     </XPFlexCenter>
                 </XPBoxCenter>
             </XPMain>

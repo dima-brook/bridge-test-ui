@@ -332,7 +332,7 @@ export const XPDropDownContent = styled("div")`
     overflow-y: scroll;
     scroll-padding-right: 0;
     overflow: auto !important;
-    max-height: 150px;
+    max-height: 200px;
     z-index:999;
   }
 `;
