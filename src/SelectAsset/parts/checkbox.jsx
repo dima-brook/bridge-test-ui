@@ -1,15 +1,14 @@
-import React from 'react';
+import React from "react";
 
-export default function Checkbox({ cb, onClick, selected }) {
+const Checkbox = ({ cb, onClick, selected}) => {
 
-    const onclick = () => {
+        const onclick = ()  => {
 
-        if(!selected){
-            cb();
-            onClick()
+            if (!selected) {
+                cb();
+                onClick()
+            }
         }
-
-    };
 
     return <div
         onClick={onclick}
@@ -17,6 +16,8 @@ export default function Checkbox({ cb, onClick, selected }) {
         checked={selected}
 
     >
-        {selected ? <div  className="inner-radio-box"/> : ''}
+        {selected ? <div className="inner-radio-box" /> : ''}
     </div>
 }
+
+export default Checkbox;
