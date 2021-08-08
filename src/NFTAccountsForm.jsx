@@ -321,9 +321,7 @@ const PredefinedNFTAccounts = () => {
             // setExecResult('');
             clearFields();
             if (res === 'success') {
-                if (from === chains[0]){
-                    toggle()
-                }
+                toggle()
                 setTxUrl(url);
             }
         }
