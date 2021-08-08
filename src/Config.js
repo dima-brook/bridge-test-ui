@@ -1,6 +1,6 @@
 import { Keyring } from '@polkadot/keyring';
 
-export const polkadotBlockPrefix = "https://polkadot.js.org/apps/?rpc=wss%3A%2F%2Fbridge.xp.network%3A443%2Fnode#/explorer/query";
+export const polkadotBlockPrefix = "https://explorer.xp.network/#/explorer/query";
 export const elrondTxnPrefix = "https://devnet-explorer.elrond.com/transactions";
 
 // export const ElrondAccounts = {
