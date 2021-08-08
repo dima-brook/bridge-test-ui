@@ -30,23 +30,26 @@ import ElrondSVG from './assets/SVG/Elrond';
 import Polka from './assets/SVG/substrateLogo';
 import { decodeAddress } from '@polkadot/keyring';
 import { Address, UserSigner } from '@elrondnetwork/erdjs/out';
+import LoadingDots from './LoadingDots'
+
+
 const customStyles = {
     content: {
-      top: '50%',
-      left: '50%',
-      right: 'auto',
-      bottom: 'auto',
-      backgroundColor: '#051937',
-      padding: '80px 65px',
-      marginRight: '-50%',
-      borderRadius: '6px',
-      transform: 'translate(-50%, -50%)',
-      borderColor: '#374462'
+        top: '50%',
+        left: '50%',
+        right: 'auto',
+        bottom: 'auto',
+        backgroundColor: '#051937',
+        padding: '80px 65px',
+        marginRight: '-50%',
+        borderRadius: '6px',
+        transform: 'translate(-50%, -50%)',
+        borderColor: '#374462'
     },
     overlay: {
         backgroundColor: 'rgba(0,0,0,0.8)'
     }
-  };
+};
 
 const PredefinedNFTAccounts = () => {
 
@@ -61,7 +64,7 @@ const PredefinedNFTAccounts = () => {
     const [sourceAccounts, setSourceAccounts] = useState(Object.keys(NewParachainAccounts));
     const [targetAccounts, setTargetAccounts] = useState(Object.keys(NewElrondAccounts));
     const toggle = () => {
-        
+
         setOpen(!isOpen)
     }
     const [from, setFrom] = useState(chains[0]);
@@ -296,7 +299,7 @@ const PredefinedNFTAccounts = () => {
         }
 
         try {
-            const [ , id] = await call(
+            const [, id] = await call(
                 sender,
                 target,
                 info
@@ -355,17 +358,17 @@ const PredefinedNFTAccounts = () => {
                                     onChange={handleFromChange}
                                 />
                             </XPColumn>
-                                {window.innerWidth <= 600 ? <XPColumn>
-                                    <XPLabel>Source Account</XPLabel>
-                                    <Selector
-                                        img={from === chains[0] ? <Polka /> : <ElrondSVG />}
-                                        value={sourceAcc}
-                                        data={sourceAccounts}
-                                        onChange={handleFromAccountChange}
-                                    />
-                                </XPColumn> : ''}
-                                {window.innerWidth <= 600  ? <><XPLabel>Select asset</XPLabel>
-                        <SelectAssets imgs={imgs} cb={imageSelectCb} /></> : ''}
+                            {window.innerWidth <= 600 ? <XPColumn>
+                                <XPLabel>Source Account</XPLabel>
+                                <Selector
+                                    img={from === chains[0] ? <Polka /> : <ElrondSVG />}
+                                    value={sourceAcc}
+                                    data={sourceAccounts}
+                                    onChange={handleFromAccountChange}
+                                />
+                            </XPColumn> : ''}
+                            {window.innerWidth <= 600 ? <><XPLabel>Select asset</XPLabel>
+                                <SelectAssets imgs={imgs} cb={imageSelectCb} /></> : ''}
                             <div style={{ marginTop: window.innerWidth <= 600 ? '20px' : '' }} className="swap-button-absolute">
                                 <SwapChains onClick={handleSwapChains} />
                             </div>
@@ -387,7 +390,7 @@ const PredefinedNFTAccounts = () => {
 
                         <div className="from-to-style">
 
-                        {window.innerWidth > 600? <XPColumn>
+                            {window.innerWidth > 600 ? <XPColumn>
                                 <XPLabel>Source Account</XPLabel>
                                 <Selector
                                     img={from === chains[0] ? <Polka /> : <ElrondSVG />}
@@ -412,8 +415,8 @@ const PredefinedNFTAccounts = () => {
                         {/* ---------- The third Row of elements ------- */}
                         {/* -------------------------------------------- */}
 
-                        {window.innerWidth > 600  ? <><XPLabel>Select asset</XPLabel>
-                        <SelectAssets imgs={imgs} cb={imageSelectCb} /></> : ''}
+                        {window.innerWidth > 600 ? <><XPLabel>Select asset</XPLabel>
+                            <SelectAssets imgs={imgs} cb={imageSelectCb} /></> : ''}
 
                         <XPRow>
                             <XPColumn>
@@ -460,15 +463,25 @@ const PredefinedNFTAccounts = () => {
                                 <XPSpace />
                             </XPColumn>
                         </XPRow>
-                            <Modal
-                                isOpen={isOpen}
-                                shouldCloseOnOverlayClick={true}
-                                onRequestClose={toggle}
-                                style={customStyles}
-                                contentLabel="Example Modal"
-                            >
-                                <a className="tx-link" href={txUrl} target="_blank" rel="noreferrer">View Transaction</a>
-                            </Modal>
+                        <Modal
+                            isOpen={isOpen}
+                            shouldCloseOnOverlayClick={true}
+                            onRequestClose={toggle}
+                            style={customStyles}
+                            contentLabel="Example Modal"
+                        >
+                            <a className="tx-link" href={txUrl} target="_blank" rel="noreferrer">View Transaction</a>
+                        </Modal>
+
+                        <XPRow style={{flexDirection: 'column'}}>
+                            {
+                                sendInactive && !execResult
+                                    ? <LoadingDots />
+                                    : ''
+                            }
+                        </XPRow>
+                            
+                        
                         <SendButton
                             onClick={handleSendClick}
                             inactive={sendInactive}
