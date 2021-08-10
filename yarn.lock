@@ -13140,7 +13140,7 @@ test-exclude@^6.0.0:
 
 "testsuite-ts@git+https://github.com/xp-network/bridge-ui-logics#master":
   version "1.0.0"
-  resolved "git+https://github.com/xp-network/bridge-ui-logics#9c58506e7e5c9bda3b001a54778bb3e02fa5eea8"
+  resolved "git+https://github.com/xp-network/bridge-ui-logics#42d69b6f05cd5b657a93e16bc13c0c29eec75ee6"
   dependencies:
     "@elrondnetwork/erdjs" "^6.2.0"
     "@polkadot/api" "^5.2.1"
@@ -13788,8 +13788,10 @@ watchpack@^1.7.4:
   resolved "https://registry.yarnpkg.com/watchpack/-/watchpack-1.7.5.tgz#1267e6c55e0b9b5be44c2023aed5437a2c26c453"
   integrity sha512-9P3MWk6SrKjHsGkLT2KHXdQ/9SNkyoJbabxnKOoJepsvJjJG8uYTR3yTPxPQvNDI3w4Nz1xnE0TLHK4RIVe/MQ==
   dependencies:
+    chokidar "^3.4.1"
     graceful-fs "^4.1.2"
     neo-async "^2.5.0"
+    watchpack-chokidar2 "^2.0.1"
   optionalDependencies:
     chokidar "^3.4.1"
     watchpack-chokidar2 "^2.0.1"

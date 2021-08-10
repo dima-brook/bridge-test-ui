@@ -5,11 +5,8 @@ import Selector from './Selector';
 import SendButton from './SendButton';
 import MaxButton from './MaxButton';
 import "./style.css";
-import {
-  ElrondAccounts,
-} from './Config';
 
-import { chains, tokens } from './consts';
+import { chains, CHAIN_INFO, tokens } from './consts';
 import {
     XPApp,
     XPMain,
@@ -26,6 +23,8 @@ import {
 } from './StyledComponents'
 import { ChainHandlers } from './helper_functions'
 import * as Elrond from "@elrondnetwork/dapp";
+import { useLocation } from 'react-router-dom';
+import { Address } from '@elrondnetwork/erdjs/out';
 
 
 function Fungible() {
@@ -39,6 +38,7 @@ function Fungible() {
   // =====================================================
   //                      S T A T E
   // =====================================================
+  const query = useRef(new URLSearchParams(useLocation().search));
   const [amount, setAmount] = useState(1000000000000000);
 
   const [token, setTokens] = useState(tokens[0]);
@@ -72,7 +72,7 @@ function Fungible() {
         fromAccts.current = await ChainHandlers.polkadotAccounts();
         break;
       case chains[1]:
-        fromAccts.current = ElrondAccounts;
+        fromAccts.current = [query.current.get("address") || ""];
         break;
       default:
         break;
@@ -85,14 +85,10 @@ function Fungible() {
    * Defaults to the first accounts
    */
   const populateInitialAccounts = useCallback(() => {
-    if (from === chains[0]) {
-      setFromAcct(fromAccts.current[0])
-    } else if (from === chains[1]) {
-      setFromAcct(Object.keys(ElrondAccounts)[0])
-    }
+    setFromAcct(fromAccts.current[0])
 
     toAcct.current.value = "";
-  }, [from]);
+  }, []);
 
   /**
    * Catches the change events and updates related fields
@@ -125,17 +121,15 @@ function Fungible() {
   }
 
   const liqudityElrond = async () => {
-    let txGen;
+    let tx;
 
     const elrd = await ChainHandlers.elrd();
   
-    if (token === tokens[0]) {
-      txGen = elrd.unsignedUnfreezeTxn;
+    if (token === CHAIN_INFO[from].native) {
+      tx = elrd.unsignedTransferTxn(CHAIN_INFO[to].nonce, toAcct.current.value, amount);
     } else {
-      txGen = elrd.unsignedTransferTxn;
+      tx = elrd.unsignedUnfreezeTxn(CHAIN_INFO[to].nonce, new Address(fromAcct), toAcct.current.value, amount);
     }
-
-    const tx = txGen(toAcct.current.value, amount);
     setSendInactive(false);
 
     sendElrdTx({
@@ -151,9 +145,10 @@ function Fungible() {
     */
   const handleSendButtonClick = async () => {
 
+    let chain;
     let key;
-    let acctAddress;
     let targetWallet;
+    const chain_info = CHAIN_INFO[to];
 
     setSendInactive(true);
 
@@ -162,46 +157,38 @@ function Fungible() {
       populateInitialAccounts();
     }
 
-    const polka = await ChainHandlers.polka();
-
+    switch (from) {
+      case chains[0]: {
+        chain = await ChainHandlers.polka();
+        key = await ChainHandlers.polkadotSigner(fromAcct);
+        targetWallet = toAcct.current.value;
+        break;
+      }
+      case chains[1]: {
+        return await liqudityElrond();
+      }
+      default:
+        throw Error(`unhandled chain: ${from}`);
+    }
+  
     try {
 
       update_tx('', "please wait...")
-      let result;
+      let call;
 
-      // Transfer direction XP.network => Elrond:
-      if (from === chains[0] && to === chains[1]) {
-        // Extract the signature by the Sender's name
-        key = await ChainHandlers.polkadotSigner(fromAcct);
-        // Extract the account by the Sender's name
-        acctAddress = fromAcct;
-        // Extract the address by the target user name
-        targetWallet = toAcct.current.value;
-
-        if (token === tokens[0]) { // XPNET
-          // Lock XPNET and mint wrapped XPNET in Elrond:
-          result = await polka.transferNativeToForeign(key, targetWallet, amount);
-        } else if (token === tokens[1]) { // EGLD
-          // Return wrapped EGLD from Parachain to Elrond:
-          result = await polka.unfreezeWrapped(key, targetWallet, amount);
-        }
-        // Transfer direction Elrond => XP.network:
-      } else if (from === chains[1] && to === chains[0]) {
-        return await liqudityElrond();
+      if (CHAIN_INFO[from].native === token) {
+        call = await chain.transferNativeToForeign;
+      } else {
+        call = await chain.unfreezeWrapped;
       }
+
+      const result = await call(key, chain_info.nonce, targetWallet, amount);
+
       update_tx(targetWallet, `${JSON.stringify(result[0])}`);
     } catch (error) {
       console.error(error)
     }
     setSendInactive(false);
-
-    // Check the extracted values:
-    console.log("From:", fromAcct)
-    console.log("Account:", acctAddress)
-    console.log("Key:", key)
-    console.log("To Account:", targetWallet)
-    console.log("Token:", token);
-    console.log(amount, typeof amount);
   }
 
   /**
@@ -256,23 +243,20 @@ function Fungible() {
     // Put your code for retrieving the data here
 
     let chain;
-    let acc;
     // Example:
     switch (from) {
       case chains[0]:
         chain = await ChainHandlers.polka();
-        acc = fromAcct;
         break;
       case chains[1]:
         chain = await ChainHandlers.elrd();
-        acc = ElrondAccounts[fromAcct]
         break;
       default:
         break;
     }
   
     console.log(chain)
-    setAmount((await chain.balance(acc)).toString())
+    setAmount((await chain.balance(fromAcct)).toString())
   }
 
   // ==========================================================

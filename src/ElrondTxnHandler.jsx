@@ -22,7 +22,7 @@ function ElrondTxnHandler({ redirect }) {
         const cb = status.current === "success" ? execTx() : new Promise((r) => r());
         cb.then(async () => {
             await new Promise(r => setTimeout(r, 3000));
-            history.current.push(red.current);
+            history.current.push(`${red.current}?address=${query.current.get("address")}`);
         })
     }, [])
 

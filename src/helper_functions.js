@@ -1,7 +1,6 @@
 import { elrondHelperFactory, polkadotPalletHelperFactory, txnSocketHelper } from 'testsuite-ts';
-import { ChainConfig, ElrondKeys } from './Config';
+import { ChainConfig } from './Config';
 import { web3Accounts, web3Enable, web3FromAddress } from '@polkadot/extension-dapp';
-import { UserSigner } from '@elrondnetwork/erdjs';
 import { chains } from './consts';
 import { Base64 } from 'js-base64';
 
@@ -71,9 +70,6 @@ export const ChainHandlers = {
         await this._requireElrd();
 
         return this._elrd;
-    },
-    async elrondSigner(name) {
-        return UserSigner.fromPem(ElrondKeys[name]);
     },
     async checkWrappedOnPolkadot(_owner, ident) {
         return ident === ChainConfig.elrond_esdt_nft;
