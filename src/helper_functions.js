@@ -1,8 +1,11 @@
-import { elrondHelperFactory, polkadotPalletHelperFactory, txnSocketHelper } from 'testsuite-ts';
+import { elrondHelperFactory, polkadotPalletHelperFactory, web3HelperFactory, txnSocketHelper } from 'testsuite-ts';
 import { ChainConfig } from './Config';
 import { web3Accounts, web3Enable, web3FromAddress } from '@polkadot/extension-dapp';
 import { chains } from './consts';
 import { Base64 } from 'js-base64';
+import { abi } from './assets/Minter.json'
+import { ethers } from 'ethers';
+import detectEthereumProvider from '@metamask/detect-provider';
 
 /*const nft_info_encoded_t = new StructType('EncodedNft', [
     new StructFieldDefinition('token', '', new TokenIdentifierType()),
@@ -22,6 +25,9 @@ export const ChainHandlers = {
     _polka: undefined,
     _polkaExtInit: undefined,
     _elrd: undefined,
+    _web3: undefined,
+    _w3ExtInit: undefined,
+    _web3Provider: undefined,
     async _requirePolkadotExt() {
         if (!this._polkaExtInit) {
             await web3Enable('XPNET Cross Chain Bridge');
@@ -70,6 +76,42 @@ export const ChainHandlers = {
         await this._requireElrd();
 
         return this._elrd;
+    },
+    _w3eventsSetup() {
+        const nullIt = () => this._web3 = undefined;
+        this._web3Provider.provider.on('chainChanged', nullIt);
+    },
+    async _requireWeb3() {
+        if (!this._web3) {
+            const base = await detectEthereumProvider();
+            if (!base) {
+                throw Error("Metamask not installed!");
+            }
+            this._web3Provider = new ethers.providers.Web3Provider(base);
+            console.log(web3HelperFactory);
+            this._web3 = await web3HelperFactory(
+                this._web3Provider,
+                ChainConfig.heco_minter,
+                abi
+            );
+            this._w3eventsSetup();
+        }
+    },
+    async web3() {
+        await this._requireWeb3();
+
+        return this._web3;
+    },
+    async w3Accounts() {
+        await this._requireWeb3();
+        if (!this._w3ExtInit) {
+          await this._web3Provider.provider.request({ method: 'eth_requestAccounts' });
+        }
+        return await this._web3Provider.listAccounts();
+    },
+    async w3Signer(address) {
+        await this._requireWeb3();
+        return this._web3Provider.getSigner(address);
     },
     async checkWrappedOnPolkadot(_owner, ident) {
         return ident === ChainConfig.elrond_esdt_nft;

@@ -12,7 +12,8 @@ export const ChainConfig = {
     "elrond_event_rest": "http://localhost:6644", //"https://bridge.xp.network/event_rest", //
     "elrond_esdt": "XPNET-274880", //"XPNET-cdf688", //
     "elrond_esdt_nft": "XPNFT-d19b90", //"XPNFT-ff3b98", //
-    "validator_txn_socket": "ws://localhost:3001" //"wss://bridge.xp.network/" //
+    "validator_txn_socket": "ws://localhost:3001", //"wss://bridge.xp.network/", //
+    "heco_minter": "0xe7f1725E7734CE288F8367e1Bb143E90bb3F0512",
 };
 
 export const walletConnectBridge = "https://bridge.walletconnect.org";

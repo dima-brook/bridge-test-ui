@@ -74,6 +74,9 @@ function Fungible() {
       case chains[1]:
         fromAccts.current = [query.current.get("address") || ""];
         break;
+      case chains[2]:
+        fromAccts.current = await ChainHandlers.w3Accounts();
+        break;
       default:
         break;
     }
@@ -167,6 +170,12 @@ function Fungible() {
       case chains[1]: {
         return await liqudityElrond();
       }
+      case chains[2]: {
+        chain = await ChainHandlers.web3();
+        key = await ChainHandlers.w3Signer(fromAcct);
+        targetWallet = toAcct.current.value;
+        break;
+      }
       default:
         throw Error(`unhandled chain: ${from}`);
     }
@@ -178,8 +187,10 @@ function Fungible() {
 
       if (CHAIN_INFO[from].native === token) {
         call = await chain.transferNativeToForeign;
-      } else {
+      } else if (CHAIN_INFO[to].native === token) {
         call = await chain.unfreezeWrapped;
+      } else {
+        throw Error("Invalid Target");
       }
 
       const result = await call(key, chain_info.nonce, targetWallet, amount);
