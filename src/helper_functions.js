@@ -1,7 +1,7 @@
 import { elrondHelperFactory, polkadotPalletHelperFactory, web3HelperFactory, txnSocketHelper } from 'testsuite-ts';
 import { ChainConfig } from './Config';
 import { web3Accounts, web3Enable, web3FromAddress } from '@polkadot/extension-dapp';
-import { chains } from './consts';
+import { chains, CHAIN_INFO } from './consts';
 import { Base64 } from 'js-base64';
 import { abi } from './assets/Minter.json'
 import { ethers } from 'ethers';
@@ -27,6 +27,7 @@ export const ChainHandlers = {
     _elrd: undefined,
     _web3: undefined,
     _w3ExtInit: undefined,
+    _web3Chain: undefined,
     _web3Provider: undefined,
     async _requirePolkadotExt() {
         if (!this._polkaExtInit) {
@@ -81,6 +82,31 @@ export const ChainHandlers = {
         const nullIt = () => this._web3 = undefined;
         this._web3Provider.provider.on('chainChanged', nullIt);
     },
+    async _metaChangeChain() {
+        const info = CHAIN_INFO[this._web3Chain];
+        const chainId = `0x${info.chainId.toString(16)}`;
+        try {
+            await this._web3Provider.provider.request({
+                method: 'wallet_switchEthereumChain',
+                params: [{ chainId }]
+            });
+        } catch (err) {
+            if (err.code === 4902) {
+                await this._web3Provider.provider.request({
+                    method: 'wallet_addEthereumChain',
+                    params: [{
+                        chainId,
+                        chainName: this._web3Chain,
+                        nativeCurrency: {
+                            name: info.native,
+                            symbol: info.native
+                        },
+                        rpcUrls: [info.rpcUrl]
+                    }]
+                });
+            }
+        }
+    },
     async _requireWeb3() {
         if (!this._web3) {
             const base = await detectEthereumProvider();
@@ -88,14 +114,22 @@ export const ChainHandlers = {
                 throw Error("Metamask not installed!");
             }
             this._web3Provider = new ethers.providers.Web3Provider(base);
-            console.log(web3HelperFactory);
+            const { chainId } = await this._web3Provider.getNetwork();
+            if (chainId !== CHAIN_INFO[this._web3Chain].chainId) {
+                await this._metaChangeChain();
+            }
+
             this._web3 = await web3HelperFactory(
                 this._web3Provider,
-                ChainConfig.heco_minter,
+                ChainConfig.web3_minters[this._web3Chain],
                 abi
             );
             this._w3eventsSetup();
         }
+    },
+    setWeb3Chain(chain) {
+        this._web3 = undefined;
+        this._web3Chain = chain;
     },
     async web3() {
         await this._requireWeb3();

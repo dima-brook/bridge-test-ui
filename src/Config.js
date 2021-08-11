@@ -13,7 +13,11 @@ export const ChainConfig = {
     "elrond_esdt": "XPNET-274880", //"XPNET-cdf688", //
     "elrond_esdt_nft": "XPNFT-d19b90", //"XPNFT-ff3b98", //
     "validator_txn_socket": "ws://localhost:3001", //"wss://bridge.xp.network/", //
-    "heco_minter": "0xe7f1725E7734CE288F8367e1Bb143E90bb3F0512",
+    "web3_minters": {
+        'HECO': "0x768C888bDf319f2bA0e2642235C2967f4a47441a",
+        "BSC": "0x471bF01b8C622C00652F336651747B1A5d37b5ea",
+        "ROPSTEN": "0x66b07bC16F499a0e835c5b277AF19555a05578c1"
+    }
 };
 
 export const walletConnectBridge = "https://bridge.walletconnect.org";

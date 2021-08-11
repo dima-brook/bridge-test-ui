@@ -75,6 +75,8 @@ function Fungible() {
         fromAccts.current = [query.current.get("address") || ""];
         break;
       case chains[2]:
+      case chains[3]:
+      case chains[4]:
         fromAccts.current = await ChainHandlers.w3Accounts();
         break;
       default:
@@ -170,12 +172,16 @@ function Fungible() {
       case chains[1]: {
         return await liqudityElrond();
       }
-      case chains[2]: {
+      // All web3 chains should match here
+      case chains[2]:
+      case chains[3]:
+      case chains[4]: {
         chain = await ChainHandlers.web3();
         key = await ChainHandlers.w3Signer(fromAcct);
         targetWallet = toAcct.current.value;
         break;
       }
+      // All web3 chains end here
       default:
         throw Error(`unhandled chain: ${from}`);
     }
@@ -224,6 +230,7 @@ function Fungible() {
    */
   const handleFromBlockchainChange = (value) => {
     setFrom(value);
+    (CHAIN_INFO[value].chainId !== undefined) && ChainHandlers.setWeb3Chain(value);
     populateFromAccounts()
     setFromAcct(fromAccts.current[0]);
   }
@@ -261,6 +268,11 @@ function Fungible() {
         break;
       case chains[1]:
         chain = await ChainHandlers.elrd();
+        break;
+      case chains[2]:
+      case chains[3]:
+      case chains[4]:
+        chain = await ChainHandlers.web3();
         break;
       default:
         break;
