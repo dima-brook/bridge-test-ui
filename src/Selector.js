@@ -7,6 +7,9 @@ import {
     XPDropDownContent,
     XPDropDownElement
 } from './StyledComponents';
+import ElrondSVG from './assets/SVG/Elrond';
+import Polka from './assets/SVG/substrateLogo';
+import { chains } from './consts';
 
 /**
  * Custom SELECT component
@@ -43,9 +46,9 @@ const Selector = ({ value, data, onClick, onChange, img }) => {
      */
     const handleClick = () => {
         borderRadiusHandler();
-        display === "none" 
-     ? setDisplay("block") 
-     : setDisplay("none");
+        display === "none"
+            ? setDisplay("block")
+            : setDisplay("none");
     }
 
     /**
@@ -55,7 +58,7 @@ const Selector = ({ value, data, onClick, onChange, img }) => {
      * @param {String} datum 
      */
     const handleXPDropDownClick = (datum) => {
-        
+
 
         onChange(datum)
 
@@ -72,11 +75,11 @@ const Selector = ({ value, data, onClick, onChange, img }) => {
 
         <XPDropDown
             onClick={() => handleClick()}
-	    style={{borderBottomRightRadius: borderRadius + "px" ,borderBottomLeftRadius: borderRadius + "px"}}
+            style={{ borderBottomRightRadius: borderRadius + "px", borderBottomLeftRadius: borderRadius + "px" }}
         >
-            
+
             <XPWrapper>
-            {img}
+                {img}
                 {/* ================================= 2. TEXT FIELD ================================*/}
                 <XPStyledText>{value}</XPStyledText>
 
@@ -96,9 +99,12 @@ const Selector = ({ value, data, onClick, onChange, img }) => {
                 {   // Loop over the data elements:
                     data.map(item => {
                         return (
-                            <XPDropDownElement onClick={() => handleXPDropDownClick(item)}  key={item}>
+                            <XPDropDownElement onClick={() => handleXPDropDownClick(item)} key={item}>
                                 <XPWrapper>
-                                    {img}
+                                    {item === chains[0]
+                                        ? <Polka />
+                                        : item === chains[1] ? <ElrondSVG /> : img
+                                    }
                                     {/* ================================= 2. TEXT FIELD ================================*/}
                                     <XPStyledText>{item}</XPStyledText>
                                 </XPWrapper>
