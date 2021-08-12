@@ -84,6 +84,14 @@ const PredefinedNFTAccounts = () => {
 
     const [txUrl, setTxUrl] = useState('');
 
+    const [fromOpen, setFromOpen] = useState(false);
+
+    const [toOpen, setToOpen] = useState(false);
+
+    const [fromAccOpen, setFromAccOpen] = useState(false);
+    
+    const [toAccOpen, setToAccOpen] = useState(false);
+
     // =====================================================
     //                        HOOKS
     // =====================================================
@@ -156,6 +164,15 @@ const PredefinedNFTAccounts = () => {
     // =====================================================
     //                    EVENT HANDLERS
     // =====================================================
+
+    const outsideClick = () => {
+        
+        if(fromOpen){ setFromOpen(false) }
+        if (toOpen){setToOpen(false)}
+        if(fromAccOpen) {setFromAccOpen(false)}
+        if (toAccOpen) (setToAccOpen(false))
+
+    }
 
     const handleFromChange = (newValue) => {
 
@@ -330,6 +347,10 @@ const PredefinedNFTAccounts = () => {
         }
     }
 
+     // const [fromOpen, setFromOpen] = useState(false)
+    // const [toOpen, setToOpen] = useState(false)
+    // const [fromAccOpen, setFromAccOpen] = useState(false)
+    // const [toAccOpen, setToAccOpen] = useState(false)
 
 
     // ==========================================================
@@ -337,7 +358,9 @@ const PredefinedNFTAccounts = () => {
     // ==========================================================
 
     return (
-        <XPApp>
+        <XPApp
+            onClick={outsideClick}
+        >
             <XPMain>
                 <XPBoxCenter>
                     <XPFlexCenter>
@@ -356,6 +379,8 @@ const PredefinedNFTAccounts = () => {
                                     value={from}
                                     data={chains}
                                     onChange={handleFromChange}
+                                    open={fromOpen}
+                                    informOpen={setFromOpen}
                                 />
                             </XPColumn>
                             {window.innerWidth <= 600 ? <XPColumn>
@@ -365,6 +390,8 @@ const PredefinedNFTAccounts = () => {
                                     value={sourceAcc}
                                     data={sourceAccounts}
                                     onChange={handleFromAccountChange}
+                                    open={toOpen}
+                                    informOpen={setToOpen}
                                 />
                             </XPColumn> : ''}
                             {window.innerWidth <= 600 ? <><XPLabel>Select asset</XPLabel>
@@ -379,6 +406,8 @@ const PredefinedNFTAccounts = () => {
                                     value={to}
                                     data={chains}
                                     onChange={handleToChange}
+                                    open={toAccOpen}
+                                    informOpen={setToAccOpen}
                                 />
                             </XPColumn>
                         </div>
@@ -397,6 +426,8 @@ const PredefinedNFTAccounts = () => {
                                     value={sourceAcc}
                                     data={sourceAccounts}
                                     onChange={handleFromAccountChange}
+                                    open={fromAccOpen}
+                                    informOpen={setFromAccOpen}
                                 />
                             </XPColumn> : ''}
 
@@ -407,6 +438,8 @@ const PredefinedNFTAccounts = () => {
                                     value={targetAcc}
                                     data={targetAccounts}
                                     onChange={handleToAccountChange}
+                                    open={toAccOpen}
+                                    informOpen={setToAccOpen}
                                 />
                             </XPColumn>
                         </div>

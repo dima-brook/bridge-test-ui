@@ -1,4 +1,4 @@
-import React, { useState, useRef } from 'react'
+import React, { useState, useRef, useEffect } from 'react'
 import ChevronDown from './assets/SVG/ShevronDown.js';
 import {
     XPDropDown,
@@ -19,13 +19,19 @@ import { chains } from './consts';
  * @param {Event} onChange change event handler
  * @returns the custom SELECT
  */
-const Selector = ({ value, data, onClick, onChange, img }) => {
+const Selector = ({ value, data, onClick, onChange, img, open, informOpen }) => {
 
     const [display, setDisplay] = useState('none');
     const [borderRadius, setBorderRadius] = useState(6)
 
-    //ref to close dropdown
-    const closeDropDownRef = useRef(null);
+        useEffect(() => {
+
+            if (!open){ 
+                setDisplay("none");
+            }
+
+        }, [open])
+
 
     if (!Array.isArray(data)) {
         data = Object.keys(data)
@@ -46,9 +52,15 @@ const Selector = ({ value, data, onClick, onChange, img }) => {
      */
     const handleClick = () => {
         borderRadiusHandler();
-        display === "none"
-            ? setDisplay("block")
-            : setDisplay("none");
+        if(display === "none"){
+            setDisplay("block");
+            informOpen(true);
+        }else{
+            setDisplay("none");
+            informOpen(false);
+
+        }
+        
     }
 
     /**
@@ -64,6 +76,7 @@ const Selector = ({ value, data, onClick, onChange, img }) => {
 
         if (display === 'block') {
             setDisplay('none');
+            informOpen(false);
         }
     }
 

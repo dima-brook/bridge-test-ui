@@ -102,69 +102,69 @@ export const NewElrondAccounts = {
         MmRkZGQ5ODc0YzNlOTBlMzAyN2M4NzlhZWQ5YmE0N2Y=
         -----END PRIVATE KEY for erd1cf07h6ne48s505cua626vwhsyskamkv8fslfpccz0jre4mvm53ls5dwyk4-----`
     },
-    Eve: {
-        name:"Eve",
-        account:"erd1ld936834u3knmt8jx3xk2zjek7hk0ld0yfhg0ar3agxwck99c9kqd8lhlg",
-        pem:`-----BEGIN PRIVATE KEY for erd1ld936834u3knmt8jx3xk2zjek7hk0ld0yfhg0ar3agxwck99c9kqd8lhlg-----
-        NDgzOWU0Yjk5MzY3MzQ2NjJkYTFiZWY5N2U5MjdjZTAzMTJhOGE4ODU4ZGI3NWFh
-        ZDk2YjYzZmViZDYwNjc3M2ZiNGIxZDFlMzVlNDZkM2RhY2YyMzQ0ZDY1MGE1OWI3
-        YWY2N2ZkYWYyMjZlODdmNDcxZWEwY2VjNThhNWMxNmM=
-        -----END PRIVATE KEY for erd1ld936834u3knmt8jx3xk2zjek7hk0ld0yfhg0ar3agxwck99c9kqd8lhlg-----`
-    },
-    Frank: {
-        name:"Frank",
-        account:"erd1q533cqtr8y4q0r2maavr0h47d5gqpqslc7fndaaqdzzjfttfv7ps284zhq",
-        pem:`-----BEGIN PRIVATE KEY for erd1q533cqtr8y4q0r2maavr0h47d5gqpqslc7fndaaqdzzjfttfv7ps284zhq-----
-        OWRmZGVhZWE1OTQ1OTE5MzI5ZWM1YmZlY2U3MjMzYjA1YmE3Nzk2MWQzMzhlZDc4
-        MjZkM2QyNjAxMzViYTMzNzA1MjMxYzAxNjMzOTJhMDc4ZDViZWY1ODM3ZGViZTZk
-        MTAwMDgyMWZjNzkzMzZmN2EwNjg4NTI0YWQ2OTY3ODM=
-        -----END PRIVATE KEY for erd1q533cqtr8y4q0r2maavr0h47d5gqpqslc7fndaaqdzzjfttfv7ps284zhq-----`
-    },
-    Geoge: {
-        name:"George",
-        account:"erd1gqupqgwzt75m94emg9k2slqkpg2t3k5mxr4dazncecappt98gcnq66tphc",
-        pem:`-----BEGIN PRIVATE KEY for erd1gqupqgwzt75m94emg9k2slqkpg2t3k5mxr4dazncecappt98gcnq66tphc-----
-        MGUzNDY1MGQ1YzUyYjM2ZGMxZTQ5ZDU2YWRjYmNiMTNjZjljZmEwZDc1ZDg0Nzk0
-        ZDc0NTVmYzUzMjNkM2EwZjQwMzgxMDIxYzI1ZmE5YjJkNzNiNDE2Y2E4N2MxNjBh
-        MTRiOGRhOWIzMGVhZGU4YTc4Y2UzYTEwYWNhNzQ2MjY=
-        -----END PRIVATE KEY for erd1gqupqgwzt75m94emg9k2slqkpg2t3k5mxr4dazncecappt98gcnq66tphc-----`
-    },
-    Hugo: {
-        name:"Hugo",
-        account:"erd18hq8hank5cwc85ek6g7xdxcerstu8dhv7d3kldcwkl75fcgtn9ts8ujjw0",
-        pem:`-----BEGIN PRIVATE KEY for erd18hq8hank5cwc85ek6g7xdxcerstu8dhv7d3kldcwkl75fcgtn9ts8ujjw0-----
-        NGJhMzk4YzkwYTZlY2EwNjEwNTJlMDk5ZTVlYWEzNGM4ZDEyNTI1ZDJmM2FiNzA1
-        OTA1ZjU2YWNhYTcyOWE5YzNkYzA3YmY2NzZhNjFkODNkMzM2ZDIzYzY2OWIxOTFj
-        MTdjM2I2ZWNmMzYzNmZiNzBlYjdmZDQ0ZTEwYjk5NTc=
-        -----END PRIVATE KEY for erd18hq8hank5cwc85ek6g7xdxcerstu8dhv7d3kldcwkl75fcgtn9ts8ujjw0-----`
-    },
-    Ivar: {
-        name:"Ivar",
-        account:"erd1q83amu9dfv66kysnzpdg37la4jnnandxrxq7pjjngkdgghc3cyeqys3jx3",
-        pem:`-----BEGIN PRIVATE KEY for erd1q83amu9dfv66kysnzpdg37la4jnnandxrxq7pjjngkdgghc3cyeqys3jx3-----
-        NDI0MGYwZmZmN2ZjNmJlZDI4NmNiYzUxYzRjZGY0NzNjMDBmZDVlZGUzMWIzZTQz
-        OTY2ZTJhYjFkOGY5NzY1ZTAxZTNkZGYwYWQ0YjM1YWIxMjEzMTA1YTg4ZmJmZGFj
-        YTczZWNkYTYxOTgxZTBjYTUzNDU5YTg0NWYxMWMxMzI=
-        -----END PRIVATE KEY for erd1q83amu9dfv66kysnzpdg37la4jnnandxrxq7pjjngkdgghc3cyeqys3jx3-----`
-    },
-    John: {
-        name:"John",
-        account:"erd18kaedtm0g7y6qxa5xyh07a2gjver4zszj04flgqwtqhl5vkd9k7sx947kn",
-        pem:`-----BEGIN PRIVATE KEY for erd18kaedtm0g7y6qxa5xyh07a2gjver4zszj04flgqwtqhl5vkd9k7sx947kn-----
-        Yzc2ZDkzNWEyMTcwMDUzNjllNTgwZjcyZTEzYmNkOGE4NjY3YjczZWYzZWIyMjdl
-        OGUxYzYyOWVhZTc2MTkwZjNkYmI5NmFmNmY0Nzg5YTAxYmI0MzEyZWZmNzU0ODkz
-        MzIzYThhMDI5M2VhOWZhMDBlNTgyZmZhMzJjZDJkYmQ=
-        -----END PRIVATE KEY for erd18kaedtm0g7y6qxa5xyh07a2gjver4zszj04flgqwtqhl5vkd9k7sx947kn-----`
-    },
-    Zena: {
-        name:"Zena",
-        account:"erd1xgamt9gqengy3a77f6zz8xnx6metrytrfc9mkwrdk0fjc3huz8dqs6sdph",
-        pem:`-----BEGIN PRIVATE KEY for erd1xgamt9gqengy3a77f6zz8xnx6metrytrfc9mkwrdk0fjc3huz8dqs6sdph-----
-        MTZkYmQwNzk3ZTBjN2NkNjJlY2JhYjRmZTdhYTQ1ODI1ZTg3MTc4NjllYzE2Njkx
-        ZDg5M2JkNTI2OGM3MGZmNzMyM2JiNTk1MDBjY2QwNDhmN2RlNGU4NDIzOWE2NmQ2
-        ZjJiMTkxNjM0ZTBiYmIzODZkYjNkMzJjNDZmYzExZGE=
-        -----END PRIVATE KEY for erd1xgamt9gqengy3a77f6zz8xnx6metrytrfc9mkwrdk0fjc3huz8dqs6sdph-----`
-    }
+    // Eve: {
+    //     name:"Eve",
+    //     account:"erd1ld936834u3knmt8jx3xk2zjek7hk0ld0yfhg0ar3agxwck99c9kqd8lhlg",
+    //     pem:`-----BEGIN PRIVATE KEY for erd1ld936834u3knmt8jx3xk2zjek7hk0ld0yfhg0ar3agxwck99c9kqd8lhlg-----
+    //     NDgzOWU0Yjk5MzY3MzQ2NjJkYTFiZWY5N2U5MjdjZTAzMTJhOGE4ODU4ZGI3NWFh
+    //     ZDk2YjYzZmViZDYwNjc3M2ZiNGIxZDFlMzVlNDZkM2RhY2YyMzQ0ZDY1MGE1OWI3
+    //     YWY2N2ZkYWYyMjZlODdmNDcxZWEwY2VjNThhNWMxNmM=
+    //     -----END PRIVATE KEY for erd1ld936834u3knmt8jx3xk2zjek7hk0ld0yfhg0ar3agxwck99c9kqd8lhlg-----`
+    // },
+    // Frank: {
+    //     name:"Frank",
+    //     account:"erd1q533cqtr8y4q0r2maavr0h47d5gqpqslc7fndaaqdzzjfttfv7ps284zhq",
+    //     pem:`-----BEGIN PRIVATE KEY for erd1q533cqtr8y4q0r2maavr0h47d5gqpqslc7fndaaqdzzjfttfv7ps284zhq-----
+    //     OWRmZGVhZWE1OTQ1OTE5MzI5ZWM1YmZlY2U3MjMzYjA1YmE3Nzk2MWQzMzhlZDc4
+    //     MjZkM2QyNjAxMzViYTMzNzA1MjMxYzAxNjMzOTJhMDc4ZDViZWY1ODM3ZGViZTZk
+    //     MTAwMDgyMWZjNzkzMzZmN2EwNjg4NTI0YWQ2OTY3ODM=
+    //     -----END PRIVATE KEY for erd1q533cqtr8y4q0r2maavr0h47d5gqpqslc7fndaaqdzzjfttfv7ps284zhq-----`
+    // },
+    // Geoge: {
+    //     name:"George",
+    //     account:"erd1gqupqgwzt75m94emg9k2slqkpg2t3k5mxr4dazncecappt98gcnq66tphc",
+    //     pem:`-----BEGIN PRIVATE KEY for erd1gqupqgwzt75m94emg9k2slqkpg2t3k5mxr4dazncecappt98gcnq66tphc-----
+    //     MGUzNDY1MGQ1YzUyYjM2ZGMxZTQ5ZDU2YWRjYmNiMTNjZjljZmEwZDc1ZDg0Nzk0
+    //     ZDc0NTVmYzUzMjNkM2EwZjQwMzgxMDIxYzI1ZmE5YjJkNzNiNDE2Y2E4N2MxNjBh
+    //     MTRiOGRhOWIzMGVhZGU4YTc4Y2UzYTEwYWNhNzQ2MjY=
+    //     -----END PRIVATE KEY for erd1gqupqgwzt75m94emg9k2slqkpg2t3k5mxr4dazncecappt98gcnq66tphc-----`
+    // },
+    // Hugo: {
+    //     name:"Hugo",
+    //     account:"erd18hq8hank5cwc85ek6g7xdxcerstu8dhv7d3kldcwkl75fcgtn9ts8ujjw0",
+    //     pem:`-----BEGIN PRIVATE KEY for erd18hq8hank5cwc85ek6g7xdxcerstu8dhv7d3kldcwkl75fcgtn9ts8ujjw0-----
+    //     NGJhMzk4YzkwYTZlY2EwNjEwNTJlMDk5ZTVlYWEzNGM4ZDEyNTI1ZDJmM2FiNzA1
+    //     OTA1ZjU2YWNhYTcyOWE5YzNkYzA3YmY2NzZhNjFkODNkMzM2ZDIzYzY2OWIxOTFj
+    //     MTdjM2I2ZWNmMzYzNmZiNzBlYjdmZDQ0ZTEwYjk5NTc=
+    //     -----END PRIVATE KEY for erd18hq8hank5cwc85ek6g7xdxcerstu8dhv7d3kldcwkl75fcgtn9ts8ujjw0-----`
+    // },
+    // Ivar: {
+    //     name:"Ivar",
+    //     account:"erd1q83amu9dfv66kysnzpdg37la4jnnandxrxq7pjjngkdgghc3cyeqys3jx3",
+    //     pem:`-----BEGIN PRIVATE KEY for erd1q83amu9dfv66kysnzpdg37la4jnnandxrxq7pjjngkdgghc3cyeqys3jx3-----
+    //     NDI0MGYwZmZmN2ZjNmJlZDI4NmNiYzUxYzRjZGY0NzNjMDBmZDVlZGUzMWIzZTQz
+    //     OTY2ZTJhYjFkOGY5NzY1ZTAxZTNkZGYwYWQ0YjM1YWIxMjEzMTA1YTg4ZmJmZGFj
+    //     YTczZWNkYTYxOTgxZTBjYTUzNDU5YTg0NWYxMWMxMzI=
+    //     -----END PRIVATE KEY for erd1q83amu9dfv66kysnzpdg37la4jnnandxrxq7pjjngkdgghc3cyeqys3jx3-----`
+    // },
+    // John: {
+    //     name:"John",
+    //     account:"erd18kaedtm0g7y6qxa5xyh07a2gjver4zszj04flgqwtqhl5vkd9k7sx947kn",
+    //     pem:`-----BEGIN PRIVATE KEY for erd18kaedtm0g7y6qxa5xyh07a2gjver4zszj04flgqwtqhl5vkd9k7sx947kn-----
+    //     Yzc2ZDkzNWEyMTcwMDUzNjllNTgwZjcyZTEzYmNkOGE4NjY3YjczZWYzZWIyMjdl
+    //     OGUxYzYyOWVhZTc2MTkwZjNkYmI5NmFmNmY0Nzg5YTAxYmI0MzEyZWZmNzU0ODkz
+    //     MzIzYThhMDI5M2VhOWZhMDBlNTgyZmZhMzJjZDJkYmQ=
+    //     -----END PRIVATE KEY for erd18kaedtm0g7y6qxa5xyh07a2gjver4zszj04flgqwtqhl5vkd9k7sx947kn-----`
+    // },
+    // Zena: {
+    //     name:"Zena",
+    //     account:"erd1xgamt9gqengy3a77f6zz8xnx6metrytrfc9mkwrdk0fjc3huz8dqs6sdph",
+    //     pem:`-----BEGIN PRIVATE KEY for erd1xgamt9gqengy3a77f6zz8xnx6metrytrfc9mkwrdk0fjc3huz8dqs6sdph-----
+    //     MTZkYmQwNzk3ZTBjN2NkNjJlY2JhYjRmZTdhYTQ1ODI1ZTg3MTc4NjllYzE2Njkx
+    //     ZDg5M2JkNTI2OGM3MGZmNzMyM2JiNTk1MDBjY2QwNDhmN2RlNGU4NDIzOWE2NmQ2
+    //     ZjJiMTkxNjM0ZTBiYmIzODZkYjNkMzJjNDZmYzExZGE=
+    //     -----END PRIVATE KEY for erd1xgamt9gqengy3a77f6zz8xnx6metrytrfc9mkwrdk0fjc3huz8dqs6sdph-----`
+    // }
 }
 
 export const NewParachainAccounts = {
