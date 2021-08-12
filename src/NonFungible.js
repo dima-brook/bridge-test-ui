@@ -133,14 +133,14 @@ function NonFungible() {
       return;
     }
 
-    const nfts = await chain.listNft(address);
-    const nft_imgs = Array.from(nfts.entries()).map(async ([hash, dat]) => {
-      const url = await ChainHandlers.tryFetchNftAsImg(address, from, hash, dat);
+	const nfts = await chain.listNft(address);
+	const nft_imgs = Array.from(nfts.entries()).reverse().map(async ([hash, dat]) => {
+		const url = await ChainHandlers.tryFetchNftAsImg(address, from, hash, dat);
 
-      return { hash, url };
-    });
+		return { hash, url };
+	});
 
-    setImgs(await Promise.all(nft_imgs));
+	setImgs((await Promise.all(nft_imgs)).filter(({ url }) => url !== undefined));
   }, [from, sourceAcc]);
 
   useEffect(() => {

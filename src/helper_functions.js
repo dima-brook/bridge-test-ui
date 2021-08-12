@@ -4,6 +4,7 @@ import { web3Accounts, web3Enable, web3FromAddress } from '@polkadot/extension-d
 import { UserSigner } from '@elrondnetwork/erdjs';
 import { chains } from './consts';
 import { Base64 } from 'js-base64';
+import BigNumber from 'bignumber.js';
 
 /*const nft_info_encoded_t = new StructType('EncodedNft', [
     new StructFieldDefinition('token', '', new TokenIdentifierType()),
@@ -128,6 +129,9 @@ export const ChainHandlers = {
                 break;
             }
             case chains[1]: {
+				if ((new BigNumber(nft_dat.balance)).comparedTo(1) === 1) {
+					return undefined;
+				}
                 const id = ident.split("-");
                 id.pop();
                 if (await this.checkWrappedOnPolkadot(owner, id.join("-"))) {
