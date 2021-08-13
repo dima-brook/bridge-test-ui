@@ -82,3 +82,9 @@ body {
     animation: pulse .4s ease .4s infinite alternate;
 }
 
+@media (max-width: 768px){
+  .flex-container{
+    display: block;
+    /* justify-content: top; */
+  }
+}

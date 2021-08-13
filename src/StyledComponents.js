@@ -41,9 +41,9 @@ export const XPButtonText = styled("div")`
 
 export const XPApp = styled("div")`
   text-align: center;
+  
   @media (max-width: 768px) {
     width: 100%;
-    margin-top: 0px;
   }
   @media(orientation: landscape)
     and (max-width: 1000px)

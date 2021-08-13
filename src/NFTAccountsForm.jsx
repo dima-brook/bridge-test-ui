@@ -361,8 +361,8 @@ const PredefinedNFTAccounts = () => {
         <XPApp
             onClick={outsideClick}
         >
-                    {from ==='Elrond' ? <div style={{paddingTop: '60px'}}></div> : ''}
-                    {!imgs || imgs.length === 0 ? <div style={{marginTop: '-200px'}}></div> :''}
+                    {/* {from ==='Elrond' ? <div style={{paddingTop: '60px'}}></div> : ''} */}
+                    {/* {!imgs || imgs.length === 0 ? <div style={{marginTop: '-200px'}}></div> :''} */}
 
             <XPMain>
                 <XPBoxCenter>
