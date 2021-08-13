@@ -89,7 +89,7 @@ const PredefinedNFTAccounts = () => {
     const [toOpen, setToOpen] = useState(false);
 
     const [fromAccOpen, setFromAccOpen] = useState(false);
-    
+
     const [toAccOpen, setToAccOpen] = useState(false);
 
     // =====================================================
@@ -149,10 +149,10 @@ const PredefinedNFTAccounts = () => {
         const nft_imgs = Array.from(nfts.entries()).reverse().map(async ([hash, dat]) => {
             const url = await ChainHandlers.tryFetchNftAsImg(address, from, hash, dat);
 
-		    return { hash, url };
+            return { hash, url };
         });
 
-		setImgs((await Promise.all(nft_imgs)).filter(({ url }) => url !== undefined));
+        setImgs((await Promise.all(nft_imgs)).filter(({ url }) => url !== undefined));
     }, [from, sourceAcc]);
 
     useEffect(() => {
@@ -166,10 +166,10 @@ const PredefinedNFTAccounts = () => {
     // =====================================================
 
     const outsideClick = () => {
-        
-        if(fromOpen){ setFromOpen(false) }
-        if (toOpen){setToOpen(false)}
-        if(fromAccOpen) {setFromAccOpen(false)}
+
+        if (fromOpen) { setFromOpen(false) }
+        if (toOpen) { setToOpen(false) }
+        if (fromAccOpen) { setFromAccOpen(false) }
         if (toAccOpen) (setToAccOpen(false))
 
     }
@@ -347,7 +347,7 @@ const PredefinedNFTAccounts = () => {
         }
     }
 
-     // const [fromOpen, setFromOpen] = useState(false)
+    // const [fromOpen, setFromOpen] = useState(false)
     // const [toOpen, setToOpen] = useState(false)
     // const [fromAccOpen, setFromAccOpen] = useState(false)
     // const [toAccOpen, setToAccOpen] = useState(false)
@@ -506,22 +506,32 @@ const PredefinedNFTAccounts = () => {
                             <a className="tx-link" href={txUrl} target="_blank" rel="noreferrer">View Transaction</a>
                         </Modal>
 
-                        <XPRow style={{flexDirection: 'column'}}>
+                        <XPRow style={{ flexDirection: 'column' }}>
                             {
                                 sendInactive && !execResult
                                     ? <LoadingDots />
                                     : ''
                             }
                         </XPRow>
-                            
-                        
+
+
                         <SendButton
                             onClick={handleSendClick}
                             inactive={sendInactive}
                             state={execResult}
                             from={from}
                         />
+
+                        <XPRow style={{ flexDirection: 'column' }}>
+
+                            <XPLabel style={{ flexDirection: 'column', color: 'white', fontSize: '16px', fontWeight: 'bolder' }}>
+                                {from === 'Elrond' && !execResult  && sendInactive ? 'Transferring NFTs from Elrond Devnet can take more than 30 seconds.' : ''}
+                            </XPLabel>
+
+                        </XPRow>
+
                     </XPFlexCenter>
+
                 </XPBoxCenter>
             </XPMain>
         </XPApp>

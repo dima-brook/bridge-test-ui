@@ -44,6 +44,14 @@ iframe{
 
 .buttonExchange:focus-visible{
   outline: none;
+  box-shadow: none;
+  -webkit-tap-highlight-color: rgba(0,0,0,0);
+}
+
+.buttonExchange:focus{
+  outline: none;
+  box-shadow: none;
+  -webkit-tap-highlight-color: rgba(0,0,0,0);
 }
 
 #transfer-amount::placeholder {
@@ -136,8 +144,8 @@ iframe{
     margin-inline-start: 0px;
   }
   .flex-container {
-    margin-top: 100px;
-    margin-bottom: 100px;
+    padding-top: 170px;
+    padding-bottom: 100px;
   }
 
   .buttonExchange {

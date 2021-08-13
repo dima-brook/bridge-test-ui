@@ -4,6 +4,6 @@ export const stateColors = {'success': '#28a745', 'failure': '#dc3545', 'disable
 export const stateText = {
     'success': 'Success',
     'failure': 'Failure',
-    'disabled': 'Executing',
+    'disabled': 'Transferring NFTs',
     'enabled': 'Send'
 }

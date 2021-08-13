@@ -27,7 +27,7 @@ function sanitizeState(inactive, state) {
             <XPButtonText
                 disabled={inactive}
             >
-                {stateText[stateS] + (from === 'Elrond' && stateText[stateS] === 'Executing' ? " can take more than 30 seconds" : "")}
+                {stateText[stateS]}
             </XPButtonText>
         </XPButton>
     )
