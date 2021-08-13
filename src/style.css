@@ -1,5 +1,9 @@
 @import url('https://fonts.googleapis.com/css2?family=Roboto&display=swap');
 
+button, img, div.select-all-check-box-none {
+  cursor: pointer;
+}
+
 iframe{
   opacity: 0;
 }

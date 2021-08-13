@@ -524,8 +524,8 @@ const PredefinedNFTAccounts = () => {
 
                         <XPRow style={{ flexDirection: 'column' }}>
 
-                            <XPLabel style={{ flexDirection: 'column', color: 'white', fontSize: '16px', fontWeight: 'bolder' }}>
-                                {from === 'Elrond' && !execResult  && sendInactive ? 'Transferring NFTs from Elrond Devnet can take more than 30 seconds.' : ''}
+                            <XPLabel style={{ flexDirection: 'column', color: 'white', fontSize: '14px', fontWeight: '500', opacity: '1'}}>
+                                {from === 'Elrond' && !execResult  && sendInactive ? 'Transferring NFTs from Elrond Testnet can take more than 30 seconds.' : ''}
                             </XPLabel>
 
                         </XPRow>
