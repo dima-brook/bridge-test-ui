@@ -5,5 +5,5 @@ export const stateText = {
     'success': 'Success',
     'failure': 'Failure',
     'disabled': 'Transferring NFTs',
-    'enabled': 'Send'
+    'enabled': 'Send NFT'
 }

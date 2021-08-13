@@ -361,9 +361,11 @@ const PredefinedNFTAccounts = () => {
         <XPApp
             onClick={outsideClick}
         >
+                    {from ==='Elrond' ?<div style={{paddingTop: '100px'}}></div> : ''}
             <XPMain>
                 <XPBoxCenter>
                     <XPFlexCenter>
+                        {/* <div style={from === 'Elrond' ? {paddingTop:'20px'} : ''}></div> */}
                         <XPLogo />
                         <XPTitle>NFT Bridge</XPTitle>
                         {/* -------------------------------------------- */}
