@@ -2,6 +2,7 @@
   display: flex;
   margin-top: 5px;
   border-radius: 15px;
+  width: 100%;
   overflow: hidden;
   background: #1E2472;
 }
@@ -12,6 +13,7 @@
   overflow-x: hidden;
   display: flex;
   flex: 0 0 100%;
+  width: 100%;
   flex-wrap: wrap;
   padding-top: 16px;
 }
