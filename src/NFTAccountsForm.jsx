@@ -5,11 +5,12 @@ import Selector from './Selector';
 import SendButton from './SendButton';
 import "./style.css";
 import {
-    elrondTxnPrefix,
-    NewElrondAccounts, NewParachainAccounts, polkadotBlockPrefix
+    PredefinedAccounts,
+    ExplorerPrefix,
+    ChainConfig
 } from './Config';
 
-import { chains } from './consts';
+import { chains, CHAIN_INFO, web3TokenStds } from './consts';
 import {
     XPApp,
     XPMain,
@@ -31,6 +32,7 @@ import Polka from './assets/SVG/substrateLogo';
 import { decodeAddress } from '@polkadot/keyring';
 import { Address, UserSigner } from '@elrondnetwork/erdjs/out';
 import LoadingDots from './LoadingDots'
+import { BigNumber } from "bignumber.js";
 
 
 const customStyles = {
@@ -58,25 +60,24 @@ const PredefinedNFTAccounts = () => {
     //                      S T A T E
     // =====================================================
 
-    const [sourceAcc, setSourceAcc] = useState(NewParachainAccounts['Alice_Stash'].name);
-    const [targetAcc, setTargetAcc] = useState(NewElrondAccounts['Alice'].name);
+    const [sourceAcc, setSourceAcc] = useState("Alice_Stash");
+    const [targetAcc, setTargetAcc] = useState("Alice");
     const [isOpen, setOpen] = useState(false)
-    const [sourceAccounts, setSourceAccounts] = useState(Object.keys(NewParachainAccounts));
-    const [targetAccounts, setTargetAccounts] = useState(Object.keys(NewElrondAccounts));
+    const [sourceAccounts, _setSourceAccounts] = useState(Object.keys(PredefinedAccounts[chains[0]]));
+    const [targetAccounts, _setTargetAccounts] = useState(Object.keys(PredefinedAccounts[chains[1]]));
     const toggle = () => {
 
         setOpen(!isOpen)
     }
-    const [from, setFrom] = useState(chains[0]);
-    const [to, setTo] = useState(chains[1]);
+    const [from, _setFrom] = useState(chains[0]);
+    const [to, _setTo] = useState(chains[1]);
 
     const [imgs, setImgs] = useState([]);
 
     const [nftToken, setNftToken] = useState('');
-
     const [nftNonce, setNftNonce] = useState('');
-
-    const [nonceDisplay, setNonceDisplay] = useState('none');
+    const [contract, setContract] = useState('');
+    const [web3Std, setWeb3Std] = useState(web3TokenStds[0]);
 
     const [sendInactive, setSendInactive] = useState(false);
 
@@ -87,20 +88,36 @@ const PredefinedNFTAccounts = () => {
     // =====================================================
     //                        HOOKS
     // =====================================================
+    const setFrom = useCallback((newFrom) => {
+        const fromAccs = Object.keys(PredefinedAccounts[newFrom]);
 
-    useEffect(() => {
-        if (from === chains[1]) {
-            setNonceDisplay('flex');
-        } else {
-            setNonceDisplay('none');
-        }
+        _setFrom(newFrom);
+        _setSourceAccounts(fromAccs);
+        setSourceAcc(fromAccs[0]);
 
-        // eslint-disable-next-line react-hooks/exhaustive-deps
+        (CHAIN_INFO[newFrom].chainId !== undefined) && ChainHandlers.setWeb3Chain(newFrom);
+    }, [])
+
+    const setTo = useCallback((newTo) => {
+        const toAccs = Object.keys(PredefinedAccounts[newTo]);
+
+        _setTo(newTo);
+        _setTargetAccounts(toAccs);
+        setTargetAcc(toAccs[0]);
+    }, []);
+
+    const nonceDisplay = useCallback(() => {
+        return from === chains[1] ? "flex" : "none";
+    }, [from]);
+
+    const contractDisplay = useCallback(() => {
+        return from === chains[2] || from === chains[3] || from === chains[4] ? "flex" : "none";
     }, [from]);
 
     const clearNft = () => {
         setNftToken('');
         setNftNonce('');
+        setContract('');
     }
 
     const populateImages = useCallback(async () => {
@@ -110,22 +127,32 @@ const PredefinedNFTAccounts = () => {
         let address;
         let chain;
 
+        if (PredefinedAccounts[from][sourceAcc] === undefined) {
+            return;
+        }
+
         setImgs([]);
+        const addr_s = PredefinedAccounts[from][sourceAcc].account;
 
         switch (from) {
             case chains[0]: {
-                addressGetter = (addr) => {
-                    decodeAddress(NewParachainAccounts[addr].account)
+                addressGetter = () => {
+                    decodeAddress(addr_s)
 
-                    return NewParachainAccounts[addr].account;
+                    return addr_s;
                 };
                 chain = await ChainHandlers.polka();
                 break;
             }
             case chains[1]: {
-                addressGetter = (addr) => (new Address(NewElrondAccounts[addr].account)).toString(); // sanity check
+                addressGetter = () => (new Address(addr_s)).toString(); // sanity check
                 chain = await ChainHandlers.elrd();
                 break;
+            }
+            case chains[2]:
+            case chains[3]:
+            case chains[4]: { // TODO: impl
+                return;
             }
             default:
                 throw Error(`unhandled chain ${from}`);
@@ -158,11 +185,14 @@ const PredefinedNFTAccounts = () => {
     // =====================================================
 
     const handleFromChange = (newValue) => {
-
-        console.log(newValue, from)
-        if (newValue !== from) {
-            handleSwapChains()
+        if (newValue === to) {
+            handleSwapChains();
+        } else {
+            setFrom(newValue);
         }
+
+        setExecResult('')
+        setSendInactive(false)
     }
 
 
@@ -170,34 +200,24 @@ const PredefinedNFTAccounts = () => {
         const [
             _from,
             _to,
-            _sourceAcc,
-            _targetAcc,
-            _sourceAccounts,
-            _targetAccounts
         ] = [
                 to,
                 from,
-                targetAcc,
-                sourceAcc,
-                targetAccounts,
-                sourceAccounts
             ];
 
         setFrom(_from);
         setTo(_to);
-        setSourceAcc(_sourceAcc);
-        setTargetAcc(_targetAcc);
-        setSourceAccounts(_sourceAccounts);
-        setTargetAccounts(_targetAccounts);
-        setExecResult('')
-        setSendInactive(false)
     }
 
     const handleToChange = (newValue) => {
-        console.log(newValue, to)
-        if (newValue !== to) {
-            handleSwapChains()
+        if (newValue === from) {
+            handleSwapChains();
+        } else {
+            setTo(newValue);
         }
+
+        setExecResult('')
+        setSendInactive(false)
     }
 
     const imageSelectCb = useCallback(hash => {
@@ -227,6 +247,14 @@ const PredefinedNFTAccounts = () => {
         setNftNonce(e.target.value);
     }
 
+    const handleContractChange = (e) => {
+        setContract(e.target.value);
+    }
+
+    const handleToWeb3StdChange = (newValue) => {
+        setWeb3Std(newValue);
+    }
+
     const handleFromAccountChange = (newValue) => {
         setSourceAcc(newValue);
     }
@@ -239,19 +267,6 @@ const PredefinedNFTAccounts = () => {
         setTxUrl('');
     }, [from, to, sourceAcc, targetAcc, nftToken]);
 
-    const clearFields = () => {
-
-        setImgs([]);
-        setFrom(chains[0]);
-        setTo(chains[1]);
-        setSourceAcc(NewParachainAccounts['Alice_Stash'].name);
-        setTargetAcc(NewElrondAccounts['Alice'].name);
-        setSourceAccounts(Object.keys(NewParachainAccounts));
-        setTargetAccounts(Object.keys(NewElrondAccounts));
-
-        clearNft();
-    }
-
     const handleSendClick = async () => {
         setSendInactive(true);
         setTxUrl('');
@@ -260,47 +275,81 @@ const PredefinedNFTAccounts = () => {
         let call;
         let sender;
         let res;
-        let target;
-        let prefix;
         let txWait;
         let url;
+        let wrap_check;
+        let init_args = [];
 
-        if (from === chains[0]) {
-            const acc = NewParachainAccounts[sourceAcc];
-            info = nftToken;
-            const polka = await ChainHandlers.polka();
-            if (await ChainHandlers.checkWrappedOnElrond(acc.account, nftToken)) {
-                call = polka.unfreezeWrappedNft;
-            } else {
-                call = polka.transferNftToForeign;
+        const acc = PredefinedAccounts[from][sourceAcc];
+        const target = PredefinedAccounts[to][targetAcc].account;
+        const prefix = ExplorerPrefix[to];
+
+        const chain_nonce = CHAIN_INFO[to].nonce;
+    
+        switch (from) {
+            case chains[0]: {
+                info = nftToken;
+                const polka = await ChainHandlers.polka();
+                wrap_check = async () => {
+                    if (await ChainHandlers.isWrappedPolkadotNft(acc.account, nftToken)) {
+                        call = polka.unfreezeWrappedNft
+                    } else {
+                        init_args = [chain_nonce];
+                        call = polka.transferNftToForeign;
+                    }
+                };
+                sender = { sender: acc.key() };
+                txWait = txnSocket.waitTxHashElrond;
+                break;
             }
-            sender = { sender: acc.key() };
-            target = NewElrondAccounts[targetAcc].account;
-
-            // We are waiting for the action to execute on elrond
-            prefix = elrondTxnPrefix;
-            txWait = txnSocket.waitTxHashElrond;
-        } else {
-            const acc = NewElrondAccounts[sourceAcc];
-            const elrd = await ChainHandlers.elrd();
-            if (await ChainHandlers.checkWrappedOnPolkadot(acc.account, nftToken)) {
-                call = elrd.unfreezeWrappedNft;
-                info = nftNonce;
-            } else {
-                call = elrd.transferNftToForeign;
-                info = { token: nftToken, nonce: nftNonce };
+            case chains[1]: {
+                const elrd = await ChainHandlers.elrd();
+                wrap_check = async () => {
+                    if (await ChainHandlers.isWrappedEsdtNft("", nftToken)) {
+                        console.log("yes");
+                        info = nftNonce;
+                        call = elrd.unfreezeWrappedNft;
+                    } else {
+                        init_args = [chain_nonce];
+                        info = { token: nftToken, nonce: nftNonce };
+                        call = elrd.transferNftToForeign;
+                    }
+                }
+                sender = UserSigner.fromPem(acc.pem);
+                txWait = txnSocket.waitTxHashPolkadot;
+                break;
             }
-            sender = UserSigner.fromPem(acc.pem);
-            target = NewParachainAccounts[targetAcc].account;
-
-            // We are waiting for the action to execute on polkadot
-            prefix = polkadotBlockPrefix;
-            txWait = txnSocket.waitTxHashPolkadot;
+            case chains[2]:
+            case chains[3]:
+            case chains[4]: {
+                info = nftToken;
+                const w3 = await ChainHandlers.web3(false);
+                wrap_check = async () => {
+                    if (contract === ChainConfig.web3_erc1155[from]) {
+                        console.log("from", from);
+                        console.log("contract", contract);
+                        console.log("conf", ChainConfig.web3_erc1155[from]);
+                        info = nftToken;
+                        call = w3.unfreezeWrappedNft;
+                    } else {
+                        init_args = [chain_nonce];
+                        info = { contract_type: web3Std, contract, token: new BigNumber(nftToken) };
+                        call = w3.transferNftToForeign;
+                    }
+                };
+                sender = await ChainHandlers.web3AccountFromPkey(acc.key);
+                txWait = new Promise(r => setTimeout(() => r(""), 10000));
+                break;
+            }
+            default:
+                throw Error(`unhandled chain ${from}`);
         }
+        await wrap_check();
 
         try {
             const [, id] = await call(
                 sender,
+                ...init_args,
                 target,
                 info
             );
@@ -318,15 +367,13 @@ const PredefinedNFTAccounts = () => {
             res = 'failure';
         } finally {
             setExecResult(res);
-
-            // await new Promise(r => setTimeout(r, 3000));
-            // setSendInactive(false);
-            // setExecResult('');
-            clearFields();
+            await new Promise(r => setTimeout(r, 1500));
+            setSendInactive(false);
             if (res === 'success') {
                 toggle()
                 setTxUrl(url);
             }
+            clearNft();
         }
     }
 
@@ -445,9 +492,9 @@ const PredefinedNFTAccounts = () => {
                         {/* -------------------------------------------- */}
 
 
-                        <XPLabel style={{ display: `${nonceDisplay}` }}>ESDT NFT nonce</XPLabel>
+                        <XPLabel style={{ display: nonceDisplay() }}>ESDT NFT nonce</XPLabel>
                         <XPRow
-                            style={{ display: `${nonceDisplay}` }}
+                            style={{ display: nonceDisplay() }}
                         >
                             <XPTransaction
                                 value={nftNonce}
@@ -457,12 +504,49 @@ const PredefinedNFTAccounts = () => {
                         </XPRow>
 
                         <XPRow
-                            style={{ display: `${nonceDisplay}` }}
+                            style={{ display: nonceDisplay() }}
                         >
                             <XPColumn>
                                 <XPSpace />
                             </XPColumn>
                         </XPRow>
+
+                        <XPLabel style={{ display: contractDisplay() }}>NFT Contract Address</XPLabel>
+                        <XPRow
+                            style={{ display: contractDisplay() }}
+                        >
+                            <XPTransaction
+                                value={contract}
+                                onChange={handleContractChange}
+                            ></XPTransaction>
+
+                        </XPRow>
+
+                        <XPRow
+                            style={{ display: contractDisplay() }}
+                        >
+                            <XPColumn>
+                                <XPSpace />
+                            </XPColumn>
+                        </XPRow>
+
+                        <XPLabel style={{ display: contractDisplay() }}>NFT Contract Token</XPLabel>
+                        <XPRow style={{ display: contractDisplay() }} >
+                                <Selector
+                                    value={web3Std}
+                                    data={web3TokenStds}
+                                    onChange={handleToWeb3StdChange}
+                                />
+                        </XPRow>
+
+                        <XPRow
+                            style={{ display: contractDisplay() }}
+                        >
+                            <XPColumn>
+                                <XPSpace />
+                            </XPColumn>
+                        </XPRow>
+
                         <Modal
                             isOpen={isOpen}
                             shouldCloseOnOverlayClick={true}
@@ -480,8 +564,8 @@ const PredefinedNFTAccounts = () => {
                                     : ''
                             }
                         </XPRow>
-                            
-                        
+
+
                         <SendButton
                             onClick={handleSendClick}
                             inactive={sendInactive}

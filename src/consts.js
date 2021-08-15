@@ -22,6 +22,7 @@ export const CHAIN_INFO = {
         rpcUrl: "https://ropsten.infura.io/v3/182b3d3fb2d14d5fbe7421348624d1ce"
     }
 };
+export const web3TokenStds = ["ERC721", "ERC1155"];
 export const stateColors = {'success': '#28a745', 'failure': '#dc3545', 'disabled': '#374462', 'enabled': '#045adb'};
 export const stateText = {
     'success': 'Success',

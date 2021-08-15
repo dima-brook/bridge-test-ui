@@ -4,7 +4,7 @@ import { web3Accounts, web3Enable, web3FromAddress } from '@polkadot/extension-d
 import { chains, CHAIN_INFO } from './consts';
 import { Base64 } from 'js-base64';
 import { abi } from './assets/Minter.json'
-import { ethers } from 'ethers';
+import { ethers, Wallet } from 'ethers';
 import detectEthereumProvider from '@metamask/detect-provider';
 
 /*const nft_info_encoded_t = new StructType('EncodedNft', [
@@ -107,16 +107,23 @@ export const ChainHandlers = {
             }
         }
     },
-    async _requireWeb3() {
+    async _requireWeb3(toSign = true) {
         if (!this._web3) {
-            const base = await detectEthereumProvider();
-            if (!base) {
-                throw Error("Metamask not installed!");
-            }
-            this._web3Provider = new ethers.providers.Web3Provider(base);
-            const { chainId } = await this._web3Provider.getNetwork();
-            if (chainId !== CHAIN_INFO[this._web3Chain].chainId) {
-                await this._metaChangeChain();
+            if (toSign) {
+                const base = await detectEthereumProvider();
+                if (!base) {
+                    throw Error("Metamask not installed!");
+                }
+
+                this._web3Provider = new ethers.providers.Web3Provider(base);
+                const { chainId } = await this._web3Provider.getNetwork();
+                if (chainId !== CHAIN_INFO[this._web3Chain].chainId) {
+                    await this._metaChangeChain();
+                }
+                this._w3eventsSetup();
+            } else {
+                this._web3Provider = ethers.providers.getDefaultProvider(CHAIN_INFO[this._web3Chain].rpcUrl);
+                await this._web3Provider.ready;
             }
 
             this._web3 = await web3HelperFactory(
@@ -124,15 +131,14 @@ export const ChainHandlers = {
                 ChainConfig.web3_minters[this._web3Chain],
                 abi
             );
-            this._w3eventsSetup();
         }
     },
     setWeb3Chain(chain) {
         this._web3 = undefined;
         this._web3Chain = chain;
     },
-    async web3() {
-        await this._requireWeb3();
+    async web3(toSign = true) {
+        await this._requireWeb3(toSign);
 
         return this._web3;
     },
@@ -143,14 +149,19 @@ export const ChainHandlers = {
         }
         return await this._web3Provider.listAccounts();
     },
+    async web3AccountFromPkey(pk) {
+        await this._requireWeb3();
+
+        return new Wallet(pk, this._web3Provider);
+    },
     async w3Signer(address) {
         await this._requireWeb3();
         return this._web3Provider.getSigner(address);
     },
-    async checkWrappedOnPolkadot(_owner, ident) {
+    async isWrappedEsdtNft(_owner, ident) {
         return ident === ChainConfig.elrond_esdt_nft;
     },
-    _tryDecodeWrappedOnElrond(nftDat /* Buffer */) {
+    _tryDecodeWrappedPolkadotNft(nftDat /* Buffer */) {
         /// TokenLen(4 by), TokenIdent(TokenLen by), Nonce(8 by)
         /// BinaryCodec is broken for browsers. Decode manually :|
         if (nftDat.length < 12) {
@@ -168,28 +179,22 @@ export const ChainHandlers = {
 
         return { token, nonce };
     },
-    async checkWrappedOnElrond(owner, ident) {
+    async isWrappedPolkadotNft(owner, ident) {
         await this._requireElrd();
         await this._requirePolka();
 
         const nfts = await this._polka.listNft(owner);
         const nftDat = fromHexString(nfts.get(ident).replace('0x', ''));
 
-        const res = this._tryDecodeWrappedOnElrond(nftDat);
-        if (res === undefined) {
-            return false;
-        }
-        const { token, nonce } = res;
-
-        const lockedNfts = await this._elrd.listNft(ChainConfig.elrond_minter);
-        return lockedNfts.has(`${token}-0${nonce}`);
+        const res = this._tryDecodeWrappedPolkadotNft(nftDat);
+        return res !== undefined;
     },
     async tryFetchNftAsImg(owner, chain, ident, nft_dat) {
         let url;
         switch (chain) {
             case chains[0]: {
                 const dat = fromHexString(nft_dat.replace('0x', ''));
-                const res = this._tryDecodeWrappedOnElrond(dat);
+                const res = this._tryDecodeWrappedPolkadotNft(dat);
                 if (res === undefined) {
                     url = decoder.decode(dat);
                 } else {
@@ -202,7 +207,7 @@ export const ChainHandlers = {
             case chains[1]: {
                 const id = ident.split("-");
                 id.pop();
-                if (await this.checkWrappedOnPolkadot(owner, id.join("-"))) {
+                if (await this.isWrappedEsdtNft(owner, id.join("-"))) {
                     await this._requirePolka();
                     const hash = Base64.toUint8Array(nft_dat.uris[0]);
                     const hex = await this._polka.getLockedNft(hash);

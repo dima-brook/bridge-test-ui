@@ -1,22 +1,28 @@
 import { Keyring } from '@polkadot/keyring';
+import { chains } from "./consts";
 
-export const polkadotBlockPrefix = "https://explorer.xp.network/#/explorer/query";
-export const elrondTxnPrefix = "https://devnet-explorer.elrond.com/transactions";
+const polkadotBlockPrefix = "https://explorer.xp.network/#/explorer/query";
+const elrondTxnPrefix = "https://devnet-explorer.elrond.com/transactions";
 
 const keyring = new Keyring();
 
 export const ChainConfig = {
     "xpnode": "ws://localhost:9944", //"wss://bridge.xp.network:443/node", //
     "elrond_node": "https://devnet-api.elrond.com",
-    "elrond_minter": "erd1qqqqqqqqqqqqqpgqfy5zmm64avweyq3rcw65xczwkwedfz5zs3ysmja8la", //"erd1qqqqqqqqqqqqqpgq7ysztrj922cs53e5wh2vdmeds9pd69wms3ysy3tyy9", //
-    "elrond_event_rest": "http://localhost:6644", //"https://bridge.xp.network/event_rest", //
-    "elrond_esdt": "XPNET-274880", //"XPNET-cdf688", //
-    "elrond_esdt_nft": "XPNFT-d19b90", //"XPNFT-ff3b98", //
-    "validator_txn_socket": "ws://localhost:3001", //"wss://bridge.xp.network/", //
+    "elrond_minter": "erd1qqqqqqqqqqqqqpgqe8lzlc2husrrthhyavhcj50kpneqzf9ms3ys4anmfd", //"erd1qqqqqqqqqqqqqpgq7ysztrj922cs53e5wh2vdmeds9pd69wms3ysy3tyy9", //
+    "elrond_event_rest": "http://localhost:3000", //"https://bridge.xp.network/event_rest", //
+    "elrond_esdt": "XPNET-1dba6e", //"XPNET-cdf688", //
+    "elrond_esdt_nft": "XPNFT-594a29", //"XPNFT-ff3b98", //
+    "validator_txn_socket": "ws://localhost:3001/", //"wss://bridge.xp.network/", //
     "web3_minters": {
-        'HECO': "0x768C888bDf319f2bA0e2642235C2967f4a47441a",
+        'HECO': "0xEf5b44491d1da9E30803d666Fb7BdD06141f0b82",
         "BSC": "0x471bF01b8C622C00652F336651747B1A5d37b5ea",
         "ROPSTEN": "0x66b07bC16F499a0e835c5b277AF19555a05578c1"
+    },
+    "web3_erc1155": {
+        "HECO": "0x65c823E97d61F5Db30a433612a4AF3CC26aeD4ba",
+        "BSC": "0xaFFA531E294E8e4b6647F993c12216D8CFA90903",
+        "ROPSTEN": "0x5d9f23f7253Efef3926E934829Ab65C0092E218B",
     }
 };
 
@@ -36,7 +42,7 @@ export const ElrondDappConfig = {
 };
 
 
-export const NewElrondAccounts = {
+const NewElrondAccounts = {
     Alice: {
         name:"Alice",
         account: "erd192jvkmmd6neqallnftgjyxpml5t7juktu38nlvq8ar7hqn4amy0sufrwer",
@@ -138,7 +144,7 @@ export const NewElrondAccounts = {
     }
 }
 
-export const NewParachainAccounts = {
+const NewParachainAccounts = {
     Alice_Stash:{
         name:"Alice_Stash",
         account: "5GNJqTPyNqANBkUVMN1LPPrxXnFouWXoe2wNSmmEoLctxiZY",
@@ -155,3 +161,41 @@ export const NewParachainAccounts = {
         key:() => keyring.createFromUri("//Bob//stash", undefined, 'sr25519')
     }
 }
+
+const Web3Accounts = {
+    "ACC1": {
+        name: "ACC1",
+        account: "0x50aCEC08ce70aa4f2a8ab2F45d8dCd1903ea4E14",
+        key: "0xbaedb25b3352638942e80aa3dbc2d54f2bab423849cce21a73c164f0c21103c8"
+    },
+    "ACC2": {
+        name: "ACC2",
+        account: "0xae87208a5204B6606d3AB177Be5fdf62267Cd499",
+        key: "0xd32cb8a5e3541a3d4c33d7e0669371a4b5b5738400e85239760e51b67fb9207b"
+    },
+    "ACC3": {
+        name: "ACC3",
+        account: "0x5002258315873AdCbdEF25a8E71C715A4f701dF5",
+        key: "0x03b1091c3158ec4a38185fb65a8f2159650396aa6efd3dec5b0fddd44375a0b1"
+    }
+}
+
+export const ExplorerPrefix = Object.fromEntries(
+    [
+        [chains[0], polkadotBlockPrefix],
+        [chains[1], elrondTxnPrefix],
+        [chains[2], "heco/"],
+        [chains[3], "bsc/"],
+        [chains[4], "ropsten/"]
+    ]
+)
+
+export const PredefinedAccounts = Object.fromEntries(
+    [
+        [chains[0], NewParachainAccounts],
+        [chains[1], NewElrondAccounts],
+        [chains[2], Web3Accounts],
+        [chains[3], Web3Accounts],
+        [chains[4], Web3Accounts]
+    ]
+)
